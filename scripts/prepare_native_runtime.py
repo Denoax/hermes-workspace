@@ -14,7 +14,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
     args=parser.parse_args()
-    native={'backend.py','canary.py','proxy.py','supervisor.py','vm_service.py','window.py','evidence.py','jobs.py','nft_monitor.py'}
+    native={'backend.py','canary.py','proxy.py','supervisor.py','vm_service.py','window.py','evidence.py','jobs.py','nft_monitor.py','text_chat.py'}
     with zipfile.ZipFile(args.output,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
         for name in sorted(EXPECTED_FILES):
             source=ROOT/'native'/name if name in native else ROOT/name

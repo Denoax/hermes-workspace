@@ -151,13 +151,23 @@ def guard():
                 or normal_command('show','-p','MainPID','--value').strip()!=b'0'):
             mutate(lambda r:r.update(normal_quiesced=False))
             break
-        if command(['/usr/bin/systemctl', 'is-active', 'mani-vmlab-supervisor.service']).strip() != b'active':
+        try:supervisor_active=command(['/usr/bin/systemctl', 'is-active', 'mani-vmlab-supervisor.service']).strip()==b'active'
+        except subprocess.CalledProcessError:supervisor_active=False
+        if not supervisor_active:
             break
         notify('WATCHDOG=1')
         time.sleep(0.25)
 
 
 def restore():
+    # Explicit close, watchdog exit and operator recovery may arrive together.
+    # Serialize the whole operation so only one process removes the owned mask.
+    with (DIRECTORY/'restore.lock').open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX)
+        return _restore_locked()
+
+
+def _restore_locked():
     record = state()
     if record.get('status') not in ('opening', 'active', 'restoring'):
         return record
@@ -210,7 +220,6 @@ def restore():
 def unit_text():
     return '''[Unit]
 Description=Bounded Mani inference window and normal model recovery
-After=mani-vmlab-supervisor.service
 
 [Service]
 Type=notify
@@ -227,7 +236,7 @@ MemoryMax=128M
 TasksMax=32
 NoNewPrivileges=yes
 ProtectSystem=strict
-ReadWritePaths=/home/mani-vmlab-data/window /run/user/1000/systemd/user.control
+ReadWritePaths=/home/mani-vmlab-data/window /run/user/1000/systemd/user.control /var/lib/mani-vmlab-review
 ProtectHome=read-only
 PrivateTmp=yes
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

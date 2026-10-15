@@ -21,7 +21,7 @@ SELF=Path('/usr/local/lib/mani-vmlab-setup/workspace_acceptance.py')
 INSTALL=Path('/usr/local/lib/mani-vmlab')
 PUBLIC=Path('/var/lib/mani-vmlab-review')
 ORIGIN='http://127.0.0.1:18791'
-REQUIRED_PACK='7e841e74690f8ea55d36b89e27174c1cf85eb3ade8c76371f42de9b997887a34'
+REQUIRED_PACK='766142c86543e30b61d7667cc5846ea3c61974a644903ca3ba2b3c0306911d4b'
 USER_ENV={'PATH':'/usr/bin:/bin','HOME':'/home/mani','USER':'mani','LOGNAME':'mani','LANG':'C.UTF-8',
     'XDG_RUNTIME_DIR':'/run/user/1000','DBUS_SESSION_BUS_ADDRESS':'unix:path=/run/user/1000/bus',
     'XDG_CONFIG_HOME':'/home/mani/.config','XDG_DATA_HOME':'/home/mani/.local/share','XDG_CACHE_HOME':'/home/mani/.cache',

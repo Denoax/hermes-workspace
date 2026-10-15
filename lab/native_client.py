@@ -5,17 +5,24 @@ from pathlib import Path
 import socket
 import stat
 import struct
+import array
 from starter.json_limits import bounded_json
 
 CONTROL = Path('/run/mani-vmlab/control.sock')
 OPERATIONS = frozenset({'status', 'provision', 'qualify', 'heartbeat', 'stop', 'cleanup', 'run_case',
-                        'prepare_model', 'window_heartbeat','workspace_submit','workspace_read','workspace_cancel'})
+                        'prepare_model', 'window_heartbeat','workspace_submit','workspace_read','workspace_cancel',
+                        'chat_admit','chat_heartbeat','chat_release','chat_cancel'})
 
 
 def request_schema(operation, run_id=None, vm_id=None, case_id=None, arm=None, version=None, job_id=None, payload=None):
     if type(operation) is not str or operation not in OPERATIONS:
         raise ValueError('unknown_native_operation')
     data = {'operation': operation}
+    if operation.startswith('chat_'):
+        from lab.text_contract import request
+        if any(x is not None for x in (run_id,vm_id,case_id,version,payload)):
+            raise ValueError('unexpected_text_admission_fields')
+        return request(operation,job_id,arm)
     if operation.startswith('workspace_'):
         from lab.workspace_contract import canonical_id,submit
         if type(version) is not int or version!=1 or any(x is not None for x in (run_id,vm_id,case_id,arm)):
@@ -63,6 +70,8 @@ class NativeClient:
             return False
 
     def call(self, operation, **fields):
+        if operation=='chat_admit':
+            raise ValueError('text_admission_requires_descriptor_receiver')
         data = request_schema(operation, **fields)
         if not self.available():
             raise RuntimeError('protected_native_supervisor_not_installed_or_running')
@@ -83,6 +92,35 @@ class NativeClient:
             if type(result) is not dict or result.get('status') not in ('ok', 'blocked', 'failed'):
                 raise ValueError('invalid_native_reply')
             return result
+
+    def text_connection(self, job_id, arm):
+        """Receive only a root-attested connected socket, never a path or URL."""
+        data=request_schema('chat_admit',job_id=job_id,arm=arm)
+        if not self.available():raise RuntimeError('protected_text_admission_not_installed')
+        descriptors=[]
+        try:
+            with socket.socket(socket.AF_UNIX,socket.SOCK_STREAM) as channel:
+                channel.settimeout(self.timeout);channel.connect(str(CONTROL))
+                if struct.unpack('3i',channel.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))[1]!=0:
+                    raise PermissionError('native_supervisor_peer_not_root')
+                channel.sendall(json.dumps(data).encode());channel.shutdown(socket.SHUT_WR)
+                raw=bytearray()
+                while True:
+                    part,ancillary,flags,_=channel.recvmsg(8192,socket.CMSG_SPACE(4*4),socket.MSG_CMSG_CLOEXEC)
+                    for level,kind,rights in ancillary:
+                        if level==socket.SOL_SOCKET and kind==socket.SCM_RIGHTS:
+                            found=array.array('i');found.frombytes(rights[:len(rights)-len(rights)%found.itemsize]);descriptors.extend(found)
+                    if flags&socket.MSG_CTRUNC:raise RuntimeError('native_descriptor_truncated')
+                    if not part:break
+                    raw.extend(part)
+                    if len(raw)>65536:raise ValueError('native_text_reply_limit')
+                result=bounded_json(bytes(raw),max_bytes=65536)
+                if result.get('status')!='ok' or len(descriptors)!=1:
+                    raise RuntimeError(result.get('error','native_text_admission_denied'))
+                descriptor=descriptors.pop();connection=socket.socket(fileno=descriptor)
+                return result,connection
+        finally:
+            for descriptor in descriptors:os.close(descriptor)
 
 
 def public_snapshot():

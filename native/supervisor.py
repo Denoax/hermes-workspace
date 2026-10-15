@@ -70,6 +70,8 @@ class Supervisor:
         self.firewall.verify()
         self.workspace_jobs=None
         self.jobs_initialization=threading.Lock()
+        from text_chat import TextChat
+        self.text_chat=TextChat(self)
 
     def active_run(self):
         for directory in sorted(self.store.root.iterdir()):
@@ -617,6 +619,7 @@ ForceCommand /usr/bin/python3 -I /opt/mani-vmlab/qualify.py
     def watchdog(self):
         last_snapshot=0
         while not self.shutdown.wait(0.25):
+            self.text_chat.check()
             if self.workspace_jobs is not None:self.workspace_jobs.check_owners()
             for directory in list(self.store.root.iterdir()):
                 if not directory.is_dir():
@@ -664,6 +667,15 @@ ForceCommand /usr/bin/python3 -I /opt/mani-vmlab/qualify.py
 
     def dispatch(self, data, peer_pid=None):
         from lab.native_client import request_schema
+        if type(data) is dict and data.get('operation') in ('chat_admit','chat_heartbeat','chat_release','chat_cancel'):
+            operation=data['operation']
+            if set(data)!=({'operation','job_id','arm'} if operation=='chat_admit' else {'operation','job_id'}):
+                raise ValueError('fixed_text_admission_fields_required')
+            request_schema(operation,**{k:v for k,v in data.items() if k!='operation'})
+            if type(peer_pid) is not int or peer_pid<=0:raise ValueError('native_peer_owner_required')
+            if operation=='chat_admit':return self.text_chat.admit(data['job_id'],data['arm'],peer_pid)
+            if operation=='chat_heartbeat':return self.text_chat.beat(data['job_id'],peer_pid)
+            return self.text_chat.release(data['job_id'],peer_pid,operation=='chat_cancel')
         if type(data) is dict and type(data.get('operation')) is str and data['operation'].startswith('workspace_'):
             fields={'operation','version','payload'} if data['operation']=='workspace_submit' else {'operation','version','job_id'}
             if set(data)!=fields:raise ValueError('fixed_workspace_native_fields_required')
@@ -681,6 +693,8 @@ ForceCommand /usr/bin/python3 -I /opt/mani-vmlab/qualify.py
             raise ValueError('invalid_native_schema')
         operation = data['operation']
         request_schema(operation, **{key: value for key, value in data.items() if key != 'operation'})
+        if operation in ('provision','prepare_model','run_case','qualify') and self.text_chat.current:
+            raise RuntimeError('text_resource_owner_busy')
         if operation == 'status' and set(data) == {'operation'}:
             return self.state()
         if operation == 'provision' and set(data) == {'operation'}:
@@ -711,6 +725,26 @@ ForceCommand /usr/bin/python3 -I /opt/mani-vmlab/qualify.py
         raise ValueError('invalid_native_operation_fields')
 
 
+def send_native_result(connection, result, restore=None):
+    """Finish the control reply before recovery can stop its owning daemon."""
+    restore_window=result.pop('_restore_window',False)
+    try:
+        fd=result.pop('_backend_fd',None)
+        raw=json.dumps(result).encode()
+        if fd is not None:
+            import array
+            sent=connection.sendmsg([raw],[(socket.SOL_SOCKET,socket.SCM_RIGHTS,array.array('i',[fd]))])
+            if sent<len(raw):connection.sendall(raw[sent:])
+        else:connection.sendall(raw)
+    finally:
+        if restore_window:
+            if restore is not None:restore()
+            else:
+                import window
+                subprocess.run(['/usr/bin/systemctl','--no-block','stop',window.SERVICE],
+                               check=True,timeout=5,capture_output=True)
+
+
 def main():
     if os.geteuid() != 0 or len(sys.argv) != 1:
         raise SystemExit('fixed_protected_supervisor_only')
@@ -722,12 +756,14 @@ def main():
     watchdog.start()
     SOCKET.parent.mkdir(mode=0o755, exist_ok=True)
     protected(SOCKET.parent)
-    if SOCKET.exists():
+    activated=os.environ.get('LISTEN_PID')==str(os.getpid()) and os.environ.get('LISTEN_FDS')=='1'
+    if SOCKET.exists() and not activated:
         raise RuntimeError('preserve_existing_control_socket')
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
-        server.bind(str(SOCKET))
-        os.chown(SOCKET, 0, pwd.getpwuid(OPERATOR_UID).pw_gid)
-        SOCKET.chmod(0o660)
+    with (socket.socket(fileno=3) if activated else socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)) as server:
+        if not activated:
+            server.bind(str(SOCKET))
+            os.chown(SOCKET, 0, pwd.getpwuid(OPERATOR_UID).pw_gid)
+            SOCKET.chmod(0o660)
         server.listen(4)
         server.settimeout(0.25)
         slots = threading.BoundedSemaphore(4)
@@ -748,7 +784,7 @@ def main():
                     except (OSError, ValueError, RuntimeError) as error:
                         result = {'status':'failed', 'error':str(error)}
                     try:
-                        connection.sendall(json.dumps(result).encode())
+                        send_native_result(connection,result)
                     except OSError:
                         pass  # Lease/watchdog own recovery when operator transport disappears.
             finally:
@@ -771,7 +807,7 @@ def main():
             supervisor.shutdown.set()
             supervisor.recover()
             supervisor.firewall.close()
-            SOCKET.unlink(missing_ok=True)
+            if not activated:SOCKET.unlink(missing_ok=True)
 
 
 if __name__ == '__main__':

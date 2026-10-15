@@ -17,8 +17,8 @@ sys.dont_write_bytecode=True
 
 SELF=Path('/usr/local/lib/mani-vmlab-setup/workspace_setup.py')
 INPUT=Path('/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-setup-input.json')
-INPUT_SHA='89e0995ffcff5dad8dd52a2961d70360e6c5549b0d4018d5bcfc7a37702d752a'
-PREVIOUS_PACK='7dd20b4588af216d0b3bf8cdee2629a1b3f28f45cf5efaab47e1e499d84069c8'
+INPUT_SHA='1478aaea6f51d89369e6e97a6869fa0721bd6936f810623b1298b3790d7bd243'
+PREVIOUS_PACK='4d1bb05cbf874df1b5aff8f9b96d060833bfe0f425c7a9e80f318921b04f7fcb'
 SETUP=SELF.parent
 STATE=Path('/var/lib/mani-vmlab-setup')
 DATA=Path('/home/mani-vmlab-data')

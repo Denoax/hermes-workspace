@@ -88,6 +88,8 @@ class BoundedServer(ThreadingHTTPServer):
 class Application:
     def __init__(self,root):
         self.catalog=Catalog(root)
+        from workspace.chat import Chat
+        self.chat=Chat(self.catalog)
         self.csrf=secrets.token_urlsafe(32)
         self.sessions={}
         self.rate={}
@@ -104,8 +106,68 @@ class Application:
           'job.submit':{'session_id','client_job_id','prompt','snapshot_sha256','task_kind'},
           'job.read':{'job_id'},'job.cancel':{'job_id'},'artifact.read':{'job_id','artifact_id'},
           'patch.prepare':{'job_id'},'patch.apply':{'review_ticket'}}
+        contracts.update({'models.list':set(),'capabilities.read':set(),
+            'chat.submit':{'session_id','request_id','model_id','prompt','reasoning','attachments','search_query'},
+            'chat.read':{'run_id'},'chat.cancel':{'run_id'},'chat.runs':{'session_id'},'chat.snapshot':{'session_id'},
+            'folder.update':{'project_id','label','parent','color'},'session.move':{'session_id','project_id'},
+            'content.delete':{'kind','id'},'attachment.metadata':{'id'},'attachment.transcribe':{'id'},
+            'search.run':{'query'}})
         if method not in contracts or set(fields)!=contracts[method]:raise ValueError('unknown_method_or_fields')
         c=self.catalog
+        if method=='models.list':
+            rows=self.chat.inventory.entries()
+            from workspace.models import normal_identity
+            try:
+                normal_identity()
+                for row in rows:
+                    if row['id']=='normal':row['state']='ready'
+            except (OSError,ValueError,RuntimeError,subprocess.SubprocessError) as error:
+                for row in rows:
+                    if row['id']=='normal':row['reason']=str(error)[:160] if isinstance(error,RuntimeError) else type(error).__name__
+            with c.lock:active=c.db.execute("SELECT model,state FROM chat_runs WHERE state NOT IN ('completed','cancelled','failed') ORDER BY created LIMIT 1").fetchone()
+            if active:
+                for row in rows:
+                    if row['id']==active[0]:row['state']='loading' if active[1] in ('queued','admitting') else 'busy'
+            return rows
+        if method=='capabilities.read':
+            from workspace.voice import available
+            from lab.native_client import NativeClient
+            return {'attachments':True,'folder_import':True,'project_library':True,'recording':True,
+                    'transcription':available(),'search':{'provider':'Wikipedia','configured':True},
+                    'text_admission':NativeClient().available(),'integrations':[]}
+        if method=='chat.submit':return self.chat.submit(fields)
+        if method=='chat.read':return self.chat.store.run(fields['run_id'])
+        if method=='chat.cancel':return self.chat.cancel(fields['run_id'])
+        if method=='chat.runs':return self.chat.store.session_runs(fields['session_id'])
+        if method=='chat.snapshot':
+            with c.lock:
+                runs=self.chat.store.session_runs(fields['session_id'])
+                latest=runs[-1] if runs else None
+                seq=c.db.execute('SELECT COALESCE(MAX(seq),0) FROM chat_events WHERE run=?',(latest['id'],)).fetchone()[0] if latest else 0
+                activity=[json.loads(row[0]) for row in c.db.execute('SELECT event FROM chat_events WHERE run=? ORDER BY seq',(latest['id'],)) if json.loads(row[0]).get('type')!='delta'] if latest else []
+                from workspace.attachments import Attachments
+                attachments={r['id']:[Attachments(c).get(v[0]) for v in c.db.execute('SELECT attachment FROM turn_attachments WHERE run=?',(r['id'],))] for r in runs}
+                messages=[{'role':row[0],'text':row[1],'job':row[2]} for row in c.db.execute('SELECT role,text,job FROM messages WHERE session=? ORDER BY id',(fields['session_id'],))]
+                return {'messages':messages,'runs':runs,'after_seq':seq,'activity':activity,'attachments':attachments}
+        if method=='folder.update':return self.chat.store.folder(fields['project_id'],fields['label'],fields['parent'],fields['color'])
+        if method=='session.move':return self.chat.store.move_session(fields['session_id'],fields['project_id'])
+        if method=='content.delete':
+            from workspace.reset import delete_content
+            return delete_content(self,fields['kind'],fields['id'])
+        if method in ('attachment.metadata','attachment.transcribe'):
+            from workspace.attachments import Attachments
+            store=Attachments(c)
+            return store.get(fields['id']) if method=='attachment.metadata' else store.transcribe(fields['id'])
+        if method=='search.run':
+            import io
+            from workspace.search import search
+            from workspace.attachments import Attachments
+            result=search(fields['query'])
+            if not result['sources']:return result
+            text='Search query: '+result['query']+'\n\n'+'\n\n'.join('['+str(i+1)+'] '+s['title']+'\n'+s['url']+'\n'+s['text'] for i,s in enumerate(result['sources']))
+            raw=text.encode();item=Attachments(c).upload(io.BytesIO(raw),len(raw),'Wikipedia search.txt','text/plain')
+            with c.lock,c.db:c.db.execute('UPDATE attachments SET metadata=? WHERE id=?',(json.dumps({'search':result}),item['id']))
+            return {**result,'attachment':item}
         if method=='status.read':return status()
         if method=='homebrew.open':
             if not status()['normal_model_available']:raise RuntimeError('Normal Qwen is paused; wait for verified recovery.')
@@ -166,7 +228,7 @@ def handler(app,credential):
             self.send_response(code)
             for key,value in {'Content-Type':mime,'Content-Length':str(len(raw)),'Cache-Control':'no-store',
                  'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer',
-                 'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'"}.items():self.send_header(key,value)
+                 'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'"}.items():self.send_header(key,value)
             self.end_headers();self.wfile.write(raw)
         def host_allowed(self):return self.headers.get_all('Host',[])==[f'127.0.0.1:{PORT}']
         def authenticated(self):
@@ -181,7 +243,28 @@ def handler(app,credential):
             if self.path=='/hermes-workspace/api/bootstrap':
                 if not self.authenticated():self.reply(401,{'error':'Open Hermes from Applications to connect securely.'});return
                 self.reply(200,{'csrf':app.csrf,'version':1});return
+            if self.path.startswith('/hermes-workspace/api/attachment/'):
+                if not self.authenticated():self.reply(401,{'error':'session_required'});return
+                try:
+                    from workspace.attachments import Attachments
+                    item,raw=Attachments(app.catalog).read(self.path.rsplit('/',1)[1])
+                    start,end=0,len(raw)-1;range_header=self.headers.get('Range');code=200
+                    if range_header:
+                        import re
+                        match=re.fullmatch(r'bytes=(\d+)-(\d*)',range_header)
+                        if not match:raise ValueError('invalid_media_range')
+                        start=int(match[1]);end=int(match[2]) if match[2] else end
+                        if not 0<=start<=end<len(raw):raise ValueError('invalid_media_range')
+                        code=206
+                    self.send_response(code);self.send_header('Content-Type',item['mime']);self.send_header('Content-Length',str(end-start+1));self.send_header('Accept-Ranges','bytes')
+                    if code==206:self.send_header('Content-Range',f'bytes {start}-{end}/{len(raw)}')
+                    self.send_header('Cache-Control','private, no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Security-Policy',"default-src 'none'; frame-ancestors 'none'");self.end_headers();self.wfile.write(raw[start:end+1])
+                except (OSError,ValueError):self.reply(404,{'error':'attachment_unavailable'})
+                return
             assets={'/':'index.html','/hermes-workspace':'index.html','/style.css':'style.css','/portfolio.css':'portfolio.css','/app.js':'app.js'}
+            manifest=PROJECT/'workspace/ui/dist/manifest.json'
+            if manifest.exists():
+                for asset in json.loads(manifest.read_text()):assets['/assets/'+asset]='dist/'+asset
             for module in ('icons','pane-motion','portfolio-nav','interface-audio','flight-kernel','paintPane','glassOptics','sliderFlight','portfolio-settings','paint-support'):
                 assets['/'+module+'.mjs']=module+'.mjs'
             assets['/brand/hermes.png']='brand/hermes.png'
@@ -196,10 +279,21 @@ def handler(app,credential):
             mime=('image/png' if name.endswith('.png') else 'font/ttf' if name.endswith('.ttf') else 'font/woff2' if name.endswith('.woff2') else 'audio/wav' if name.endswith('.wav') else 'text/javascript; charset=utf-8' if name.endswith(('.js','.mjs')) else 'text/css; charset=utf-8' if name.endswith('.css') else 'text/html; charset=utf-8')
             self.reply(200,(PROJECT/'workspace/ui'/name).read_bytes(),mime)
         def do_POST(self):
-            if self.path!='/hermes-workspace/api/rpc' or not self.host_allowed() or self.headers.get_all('Origin',[])!=[ORIGIN]:
+            if self.path not in ('/hermes-workspace/api/rpc','/hermes-workspace/api/stream','/hermes-workspace/api/upload') or not self.host_allowed() or self.headers.get_all('Origin',[])!=[ORIGIN]:
                 self.reply(403,{'error':'local_origin_required'});return
             if not self.authenticated() or not secrets.compare_digest(self.headers.get('X-Hermes-CSRF','').encode(),app.csrf.encode()):
                 self.reply(403,{'error':'session_or_CSRF_denied'});return
+            if self.path=='/hermes-workspace/api/upload':
+                try:
+                    from workspace.attachments import Attachments,LIMIT
+                    from urllib.parse import unquote
+                    lengths=self.headers.get_all('Content-Length',[])
+                    if self.headers.get('Transfer-Encoding') or len(lengths)!=1 or not lengths[0].isdigit() or not 0<int(lengths[0])<=LIMIT:raise ValueError('bounded_upload_required')
+                    self.connection.settimeout(30)
+                    item=Attachments(app.catalog).upload(self.rfile,int(lengths[0]),unquote(self.headers.get('X-Filename','')),self.headers.get('Content-Type','').split(';')[0])
+                    self.reply(200,{'result':item})
+                except (OSError,ValueError) as error:self.reply(409,{'error':str(error)[:160]})
+                return
             if self.headers.get('Transfer-Encoding') or self.headers.get_all('Content-Type',[])!=['application/json']:
                 self.reply(400,{'error':'bounded_JSON_required'});return
             lengths=self.headers.get_all('Content-Length',[])
@@ -211,6 +305,22 @@ def handler(app,credential):
                 app.rate['local']=[*recent,now]
             try:
                 data=bounded_json(self.rfile.read(int(lengths[0])),max_bytes=65536)
+                if self.path=='/hermes-workspace/api/stream':
+                    if type(data) is not dict or set(data)!={'run_id','after'}:raise ValueError('fixed_stream_fields_required')
+                    app.chat.store.events(data['run_id'],data['after'])
+                    self.connection.settimeout(15)
+                    self.send_response(200);self.send_header('Content-Type','application/x-ndjson');self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
+                    cursor=data['after'];deadline=time.monotonic()+310
+                    try:
+                        while time.monotonic()<deadline:
+                            rows=app.chat.store.events(data['run_id'],cursor)
+                            for event in rows:
+                                self.wfile.write(json.dumps(event).encode()+b'\n');self.wfile.flush();cursor=event['seq']
+                            if not rows and app.chat.store.run(data['run_id'])['state'] in ('completed','failed','cancelled'):break
+                            if not rows:
+                                self.wfile.write(b'{"type":"keepalive"}\n');self.wfile.flush();time.sleep(.2)
+                    except (BrokenPipeError,ConnectionResetError,TimeoutError):pass
+                    return
                 if type(data) is not dict or set(data)!={'version','method','fields'} or type(data['version']) is not int or data['version']!=1 or type(data['method']) is not str or type(data['fields']) is not dict:
                     raise ValueError('unsupported_RPC_contract')
                 value=app.call(data['method'],data['fields']);self.reply(200,{'result':value})

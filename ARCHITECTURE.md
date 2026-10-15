@@ -1,5 +1,11 @@
 # Architecture and boundaries
 
+The current conversational path is documented in [LOCAL_CHAT](docs/LOCAL_CHAT.md).
+Its unprivileged worker receives a root-attested connected socket and no model
+tools. Durable ordered events, an atomic history cursor and explicit run ownership
+support streaming/reload/cancel. Candidate release waits for verified normal
+recovery. The original guest-execution architecture below remains separately gated.
+
 The trusted host supervisor is small, deterministic and outside agent control.
 It is independent of whether either model is willing to obey instructions.
 

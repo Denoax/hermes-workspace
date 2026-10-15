@@ -28,7 +28,7 @@ EXPECTED_FILES = frozenset({'supervisor.py', 'vm_service.py', 'proxy.py', 'canar
                            'lab/__init__.py', 'lab/state.py', 'lab/process.py', 'lab/doctor.py', 'lab/transport.py',
                            'lab/native_client.py', 'lab/readiness.py', 'lab/qualification.py', 'starter/__init__.py', 'starter/json_limits.py',
                            'evidence.py','jobs.py','lab/workspace_contract.py','guest/workspace_job.py','guest/run_code.py','guest/workspace_contract.py',
-                           'guest/lifecycle_probe.py','guest/recovery.py'})
+                           'guest/lifecycle_probe.py','guest/recovery.py','text_chat.py','lab/text_contract.py'})
 
 
 def sha256(path):

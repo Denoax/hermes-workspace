@@ -26,15 +26,28 @@ document.addEventListener('DOMContentLoaded',()=>{const banner=document.createEl
 })()'''
 
 class Browser:
- def __init__(self,profile='parity',headed=False,fixture=True,audio_sink=None):
+ def __init__(self,profile='parity',headed=False,fixture=True,audio_sink=None,quiet=False):
   launcher.PROFILE=launcher.PROFILE.parent/('hermes-'+profile+'-review')
-  self.pipe,self.process=launcher.browser(headless=not headed,audio_sink=audio_sink)
+  self.audio_module=None
+  if quiet and audio_sink is None:
+   import subprocess
+   audio_sink='hermes_parity_'+os.urandom(5).hex()
+   self.audio_module=subprocess.check_output(['/usr/bin/pactl','load-module','module-null-sink','sink_name='+audio_sink],text=True).strip()
+  try:self.pipe,self.process=launcher.browser(headless=not headed,audio_sink=audio_sink)
+  except BaseException:
+   if self.audio_module:
+    import subprocess
+    subprocess.run(['/usr/bin/pactl','unload-module',self.audio_module],check=True,timeout=5)
+   raise
   target=next(x for x in self.pipe.call('Target.getTargets')['targetInfos'] if x.get('type')=='page' and x.get('url','').startswith(launcher.ORIGIN))
   self.target=target['targetId'];self.session=self.pipe.call('Target.attachToTarget',{'targetId':self.target,'flatten':True})['sessionId']
   self.call('Page.enable');self.call('Runtime.enable');self.call('Performance.enable')
   if fixture:self.call('Page.addScriptToEvaluateOnNewDocument',{'source':FIXTURE});self.call('Page.reload')
-  self.wait("document.getElementById('connection')?.textContent==='Connected'")
-  self.evaluate('document.fonts.ready');time.sleep(.15)
+  try:
+   self.wait("document.getElementById('connection')?.textContent==='Connected'")
+   self.evaluate('document.fonts.ready');time.sleep(.15)
+  except BaseException:
+   self.close();raise
  def call(self,method,params=None):return self.pipe.call(method,params,self.session)
  def evaluate(self,source):
   r=self.call('Runtime.evaluate',{'expression':source,'returnByValue':True,'awaitPromise':True})
@@ -48,10 +61,26 @@ class Browser:
   raise RuntimeError('parity_state_timeout:'+source)
  def settle(self):self.wait("[...document.querySelectorAll('dialog[open]')].every(d=>d.dataset.flight==='settled') && !globalThis.hermesPaneMetrics?.rafPending")
  def key(self,key,code=None,modifiers=0):
-  for kind in ['keyDown','keyUp']:self.call('Input.dispatchKeyEvent',{'type':kind,'key':key,'code':code or key,'modifiers':modifiers})
+  virtual={'Enter':13,'Escape':27,'Tab':9,'Backspace':8,'ArrowLeft':37,'ArrowUp':38,'ArrowRight':39,'ArrowDown':40}.get(key,ord(key.upper()) if len(key)==1 else 0)
+  for kind in ['keyDown','keyUp']:
+   fields={'type':kind,'key':key,'code':code or key,'modifiers':modifiers,'windowsVirtualKeyCode':virtual}
+   if kind=='keyDown' and key=='Enter':fields['text']='\r';fields['unmodifiedText']='\r'
+   self.call('Input.dispatchKeyEvent',fields)
  def rect(self,selector):return self.evaluate('document.querySelector('+json.dumps(selector)+').getBoundingClientRect().toJSON()')
  def click(self,selector,guard=False):
   r=self.rect(selector);self.mouse(r['x']+r['width']/2,r['y']+r['height']/2,guard)
+ def dialog_click(self,selector,text):
+  # A native JS dialog blocks the mouse-release reply. Handle its protocol
+  # event without making a reentrant Pipe.call that would consume that reply.
+  previous=self.pipe.on_event
+  def event(message):
+   if message.get('method')=='Page.javascriptDialogOpening':
+    self.pipe.counter+=1;raw=json.dumps({'id':self.pipe.counter,'method':'Page.handleJavaScriptDialog','params':{'accept':True,'promptText':text},'sessionId':self.session}).encode()+b'\0'
+    while raw:raw=raw[os.write(self.pipe.write,raw):]
+   elif previous:previous(message)
+  self.pipe.on_event=event
+  try:self.click(selector)
+  finally:self.pipe.on_event=previous
  def mouse(self,x,y,guard=False):
   if guard:self.evaluate('window.__guardParityClick=true')
   try:
@@ -82,3 +111,6 @@ class Browser:
   for fd in [self.pipe.read,self.pipe.write]:
    try:os.close(fd)
    except OSError:pass
+  if self.audio_module:
+   import subprocess
+   subprocess.run(['/usr/bin/pactl','unload-module',self.audio_module],check=True,timeout=5);self.audio_module=None

@@ -36,7 +36,16 @@ class Catalog:
         self.db.executescript('''CREATE TABLE IF NOT EXISTS session_titles(session TEXT PRIMARY KEY,title TEXT NOT NULL);
           CREATE TABLE IF NOT EXISTS view_state(id INTEGER PRIMARY KEY CHECK(id=1),state TEXT NOT NULL);
           CREATE TABLE IF NOT EXISTS drafts(scope TEXT PRIMARY KEY,text TEXT NOT NULL,mode TEXT NOT NULL);''')
+        self.db.executescript('''CREATE TABLE IF NOT EXISTS folder_meta(project TEXT PRIMARY KEY,parent TEXT,color TEXT NOT NULL DEFAULT 'blue');
+          CREATE TABLE IF NOT EXISTS chat_runs(id TEXT PRIMARY KEY,session TEXT NOT NULL,model TEXT NOT NULL,
+            state TEXT NOT NULL,settings TEXT NOT NULL,created REAL NOT NULL,error TEXT,identity TEXT);
+          CREATE TABLE IF NOT EXISTS chat_events(run TEXT NOT NULL,seq INTEGER NOT NULL,event TEXT NOT NULL,PRIMARY KEY(run,seq));
+          CREATE TABLE IF NOT EXISTS attachments(id TEXT PRIMARY KEY,name TEXT NOT NULL,mime TEXT NOT NULL,
+            bytes INTEGER NOT NULL,sha256 TEXT NOT NULL,created REAL NOT NULL,metadata TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS turn_attachments(run TEXT NOT NULL,attachment TEXT NOT NULL,PRIMARY KEY(run,attachment));''')
         (self.root/'catalog.sqlite3').chmod(0o600)
+        from workspace.reset import recover_moves
+        recover_moves(self)
 
     def create(self,label):
         if type(label) is not str or not 1<=len(label.strip())<=80 or any(ord(c)<32 for c in label): raise ValueError('invalid_project_label')
@@ -48,7 +57,7 @@ class Catalog:
         return {'id':project,'label':label.strip()}
 
     def projects(self):
-        with self.lock:return [{'id':row[0],'label':row[1]} for row in self.db.execute('SELECT id,label FROM projects ORDER BY rowid LIMIT 1000')]
+        with self.lock:return [{'id':r[0],'label':r[1],'parent':r[2],'color':r[3] or 'blue'} for r in self.db.execute('SELECT p.id,p.label,m.parent,m.color FROM projects p LEFT JOIN folder_meta m ON m.project=p.id ORDER BY p.rowid LIMIT 1000')]
 
     def files(self,project,kind='workspace'):
         identifier(project)
@@ -59,8 +68,10 @@ class Catalog:
 
     def session(self,project,arm):
         if arm not in ('normal','abliterated'):raise ValueError('unknown_pinned_model')
-        files=self.files(project);files.close();session=uuid.uuid4().hex
-        with self.lock:self.db.execute('INSERT INTO sessions VALUES (?,?,?)',(session,project,arm));self.db.commit()
+        if project is not None:
+            files=self.files(project);files.close()
+        session=uuid.uuid4().hex
+        with self.lock:self.db.execute('INSERT INTO sessions VALUES (?,?,?)',(session,project or '',arm));self.db.commit()
         return {'id':session,'project':project,'arm':arm}
 
     def sessions(self):
@@ -68,14 +79,14 @@ class Catalog:
             rows=self.db.execute('''SELECT s.id,s.project,s.arm,t.title,
               (SELECT text FROM messages WHERE session=s.id AND role='user' ORDER BY id LIMIT 1)
               FROM sessions s LEFT JOIN session_titles t ON t.session=s.id ORDER BY s.rowid DESC LIMIT 1000''').fetchall()
-            return [{'id':r[0],'project':r[1],'arm':r[2],
+            return [{'id':r[0],'project':r[1] or None,'arm':r[2],
                      'title':r[3] or (' '.join(r[4].split())[:60] if r[4] else 'New conversation')} for r in rows]
 
     def session_record(self,session):
         identifier(session)
         with self.lock:row=self.db.execute('SELECT project,arm FROM sessions WHERE id=?',(session,)).fetchone()
         if not row:raise ValueError('unknown_session')
-        return {'id':session,'project':row[0],'arm':row[1]}
+        return {'id':session,'project':row[0] or None,'arm':row[1]}
 
     def rename(self,session,title):
         self.session_record(session)

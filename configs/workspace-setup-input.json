@@ -2,8 +2,8 @@
   "files": {
     "installer": {
       "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/install_runtime.py",
-      "sha256": "3a8d5b7214d2f1cc75431e86a7eeb9da8f39dcb9511e510d26d5841025f6a501",
-      "bytes": 11520
+      "sha256": "dcbdca65c1215504459a8974d63c75912c53ab5b1173b6fe40a9c80f4f15dd7c",
+      "bytes": 11558
     },
     "updater": {
       "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/update_runtime.py",
@@ -22,7 +22,7 @@
     },
     "acceptance": {
       "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/workspace_acceptance.py",
-      "sha256": "bbdcb4816f2c57aada6b2a0190b03f59a59824f97ec663763d0e8fc0736189b4",
+      "sha256": "939e40d418053ff0a5da0f36526c6c7ce5808f0a14174c90d33aa36636b43feb",
       "bytes": 26922
     },
     "watchdogs": {
@@ -41,9 +41,9 @@
       "bytes": 429
     },
     "source_pack": {
-      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-source-20261013T115642Z.zip",
-      "sha256": "7e841e74690f8ea55d36b89e27174c1cf85eb3ade8c76371f42de9b997887a34",
-      "bytes": 72025
+      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-source-20261015T062346Z.zip",
+      "sha256": "766142c86543e30b61d7667cc5846ea3c61974a644903ca3ba2b3c0306911d4b",
+      "bytes": 76270
     },
     "runtime_iso": {
       "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-runtime.iso",
@@ -61,7 +61,7 @@
       "bytes": 16787
     }
   },
-  "source_pack_sha256": "7e841e74690f8ea55d36b89e27174c1cf85eb3ade8c76371f42de9b997887a34",
+  "source_pack_sha256": "766142c86543e30b61d7667cc5846ea3c61974a644903ca3ba2b3c0306911d4b",
   "compiler_zip_sha256": "08b4768c5e16e95dd17bc457a2e937f87e9b1acaadf303bfaa024014709bcdd3",
   "runtime_iso_sha256": "c3972597baf13d8bacdaa51165f00764da10ce2c717baf4f52cec1752d233d74",
   "pin_before_sha256": "8f03675c67f2eafb90baaee9948e2fb5d826431831500cd822084062bd7c7048",
