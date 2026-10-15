@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="showcase/github/banner.png" alt="Hermes × Your local model — local workspace with Settings closed" width="100%">
+<img src="showcase/github/banner.png?v=local-model-centered" alt="Hermes × Your local model — centered interface with Settings closed" width="100%">
 
 # Hermes Workspace
 

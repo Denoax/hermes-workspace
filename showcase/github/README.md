@@ -23,9 +23,9 @@ monochrome interface rather than copied as a desktop/anime theme.
 - `social-preview.png` is the matching 1280×640 solid-background image, below
   GitHub's 1 MB social-preview limit. Upload it under Repository Settings →
   Social preview; adding it to the README does not set that separate field.
-  Mani requested the fresh closed-Settings view, larger “Local workspace” text,
-  “Hermes × Your local model” identity and removal of the outer documentation
-  caption. Fixture provenance remains here and in the repository README.
+  The latest request changes the small label to “Local model”, removes the
+  description and name, and centers the complete UI capture with balanced margins.
+  The “Hermes × Your local model” identity and closed-Settings capture remain. Fixture provenance remains here and in the repository README.
 - `workspace-*.webp`, `settings-*.webp` and `files.webp` are actual current browser
   captures, converted losslessly. Documentation content is explicitly labelled
   and isolated from the private catalog. It is not live model evidence.
@@ -62,3 +62,19 @@ setting its social preview are distinct publication operations.
 An initial banner export froze its video inset on the first frame. It was rejected
 before delivery. The final exporter decodes the original recording into source-
 paced frames, composes each real frame and verifies distinct GIF output frames.
+
+## Current static banner refinement
+
+The active990×352 header and matching social image are rendered again from
+`banner.html`, using the unchanged closed-Settings `banner-still.webp`, Hermes
+mark and existing Bebas Neue/DM Sans fonts. The UI frame is792×396 at1280px,
+vertically centered with32px margins in the banner; the complete2:1 capture is
+contained without crop. The Local model label replaces Local workspace. The
+byline and Conversations/projects/code caption are removed. This is a static
+presentation edit; the app, model state and original captures are unchanged.
+
+`banner.gif` is the previous composition, retained as historical media. The
+latest `banner-sources.json` distinguishes its old lettering from the active
+static files. The profile receives exact copies of the active PNG. Social
+preview image bytes are updated here; GitHub's separate social-preview setting
+is unchanged.

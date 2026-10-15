@@ -1,57 +1,206 @@
 {
-  "status": "PASS scoped documentation and authored-image checks",
-  "scope": "Real current interface with isolated documentation content; no model response or new VM qualification",
-  "README_sha256": "cbe9ab69d2c60b0c27028512932548aa339e1c17c60d4c0223ad8a762ea3686c",
+  "status": "PASS scoped static-banner and README checks",
+  "scope": "Documentation composition only; unchanged real UI capture; no application, model, lab, private-data or native-control changes.",
+  "README_sha256": "2abe940c5118f3d5699bdc0a5cdaa682bf6806bd3984040c1bfe5b7b1ad63ec7",
   "requested_changes": [
-    "Fresh actual workspace capture with all panes closed",
-    "Local workspace label enlarged from11px to24px",
-    "Hermes \u00d7 Your local model identity",
-    "Outer documentation caption removed",
-    "Banner fitted to the existing990x352 profile canvas without crop or stretch"
+    "Local model replaces Local workspace",
+    "Removed byline and Conversations/projects/code caption",
+    "Complete UI centered with balanced margins; no crop",
+    "Profile separators: seven3px original dark-blue/blue/white gradients"
   ],
   "assets": {
-    "source": "showcase/github/banner.html",
-    "source_sha256": "ebcc0fd70314a2020d82ad32b1e5aa0998553014285510d764cf17a8fe81f7de",
-    "video_sha256": "86dcde0cb29ec72c7a128dfb22118499151330ac281f9b843556ca86415102e3",
-    "frames": 139,
-    "fps": 15,
-    "operation": "Original HTML/CSS composition with a real interface recording; sampled at source pace, no interpolation or retiming; a presentation asset, not unedited app evidence",
+    "source": {
+      "path": "showcase/github/banner.html",
+      "bytes": 2401,
+      "sha256": "74752b845031d34bbeaa06677a1205e80f356fb861f3e3decb86aa538face9c7"
+    },
+    "capture": {
+      "path": "showcase/github/banner-still.webp",
+      "bytes": 27128,
+      "sha256": "d61a7481e4e52a26af44f90717c4e994714b4915bacbea9179d27d1b183a23a5"
+    },
+    "operation": "Static DOM composition from the unchanged real closed-Settings UI capture; original Bebas Neue/DM Sans and Hermes mark. Local model label; requested description/byline removed. Complete 2:1 UI capture fitted without crop inside a centered 792x396 frame. No generated imagery or application changes.",
     "files": {
-      "banner.gif": {
-        "sha256": "b691bc8c2c7a2bf960b549b46f9adae1993547ad62f3404a1ccda99a743311d7",
-        "bytes": 839961
-      },
       "banner.png": {
-        "sha256": "3b60609e0d4848b3ab31e13fb58dcfd5a5e54aed9e9b929aa0f8bc8d5b16d8bc",
-        "bytes": 73301
+        "path": "showcase/github/banner.png",
+        "bytes": 61379,
+        "sha256": "33c88c7c66afbd9d8594d6a6086abbd2b370d7f9bcefe5545d261771b1758178"
       },
       "social-preview.png": {
-        "sha256": "76ff4685e82b1853ac9018a4d1418cbbb0267e3747a36b6bf910d7a977a98c5d",
-        "bytes": 68531
+        "path": "showcase/github/social-preview.png",
+        "bytes": 58599,
+        "sha256": "f7ad6979ca059a9a559565e4dfa63dee5756d35b31c74d37974e3eef6591fbc3"
       }
+    },
+    "banner_canvas": {
+      "width": 990,
+      "height": 352,
+      "fit": "Full 1280x460 authored composition fitted without crop or stretch."
     },
     "social_preview": {
       "width": 1280,
       "height": 640,
       "under_1_MB": true
     },
-    "banner_canvas": {
-      "width": 990,
-      "height": 352,
-      "fit": "Full1280x460 authored composition fitted without crop or stretch to the existing profile canvas"
+    "historical_motion": {
+      "path": "showcase/github/banner.gif",
+      "sha256": "b691bc8c2c7a2bf960b549b46f9adae1993547ad62f3404a1ccda99a743311d7",
+      "bytes": 839961,
+      "source_sha256": "ebcc0fd70314a2020d82ad32b1e5aa0998553014285510d764cf17a8fe81f7de",
+      "note": "Previous composition retained unchanged as historical media; current static banner source supersedes its lettering/layout."
     }
   },
-  "repository_preview_dimensions": [
-    1280,
-    640
-  ],
-  "banner_dimensions": [
-    990,
-    352
-  ],
-  "publication": "Canonical destination Denoax/hermes-workspace; remote identities are verified separately after publishing",
-  "runtime_changes": "None; app/model/native controls preserved",
-  "tests": "Reviewed runtime source identities retained; publication source checks recorded separately",
-  "active_header": "banner.png: fresh actual interface capture with Settings closed",
-  "historical_motion": "banner.gif is retained as motion documentation; it is not the active repository or profile header"
+  "composition": {
+    "status": "passed",
+    "rows": [
+      {
+        "format": "banner",
+        "width": 1280,
+        "height": 460,
+        "screen": {
+          "x": 431,
+          "y": 32,
+          "width": 792,
+          "height": 396
+        },
+        "label": "Local model",
+        "body": "Local model\nHERMES\n\n\u00d7 Your local model",
+        "overflow": false
+      },
+      {
+        "format": "social",
+        "width": 1280,
+        "height": 640,
+        "screen": {
+          "x": 431,
+          "y": 122,
+          "width": 792,
+          "height": 396
+        },
+        "label": "Local model",
+        "body": "Local model\nHERMES\n\n\u00d7 Your local model",
+        "overflow": false
+      }
+    ]
+  },
+  "readme_browser_checks": {
+    "status": "passed",
+    "scope": "GitHub Markdown API output in a loopback browser preview; desktop and portrait, image decode, overflow, all seven3px gradient bars, actual gradient pixels and exact adjacent-card gaps. Actual live GitHub verification follows publication.",
+    "rows": [
+      {
+        "kind": "hermes",
+        "width": 1440,
+        "natural": [
+          990,
+          352
+        ],
+        "overflow": false
+      },
+      {
+        "kind": "hermes",
+        "width": 390,
+        "natural": [
+          990,
+          352
+        ],
+        "overflow": false
+      },
+      {
+        "kind": "profile",
+        "width": 1440,
+        "natural": [
+          990,
+          352
+        ],
+        "overflow": false,
+        "bars": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gaps": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "colours": [
+          [
+            10,
+            34,
+            85,
+            255
+          ],
+          [
+            22,
+            139,
+            245,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "kind": "profile",
+        "width": 390,
+        "natural": [
+          990,
+          352
+        ],
+        "overflow": false,
+        "bars": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gaps": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "colours": [
+          [
+            10,
+            34,
+            85,
+            255
+          ],
+          [
+            22,
+            139,
+            245,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      }
+    ]
+  },
+  "publication": "Remote identities and actual GitHub output checked separately after push.",
+  "limits": "Browser desktop and portrait emulation; not human visual approval or physical-device evidence."
 }
