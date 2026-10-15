@@ -22,7 +22,7 @@ def main():
                 text += '\n'+path.name+'\n\n'+path.read_text(errors='replace')+'\n'
         sections.append(text)
     target = ROOT/'workspace/ui/licenses/Frontend-packages.txt'
-    target.write_text(''.join(sections))
+    target.write_text('\n'.join(line.rstrip() for line in ''.join(sections).splitlines()).rstrip()+'\n')
     print(f'{len(sections)-1} pinned package notices collected')
 
 
