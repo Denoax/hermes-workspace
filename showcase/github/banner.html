@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hermes · repository banner</title>
+  <style>
+    @font-face{font-family:Display;src:url('/fonts/BebasNeue.ttf')}
+    @font-face{font-family:Body;src:url('/fonts/DMSans.ttf')}
+    *{box-sizing:border-box}
+    html,body{margin:0;width:1280px;height:460px;overflow:hidden}
+    body{background:#eaece8;color:#15191b;font-family:Body,sans-serif}
+    body.social{height:640px}
+    .layout{height:100%;position:relative;display:grid;grid-template-columns:350px 1fr;align-items:center;padding:32px 0 32px 46px;gap:20px}
+    .identity{position:relative;z-index:2;padding-bottom:5px}
+    .mark{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+    .mark img{width:30px;height:30px;object-fit:contain}
+    .mark span{font-size:24px;font-weight:500;letter-spacing:-.02em;color:#3c4643}
+    h1{font:400 154px/.86 Display,sans-serif;letter-spacing:-.025em;margin:0 0 12px -3px}
+    .model{font-size:24px;line-height:1.25;letter-spacing:-.025em;margin:0 0 14px}
+    .description{font-size:20px;line-height:1.35;letter-spacing:-.025em;margin:0;max-width:310px}
+    .byline{font-size:11px;color:#626b69;margin-top:22px;letter-spacing:.03em}
+    .screen{width:850px;height:425px;position:relative;border:1px solid #333b39;border-radius:14px;overflow:hidden;background:#080908;box-shadow:0 18px 32px #10171524}
+    .screen img{display:block;width:100%;height:100%;object-fit:cover}
+    .social .layout{padding-right:32px;grid-template-columns:350px 1fr;gap:16px}
+    .social .screen{width:810px;height:405px}
+    .social .identity{padding-bottom:2px}
+    .social h1{font-size:154px}
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <div class="identity">
+      <div class="mark"><img src="hermes-mark.png" alt=""><span>Local workspace</span></div>
+      <h1>HERMES</h1>
+      <p class="model">× Your local model</p>
+      <p class="description">Conversations, projects<br>and code.</p>
+      <p class="byline">Mani Marami Milani</p>
+    </div>
+    <div class="screen"><img src="banner-still.webp" alt="Actual Hermes interface with labelled documentation content"></div>
+  </main>
+  <script>
+    const query=new URLSearchParams(location.search);
+    if(query.get('format')==='social')document.body.classList.add('social');
+    window.bannerReady=Promise.all([document.fonts.ready,...[...document.images].map(image=>image.decode())]);
+    window.bannerImage=async filename=>{
+      await window.bannerReady;
+      const image=document.querySelector('.screen img');
+      image.src=filename;await image.decode();
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    };
+  </script>
+</body>
+</html>

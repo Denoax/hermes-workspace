@@ -1,0 +1,6 @@
+{
+  ".config/systemd/user/manibot-llama.service": "1e5d4af70903bce9b5a60ed3b7b114ca0520713da41c1eb634187512c3bc5e9a",
+  ".config/systemd/user/qwen-local.service": "e97e23de260f140666e9a50222849d794b5868399984ebcbdb45847303a92ac7",
+  ".local/bin/start-manibot-llama": "553518d1c562a33ac818365ce3d76d2ab0be09c938e6a45934f86b7a640dcd89",
+  ".hermes/config.yaml": "5d91f983729d085acba087f0bfe7a3f40a525cd2965b235a6aa9ad0dbf640c81"
+}

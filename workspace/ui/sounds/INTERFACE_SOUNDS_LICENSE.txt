@@ -1,0 +1,6 @@
+Kenney — Interface Sounds (2020)
+Source: https://kenney.nl/assets/interface-sounds
+License: Creative Commons CC0 1.0 Universal
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+Official creator page rechecked 2026-10-14; explicitly identifies the pack as CC0.
+Runtime files soft-press.wav and soft-close.wav are natural-rate filtered/faded adaptations, not generated sounds. Exact processing, source and runtime hashes: SOFT_CLICK_PROVENANCE.json.

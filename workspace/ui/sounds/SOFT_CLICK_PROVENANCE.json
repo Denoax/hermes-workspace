@@ -1,0 +1,75 @@
+{
+  "selection": "Replaces user-rejected legacy mouse click. User requested soft short click. Final listening review remains separate.",
+  "files": [
+    {
+      "id": "press-17",
+      "role": "press",
+      "creator": "Kenney",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "source_file": "audio/original/Kenney/select_005.ogg",
+      "source_sha256": "ad09146e4ea33b931b2f5dfb4051a4f1fe4a36f1a48c42c5e9269c292ae21214",
+      "candidate_file": "audio/candidates/press-17.wav",
+      "candidate_sha256": "6561050259a0a5d67905d8f94b124afc75923582f97cbe16b7be0c35e2f60c2f",
+      "pcm_sha256": "11255bbf3b8056310f8e5765018863cc21cdeb5b9be748baaf90dde02d2e1008",
+      "license": "CC0",
+      "processing": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "trim_original_samples_at_resampled_rate": [
+          397,
+          9963
+        ],
+        "cap_seconds": 0.65,
+        "cap_applied": false,
+        "lowpass_2pole_hz": 4200,
+        "attack_seconds": 0.006,
+        "release_seconds": 0.024,
+        "gain": 0.44463230131739206,
+        "pitch_rate_changed": false
+      },
+      "measured": {
+        "duration_seconds": 0.19929166666666667,
+        "rms_dbfs": -23.0,
+        "sample_peak_dbfs": -8.44185633758511,
+        "spectral_centroid_hz": 1459.067445808557
+      },
+      "listening": "unverified; candidate audition required",
+      "runtime_name": "soft-press.wav"
+    },
+    {
+      "id": "press-16",
+      "role": "press",
+      "creator": "Kenney",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "source_file": "audio/original/Kenney/select_004.ogg",
+      "source_sha256": "eb6cb435f3f2ab14f85f46a2bdd9073ec511d0f1f8d8c890c6636045703a5fd4",
+      "candidate_file": "audio/candidates/press-16.wav",
+      "candidate_sha256": "e6e4ff1105802810365fc95f42506af55ed201611acb02a69125ad57631cca00",
+      "pcm_sha256": "f5b3dfa031b9814ce015211869c779a3151eb8c6444ad50a2c2aee986a042a23",
+      "license": "CC0",
+      "processing": {
+        "sample_rate": 48000,
+        "channels": 1,
+        "trim_original_samples_at_resampled_rate": [
+          397,
+          9628
+        ],
+        "cap_seconds": 0.65,
+        "cap_applied": false,
+        "lowpass_2pole_hz": 4200,
+        "attack_seconds": 0.006,
+        "release_seconds": 0.024,
+        "gain": 0.47725453557672265,
+        "pitch_rate_changed": false
+      },
+      "measured": {
+        "duration_seconds": 0.1923125,
+        "rms_dbfs": -23.0,
+        "sample_peak_dbfs": -7.236922107529127,
+        "spectral_centroid_hz": 2051.262890608813
+      },
+      "listening": "unverified; candidate audition required",
+      "runtime_name": "soft-close.wav"
+    }
+  ]
+}

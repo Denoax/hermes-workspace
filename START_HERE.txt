@@ -1,0 +1,20 @@
+HANDOFF TYPE: Automated isolated local VM lab implementation.
+ASSET PACK REQUIRED: MANI_HERMES_VM_LAB_Codex_Handoff_v1.zip.
+
+After the current PC-hardening transaction finishes, verify the next ZIP against
+the SHA-256 supplied by ChatGPT and extract into a new private directory.
+Read AGENTS.md, CODEX_TASK.md, ARCHITECTURE.md, MODEL_COMPARISON.md,
+SOURCE_NOTES.md and RETURN_CONTRACT.md. Read/apply $reference-led-design;
+use the complete bundled snapshot directly if local skill discovery fails.
+
+Build the automated owned-VM lab around my existing Hermes/Qwen setup. Preserve
+my normal profile, model artifacts, desktop and Codex verification authority.
+Implement provisioning, isolation gates, bounded guest execution, an independent
+watchdog, resets, paired normal-vs-abliterated tasks, scoring and cleanup/reporting.
+Verify candidate provenance and actual local hardware/runtime. Use the explicit
+private-lab scope, budgets and access boundaries in the pack. Do not give lab
+agents host credentials/root, general internet access or external targets.
+Continue through implementation and the actual paired local smoke when feasible;
+do not present starter fixtures or mock responses as VM/model results.
+Return ONE sanitized review ZIP with source, hashes, observed tests, measured
+model results, remaining gaps and rollback. No push or deployment.

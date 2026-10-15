@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "package": "MANI_HERMES_VM_LAB_Codex_Handoff_v1",
+  "prepared_date": "2026-10-12",
+  "vm_execution_performed": false,
+  "model_evaluation_performed": false,
+  "files": [
+    {
+      "path": "00_READ_ME.md",
+      "size_bytes": 2209,
+      "sha256": "9349232506bdb402b0f51d61821d564391c135340922798159b11693c2a9db89"
+    },
+    {
+      "path": "AGENTS.md",
+      "size_bytes": 1711,
+      "sha256": "9726540544d6f9d0278c286a1c5344fc78018a51204c66e6cf59bb1fdbc37344"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "size_bytes": 5645,
+      "sha256": "6d7583312d1094fd23354f8ac07e4b50be3508f2d678aad782f18b08162bc553"
+    },
+    {
+      "path": "CODEX_TASK.md",
+      "size_bytes": 10061,
+      "sha256": "59ff16f0f61d334ebe61f2f43535019f7cca95d3ef2f106d3459dfc803bc7474"
+    },
+    {
+      "path": "EXPERIMENT_LADDER.md",
+      "size_bytes": 2706,
+      "sha256": "408a9099a6ec068416e24e57189f93dfc2ec1e56b80546bd42bda03a4d8fefae"
+    },
+    {
+      "path": "MODEL_COMPARISON.md",
+      "size_bytes": 4990,
+      "sha256": "d6c707bc730969bdc3dca82834becfd350b490de535fdbf2947b2a28ef2564fc"
+    },
+    {
+      "path": "PREPARATION_CHECKS.md",
+      "size_bytes": 1376,
+      "sha256": "a28ed03c8473307e8f571d379210587a97ce4b0e664b222cbf0fbe532ad96dba"
+    },
+    {
+      "path": "RETURN_CONTRACT.md",
+      "size_bytes": 1768,
+      "sha256": "2b2c37d0534fd4973c6026319c575c7ab1816e6986f94993f0bcca26425264c7"
+    },
+    {
+      "path": "SOURCE_NOTES.md",
+      "size_bytes": 4399,
+      "sha256": "3353ab8a62f51b54e3b1bc2f35e1e7dc1bfd260f5dcb967c18c25343460dd974"
+    },
+    {
+      "path": "START_HERE.txt",
+      "size_bytes": 1353,
+      "sha256": "fa166bf7d3ad083f252c5410459de7c2d0b10ed80bbe65c5db347208e89dda90"
+    },
+    {
+      "path": "bench/README.md",
+      "size_bytes": 1543,
+      "sha256": "5c242cd7a5838e0ec6f62e984124a58e5692aad0090ba4a9279fff1840638d25"
+    },
+    {
+      "path": "bench/answer_keys.json",
+      "size_bytes": 1227,
+      "sha256": "07af8fe07c06305bbdd8c61852d41276f3c6fba744ff9f56f03999e14acf9369"
+    },
+    {
+      "path": "bench/cases.json",
+      "size_bytes": 6137,
+      "sha256": "6dbe8996c036101d31a984dbc25ffab364ccbfe9ec51f996c8311c4ecdc3ea0d"
+    },
+    {
+      "path": "bench/toy_function.c",
+      "size_bytes": 319,
+      "sha256": "4d3c0257f9a35853f9dc8841d43c68f8194de113044eea777870a10f4dc872b4"
+    },
+    {
+      "path": "configs/lab.example.json",
+      "size_bytes": 1780,
+      "sha256": "7df157384c568487ec3b0e2ced5dd9966b1a044bdd5d8d8f2137a8f6caeea4b6"
+    },
+    {
+      "path": "configs/model_pair.example.json",
+      "size_bytes": 816,
+      "sha256": "c82a10a62c0b4f81cbb30acf9283ca0cc40a9f76f09e0ed2cb711e42782fe344"
+    },
+    {
+      "path": "contracts/ACCEPTANCE.csv",
+      "size_bytes": 2521,
+      "sha256": "498aee45de071cde06bad04f37c11bda94a6fd9c1ff6c705cec3673b6b35a8bf"
+    },
+    {
+      "path": "policy/reference-led-design/SKILL.md",
+      "size_bytes": 5882,
+      "sha256": "50797570860ca39381b8cbe4ee1a08de67fef9bd3fb5e1e3347d737ebffb4b72"
+    },
+    {
+      "path": "policy/reference-led-design/agents/openai.yaml",
+      "size_bytes": 409,
+      "sha256": "d4a394cf94f54a6358c885f083650931e2caf6870753f30cd1ac6b62dcc973c9"
+    },
+    {
+      "path": "policy/reference-led-design/assets/icon.svg",
+      "size_bytes": 1210,
+      "sha256": "49315dda7125ec5fc77ef5f2b96126d8b2121c6e72944b4702972e90f321d3ee"
+    },
+    {
+      "path": "policy/reference-led-design/references/codex-integration.md",
+      "size_bytes": 3396,
+      "sha256": "882ecb08e83d4fcdb0e0659e0f05a937238ef1794506b4a03dd41a7692701a18"
+    },
+    {
+      "path": "policy/reference-led-design/references/portfolio.md",
+      "size_bytes": 2179,
+      "sha256": "9eca4946518e88104191cfa4cad6792956aa3d271841a38f2ea158af1c2ed2d9"
+    },
+    {
+      "path": "policy/reference-led-design/references/source-record.md",
+      "size_bytes": 1338,
+      "sha256": "8c046f8a2b7cd5996ef91ce77dcc74336ee23579e52eaf7fa834ed67be217f21"
+    },
+    {
+      "path": "scripts/verify_handoff.py",
+      "size_bytes": 4912,
+      "sha256": "6a3b9fe098f960a209dead40f144a371ad1d864c522283d4aa028d1e080582d4"
+    },
+    {
+      "path": "starter/__init__.py",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "starter/control_policy.py",
+      "size_bytes": 6110,
+      "sha256": "e29d783527f4227f63c2131201f78731db7a76fe9a9198464cdec3abf0c76d39"
+    },
+    {
+      "path": "starter/json_limits.py",
+      "size_bytes": 1298,
+      "sha256": "ece2d09fc31c6de07fd4df3db1dfbc8e79205d13b722ca91f1e18e2b4906d52a"
+    },
+    {
+      "path": "starter/scoring.py",
+      "size_bytes": 2231,
+      "sha256": "3f10c1ec7d1a62660d81b07a2359b4fdaf8b3af9fdfe1279c7b468eb0918b46d"
+    },
+    {
+      "path": "tests/test_starter.py",
+      "size_bytes": 7720,
+      "sha256": "bb59fad66139525d9dac18662b888427556d50d6ff16848bbbbc61aa567a61a0"
+    }
+  ]
+}

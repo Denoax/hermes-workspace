@@ -1,0 +1,788 @@
+{
+  "schema_version": 1,
+  "signed_base_image_sha256": "6a81c37564db9b1ee84e141922625e1d7c5b389b99bb3c572e0243607d5bb4d2",
+  "signer": "F6ECB3762474EDA9D21B7022871920D1991BC93C",
+  "signed_index_sha256": "2a6a199e1031a5c279cb346646d594993f35b1c03dd4a82aaa0323980dd92451",
+  "base_package_versions_retained": {
+    "libc6": "2.39-0ubuntu8.9",
+    "libgcc-s1": "14.2.0-4ubuntu2~24.04.1",
+    "libstdc++6": "14.2.0-4ubuntu2~24.04.1",
+    "sudo": "1.9.15p5-3ubuntu5.24.04.3"
+  },
+  "packages": [
+    {
+      "name": "binutils",
+      "version": "2.42-4ubuntu2",
+      "file": "binutils_2.42-4ubuntu2_amd64.deb",
+      "bytes": 18038,
+      "sha256": "da90122a4711baa677e291627414c700c56b4c723700541af496a1c78999ccc7",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/binutils_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "binutils-common",
+      "version": "2.42-4ubuntu2",
+      "file": "binutils-common_2.42-4ubuntu2_amd64.deb",
+      "bytes": 239232,
+      "sha256": "0f5be03f1a6237bb7f156f0e8a25223cf2f209b75c591e4e741214f2e203aa48",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/binutils-common_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "binutils-x86-64-linux-gnu",
+      "version": "2.42-4ubuntu2",
+      "file": "binutils-x86-64-linux-gnu_2.42-4ubuntu2_amd64.deb",
+      "bytes": 2469014,
+      "sha256": "1f3770dce907c26493217393ed24ca7484443381cafd04c81d6a6bef702b7416",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/binutils-x86-64-linux-gnu_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "cpp",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "cpp_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 22442,
+      "sha256": "b51f8094760f7b41afdcb1fe1b5a57fc64b75a090859918af17450a10f8c7d31",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/cpp_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "cpp-13",
+      "version": "13.2.0-23ubuntu4",
+      "file": "cpp-13_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 1032,
+      "sha256": "a29077c6e40afb94dbdad2cabef4097d1db249d4efd4ffa59d11db250a12ba8b",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/cpp-13_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "cpp-13-x86-64-linux-gnu",
+      "version": "13.2.0-23ubuntu4",
+      "file": "cpp-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 11160560,
+      "sha256": "b62ca3e8fe6fee933e1e92ab4330a666c09374ae6c49d5c01144142746e409f3",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/cpp-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "cpp-x86-64-linux-gnu",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "cpp-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 5326,
+      "sha256": "85059b30960de3582e8612740614da3dfe47241d0368a28dea686188cf7648dd",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/cpp-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "g++",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "g++_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 1100,
+      "sha256": "800a84b369c64b18d65f0fb5c1533de0446c880ee4f1cadad64e3363327f63f0",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/g++_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "g++-13",
+      "version": "13.2.0-23ubuntu4",
+      "file": "g++-13_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 14500,
+      "sha256": "d7c1d0f12aa096d94af5dfc17022457b71c69264efd59aa97e582188c1379b95",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/g++-13_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "g++-13-x86-64-linux-gnu",
+      "version": "13.2.0-23ubuntu4",
+      "file": "g++-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 12544650,
+      "sha256": "0e4230118942fa4a082152eed4d9c6d443c2347bf0024fd3319f7dd75ffc8fb1",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/g++-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "g++-x86-64-linux-gnu",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "g++-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 964,
+      "sha256": "145b027a542db5b21f85d4f9e242f51c62c69914fc484adb3a4881ca8e2f3913",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/g++-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "gcc",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "gcc_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 5018,
+      "sha256": "0e0bb8b25153ed1c44ab92bc219eed469fcb5820c5c0bc6454b2fd366a33d3ee",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/gcc_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "gcc-13",
+      "version": "13.2.0-23ubuntu4",
+      "file": "gcc-13_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 482052,
+      "sha256": "03170f01bec12ab5a0907c16ad8f439ed3184cedfbb8ea51ba0d8ddd19d787e7",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/gcc-13_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "gcc-13-base",
+      "version": "13.2.0-23ubuntu4",
+      "file": "gcc-13-base_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 48958,
+      "sha256": "2613608b046eb9416878fa4e30aa8e34831775bb0cc7ae6efef6d230986dbb5a",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/gcc-13-base_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "gcc-13-x86-64-linux-gnu",
+      "version": "13.2.0-23ubuntu4",
+      "file": "gcc-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 21869806,
+      "sha256": "92f94ad8c5d42472fd032f7820aaeb9df2cc08559ef062a3a277573c03d26a08",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/gcc-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "gcc-x86-64-linux-gnu",
+      "version": "4:13.2.0-7ubuntu1",
+      "file": "gcc-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "bytes": 1212,
+      "sha256": "72e79089a10e381360bfc6f03c5e5d8c2ff177d6dbac2cd7ffb3cc1383f57591",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/gcc-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libasan8",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libasan8_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 3024400,
+      "sha256": "e2f51f175731daf4fd2aacdec3096203d497c53d304ee3da1a7f9b5a26ed5821",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libasan8_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libatomic1",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libatomic1_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 10374,
+      "sha256": "f496d80626e1512456273965d44f47b281edf53fa26d0d8bd0defc5be7e4601c",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libatomic1_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libbinutils",
+      "version": "2.42-4ubuntu2",
+      "file": "libbinutils_2.42-4ubuntu2_amd64.deb",
+      "bytes": 571736,
+      "sha256": "379b737386276ec099bf1fa4802d1ca6a4f020f2a81085b14caafac42ef7aec2",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/libbinutils_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "libcc1-0",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libcc1-0_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 47678,
+      "sha256": "a67619a396cdab9bf5dcd01cbed80287061e8f12af5439f4f529a001d8cee5e7",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libcc1-0_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libctf-nobfd0",
+      "version": "2.42-4ubuntu2",
+      "file": "libctf-nobfd0_2.42-4ubuntu2_amd64.deb",
+      "bytes": 97106,
+      "sha256": "f45396b6fecdfa94da09e057004b75801241db948ddb7c6d831cac0f58632549",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/libctf-nobfd0_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "libctf0",
+      "version": "2.42-4ubuntu2",
+      "file": "libctf0_2.42-4ubuntu2_amd64.deb",
+      "bytes": 94548,
+      "sha256": "3497c775d5d72c4e1cb47f54b0ced6343a25818a6571408caa398b61f4fa74e8",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/libctf0_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "libgcc-13-dev",
+      "version": "13.2.0-23ubuntu4",
+      "file": "libgcc-13-dev_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 2687706,
+      "sha256": "d36c9acb969dd37fdc0496120715d8bba67a5cc43a0c2569717314e6ad80020c",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/libgcc-13-dev_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "libgomp1",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libgomp1_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 147370,
+      "sha256": "cc2ca1193d2c11d7383bdb03dd333cc621d128237b82dafeb8d7f2bd8302f3dd",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libgomp1_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libgprofng0",
+      "version": "2.42-4ubuntu2",
+      "file": "libgprofng0_2.42-4ubuntu2_amd64.deb",
+      "bytes": 851218,
+      "sha256": "b41ab4d68f66993413e0b8c82084d469a5317323adccf6feb96f79d9e1bea7d3",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/libgprofng0_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "libhwasan0",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libhwasan0_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 1632150,
+      "sha256": "a2912d49e2d79bc2f2803e12b17b507c147d505ab5aece3c15158de76f47ac54",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libhwasan0_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libisl23",
+      "version": "0.26-3build1",
+      "file": "libisl23_0.26-3build1_amd64.deb",
+      "bytes": 679596,
+      "sha256": "24b1aa0e1772080fd23df7bed10aadcbbe16b3181b77d3a013c14dfaf9848541",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/i/isl/libisl23_0.26-3build1_amd64.deb"
+    },
+    {
+      "name": "libitm1",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libitm1_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 28886,
+      "sha256": "bd57f7e288c46d4de9e33dd0fb15d82970bc58778b10549ad813605ea2c18d65",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libitm1_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "liblsan0",
+      "version": "14-20240412-0ubuntu1",
+      "file": "liblsan0_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 1312880,
+      "sha256": "209bf408f4f5ed995d1fd831176c05d43277cdb5acdf7fa95a8ee811301c920e",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/liblsan0_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libmpc3",
+      "version": "1.3.1-1build1",
+      "file": "libmpc3_1.3.1-1build1_amd64.deb",
+      "bytes": 54520,
+      "sha256": "34af1193734f40723c7fc03d855d98c107d8b62bd2fa17dae8b09d2369cdd45e",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/m/mpclib3/libmpc3_1.3.1-1build1_amd64.deb"
+    },
+    {
+      "name": "libquadmath0",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libquadmath0_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 152804,
+      "sha256": "be0bd561a1133ef6622f58112126687f6d3b768ca8b70ed485be4787828d5f1c",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libquadmath0_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libsframe1",
+      "version": "2.42-4ubuntu2",
+      "file": "libsframe1_2.42-4ubuntu2_amd64.deb",
+      "bytes": 14790,
+      "sha256": "0b8d3e9338b2d47a523532463e341962edd1e669fb1760f12d82d7a68b33096a",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/binutils/libsframe1_2.42-4ubuntu2_amd64.deb"
+    },
+    {
+      "name": "libstdc++-13-dev",
+      "version": "13.2.0-23ubuntu4",
+      "file": "libstdc++-13-dev_13.2.0-23ubuntu4_amd64.deb",
+      "bytes": 2399142,
+      "sha256": "0e34b7a6ad0d9db6c718301a0c30a077590decbb31099d0fd6ac957222d77a94",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/libstdc++-13-dev_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "name": "libtsan2",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libtsan2_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 2735540,
+      "sha256": "dccbd2753aedbea03f6e72f94d4f0a9e2598058265c8bb889b86db14316410df",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libtsan2_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "libubsan1",
+      "version": "14-20240412-0ubuntu1",
+      "file": "libubsan1_14-20240412-0ubuntu1_amd64.deb",
+      "bytes": 1175242,
+      "sha256": "005ac9c19b9c12908c83498eded06e7e1c13994101341e05e8875d88cfca452d",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libubsan1_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "name": "make",
+      "version": "4.3-4.1build2",
+      "file": "make_4.3-4.1build2_amd64.deb",
+      "bytes": 179752,
+      "sha256": "1fe6a815b56c7b6e9ce4086a363f09444bbd0a0d30e230c453d0b78e44b57a99",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.3-4.1build2_amd64.deb"
+    }
+  ],
+  "compiler_zip_sha256": "08b4768c5e16e95dd17bc457a2e937f87e9b1acaadf303bfaa024014709bcdd3",
+  "installation": "Extract selected missing compiler/development package data in fresh guests; preserve signed-base runtime packages and package DB; no maintainer scripts or host package changes",
+  "zip_entries": [
+    {
+      "name": "manifest.json",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        32
+      ],
+      "external_attr": 2175008768,
+      "create_system": 3
+    },
+    {
+      "name": "binutils_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        12
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "binutils-common_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        12
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "binutils-x86-64-linux-gnu_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        14
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "cpp_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        14
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "cpp-13_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        14
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "cpp-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        16
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "cpp-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        16
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "g++_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        16
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "g++-13_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        16
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "g++-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        18
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "g++-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        18
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "gcc_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        18
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "gcc-13_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        18
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "gcc-13-base_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        18
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "gcc-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        20
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "gcc-x86-64-linux-gnu_13.2.0-7ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        20
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libasan8_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        22
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libatomic1_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        22
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libbinutils_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        22
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libcc1-0_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        22
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libctf-nobfd0_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        24
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libctf0_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        24
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libgcc-13-dev_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        24
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libgomp1_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        26
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libgprofng0_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        26
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libhwasan0_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        26
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libisl23_0.26-3build1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        28
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libitm1_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        28
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "liblsan0_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        28
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libmpc3_1.3.1-1build1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        28
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libquadmath0_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        30
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libsframe1_2.42-4ubuntu2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        30
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libstdc++-13-dev_13.2.0-23ubuntu4_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        30
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libtsan2_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        32
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "libubsan1_14-20240412-0ubuntu1_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        32
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    },
+    {
+      "name": "make_4.3-4.1build2_amd64.deb",
+      "date_time": [
+        2026,
+        10,
+        13,
+        2,
+        30,
+        32
+      ],
+      "external_attr": 2172649472,
+      "create_system": 3
+    }
+  ],
+  "embedded_manifest_sha256": "665fd2f5889d93729bb0af6d0dca4575a6aa5da1b863edcf01c2bc1d28aa4b50"
+}

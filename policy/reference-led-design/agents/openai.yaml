@@ -1,0 +1,14 @@
+interface:
+  display_name: Reference-led Design
+  short_description: Real references, original code, no generated media
+  default_prompt: Use $reference-led-design to research real design references and
+    implement this change in the project’s theme.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  allow_implicit_invocation: true
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas

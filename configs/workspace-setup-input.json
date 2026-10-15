@@ -1,0 +1,71 @@
+{
+  "files": {
+    "installer": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/install_runtime.py",
+      "sha256": "3a8d5b7214d2f1cc75431e86a7eeb9da8f39dcb9511e510d26d5841025f6a501",
+      "bytes": 11520
+    },
+    "updater": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/update_runtime.py",
+      "sha256": "62cff808228f7db9253726d2f2c150c93551050019d090d4be6216fe31adf105",
+      "bytes": 10538
+    },
+    "recovery": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/recovery.py",
+      "sha256": "ff755896c6a8fb0bb990aeb56f47abf8b1ec9bea3a87e625b958c10e15da4cd4",
+      "bytes": 13897
+    },
+    "recovery_entry": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/workspace_recovery.py",
+      "sha256": "b0d6170c3f18b7bafd150056c6c9b9de28e3a0d0b8157fc5b51316221ef6d5fd",
+      "bytes": 1089
+    },
+    "acceptance": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/workspace_acceptance.py",
+      "sha256": "bbdcb4816f2c57aada6b2a0190b03f59a59824f97ec663763d0e8fc0736189b4",
+      "bytes": 26922
+    },
+    "watchdogs": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/watchdog_probe.py",
+      "sha256": "b48e2913bb84127e768f686fffcc01920246cd1019d4d37bbb6ecb5d6afed280",
+      "bytes": 8830
+    },
+    "protocol": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/native/protocol_probe.py",
+      "sha256": "c53ebdf0c2c438141fb0653584077888731f57cbdae0556bc1932db00a03260b",
+      "bytes": 4835
+    },
+    "normal_profile": {
+      "path": "/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/configs/normal-profile.lock.json",
+      "sha256": "2df28a19ae54e3cd6fc431c7e1a30c5981b819fe88b3697ed09fd49bae576ba0",
+      "bytes": 429
+    },
+    "source_pack": {
+      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-source-20261013T115642Z.zip",
+      "sha256": "7e841e74690f8ea55d36b89e27174c1cf85eb3ade8c76371f42de9b997887a34",
+      "bytes": 72025
+    },
+    "runtime_iso": {
+      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/workspace-runtime.iso",
+      "sha256": "c3972597baf13d8bacdaa51165f00764da10ce2c717baf4f52cec1752d233d74",
+      "bytes": 120334336
+    },
+    "pin_backup": {
+      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/sidebar-before.qml",
+      "sha256": "8f03675c67f2eafb90baaee9948e2fb5d826431831500cd822084062bd7c7048",
+      "bytes": 16428
+    },
+    "router_backup": {
+      "path": "/home/mani/mani-hermes-workspace-gi95k3xk/private-state/hermes-worker-before",
+      "sha256": "9a7236f9e90ed3eff64f4cfbb56f76053501254bf659a72b1f2d530c6273e098",
+      "bytes": 16787
+    }
+  },
+  "source_pack_sha256": "7e841e74690f8ea55d36b89e27174c1cf85eb3ade8c76371f42de9b997887a34",
+  "compiler_zip_sha256": "08b4768c5e16e95dd17bc457a2e937f87e9b1acaadf303bfaa024014709bcdd3",
+  "runtime_iso_sha256": "c3972597baf13d8bacdaa51165f00764da10ce2c717baf4f52cec1752d233d74",
+  "pin_before_sha256": "8f03675c67f2eafb90baaee9948e2fb5d826431831500cd822084062bd7c7048",
+  "router_before_sha256": "9a7236f9e90ed3eff64f4cfbb56f76053501254bf659a72b1f2d530c6273e098",
+  "pin_before_mode": 420,
+  "router_before_mode": 493
+}

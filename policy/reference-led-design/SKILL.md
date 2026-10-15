@@ -1,0 +1,29 @@
+---
+name: reference-led-design
+description: Apply Mani's standing source policy when writing Codex prompts, instructions and handoffs, and when researching or implementing visual design. Use for UI, websites, portfolios, layouts, animation, 3D scenes, assets, visual polish, plans, reviews and missing visual assets. Adapt inspected real references in original code without generated media. Do not introduce visual research into purely nonvisual execution.
+---
+
+# Reference-led Design
+
+Apply Mani's standing design preference across projects. Follow the latest explicit user instruction and preserve completed work. Read [portfolio constraints](references/portfolio.md) for the Pelagic portfolio; read [Codex integration](references/codex-integration.md) when installing or propagating this policy.
+
+In every future Codex prompt, instruction pack or continuation brief written for Mani, explicitly require reading and applying `$reference-led-design`. Carry the operative source rules into the handoff so they survive context changes; do not rely on implicit matching alone. If the receiving agent cannot access the skill, include the core rules directly and identify the installation gap. Keep nonvisual tasks focused on their actual work; do not add unrelated visual research.
+
+## Keep these rules throughout the work
+
+- Do not generate images, videos, raster mockups, concept art, textures, illustrations, icons or other visual media as assets, planning authority or a quality target. Do not substitute externally published model-generated media: publication does not establish acceptable provenance. Permit an exception only for a later explicit user request for that particular generation task; do not infer one from a missing asset, deadline or request to make something impressive.
+- Write original CSS, SVG, canvas, Three.js/GLSL, simulations and authored 3D code. Use deterministic wireframes, layout diagrams, state charts and motion plans to explain real constraints and inspected principles. These implementation and planning methods are valid; an invented raster concept is not implementation evidence.
+- Avoid unsolicited AI badges, model labels, inference/classification panels, fake telemetry, fabricated metadata and decorative product fiction. Use labels for actual content or state and controls for real actions. Preserve factual AI-related content when it belongs to the user's actual project.
+- Avoid defaulting to interchangeable card grids, decorative pills, gratuitous glowing borders or generic futuristic controls. Use such elements only when their role and composition follow the project's established theme and inspected references. Do not turn a reference collection into unrelated visual effects.
+- Reuse owned assets, source records, approved code and evidence. Do not restart development, replace approved anatomy or remove working features merely to apply this policy. Preserve recoverable history when retiring an earlier concept.
+
+## Follow this workflow
+
+1. **Inspect the project.** Read its instructions, current implementation, approved visual language and available evidence. Identify the specific gap, existing interaction contracts and actual content. Reuse settled research rather than repeat it.
+2. **Research the gap.** Find suitable published references with credible non-generated provenance. Inspect the actual appearance and behaviour, follow curated references to the original creator, and read relevant original or official implementation documentation. Separate observed behaviour from an inference about technique; do not claim access to a site's undisclosed internals. Adapt demonstrated principles in independently authored code, or reuse assets/code with the applicable permissions and credits.
+3. **Plan a cohesive change.** State the reference detail, adaptation to this project's theme, layout/states, entry/exit behaviour and input handling. Derive motion from the actual interaction; account for interruption, reverse travel and reduced motion where relevant. Match the plan's detail to the change. Ordinary spacing fixes do not need a research essay or a new asset pack.
+4. **Implement the real interface.** Use the existing stack and consistent typography, contrast, geometry and motion language. Keep useful controls, keyboard focus, readable content and touch behaviour. Resolve missing assets with an appropriate owned/real asset or a documented code implementation. Continue independent work if a particular source is unavailable; identify any fallback and remaining gap honestly. Do not generate a substitute, invent provenance, treat a placeholder as final or claim an unavailable reference was inspected.
+5. **Verify the output.** Inspect actual browser output at meaningful viewports and exercise the affected interactions. For animation, review uninterrupted playback, transitions and applicable reverse/interruption paths; selected decoded frames do not establish continuous smoothness. Use appropriate build/runtime checks and measured performance evidence. Do not present a plan, source recording, generated mockup or build success as proof of the site's visual quality. Report browser/device/display checks that remain unverified; do not promise identical physical display brightness.
+6. **Record and report proportionately.** Keep the short [source-to-implementation record](references/source-record.md) for a new visual component. Report what changed, the supporting source and actual validation, with material unresolved gaps. Do not invent approvals or claim that saving a file has updated a separate running Codex session.
+
+If acceptable source material cannot be inspected, keep the appropriate existing implementation and explain the specific gap while completing independent work. Ask for missing input only when it materially blocks the requested result. Never use generated media as the fallback.

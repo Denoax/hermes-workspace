@@ -1,0 +1,77 @@
+{
+  "scope": "Real current interface with labelled, isolated documentation fixtures; no live inference or production mutation",
+  "fixture_source": "scripts/github_showcase.py:documentation_fixture",
+  "served_assets": {
+    "index.html": "e39d82a63b2d29b6cbff9af1c71a25e020ed532cb4bf382a0237737c2b9f9469",
+    "app.js": "0a64fb4edef14195e47c4f627ac836c3a8df519891344abddd6a1173902aa1fd",
+    "style.css": "07c6088dcba3eafc62053e4ceb5044676ca2ec7f2d76261f778f698bb1c16d0b",
+    "portfolio.css": "80e4bf780f1b16037342dc899a8e1fde02bb7868fa6fadfaa2ae162f88d142e0",
+    "brand/hermes.png": "d60d164e24fdcf6532133b8ea43c77a201e4b9e9dbc396187b58d51d8590ef52",
+    "icons.mjs": "7408857d28e4aafb2a013e989ddafa128743e4443d6caf3a3c4222841d0101b1",
+    "pane-motion.mjs": "d8faa16e25c228b92df40d8436c8e5083a89a10f8ed101330ec6347c28c0762c",
+    "portfolio-nav.mjs": "588b6928077d17b5f4e273a55ac6605454ea1cd7fa385326bc7a897fd154a23e",
+    "interface-audio.mjs": "817511c213ba2e64398d8c767662cd368601b5abab6d7c5451d9db41b5c1ff05",
+    "flight-kernel.mjs": "b8167a92b8ebdda7d50edc9f882f3020247b28288b38af658383c8771b321937",
+    "paintPane.mjs": "da59c18ccd302de4cf6e2afb50a0e1cd1ec027102d4d82494a4f315bad94ecd6",
+    "glassOptics.mjs": "43b1eac51ec168a1ed00353fa8444be0057c65c5a2047f9024ea74c8d92dfa44",
+    "sliderFlight.mjs": "3e3d06702af53e2cb04efac719534c2a5895f1c9a00ce47a5e046f3de5136758",
+    "portfolio-settings.mjs": "49b52cc3d4551832adad31caec35f4c1c274d8e30bd26a7294f50ed1a613e7f7",
+    "paint-support.mjs": "31a4aae91505eae1d81e7de0459f189ffcf76fdb0f8432c688317ed4790b62ba",
+    "fonts/Inter-Medium.woff2": "0ff3e94614e1493eb556314fd247ae6c4a85a7783b4cc86be539940cf83f2a48",
+    "fonts/Rubik.ttf": "1b3a7437ba2af80e465e773ed60c5036d1ba6ace492d89046dbcf18fb31e4e88",
+    "fonts/BebasNeue.ttf": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73",
+    "fonts/DMSans.ttf": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d",
+    "fonts/SixCaps.ttf": "7b54a46671722fb670647c9c3951e6e618b6a9d876fc5d9ae34dfd311628ae5a",
+    "sounds/soft-press.wav": "6561050259a0a5d67905d8f94b124afc75923582f97cbe16b7be0c35e2f60c2f",
+    "sounds/soft-close.wav": "e6e4ff1105802810365fc95f42506af55ed201611acb02a69125ad57631cca00"
+  },
+  "captures": [
+    {
+      "path": "files.webp",
+      "source_sha256": "0e5c343107357cbf671b8b0b83522fce219403f3d6e5c4ac4640eae81afcff47",
+      "sha256": "70a58a30f3aa26056813e572d832cc4d21ce9da4ee519226fd56513ff32e5ac1",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    },
+    {
+      "path": "settings-dark-1440.webp",
+      "source_sha256": "a62fe572f4b692eb91c8b84172c2d9210f11ea9e2cd26ea5bf1cf180c19295a4",
+      "sha256": "f0c38624b896cadd8d9378f6a5fe9fcfbe36b76defc5dc58cdd3b4c4fb33b44b",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    },
+    {
+      "path": "settings-dark-390.webp",
+      "source_sha256": "1bbff112b05904c4c901757a242168bc745930c4291e84a636493afba6d4c8a5",
+      "sha256": "b0a14e16d29f4b74405ee46f1dd0e5000e6d2d0290d9fb0393814e95e7fe36e7",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    },
+    {
+      "path": "settings-light-1440.webp",
+      "source_sha256": "1e69ea63bee86678f592e817bb07dc32b73d32a97dbfef9933f04a80406a7aad",
+      "sha256": "1de49f6049717113d478e1370cbba413c227f3043ca36456ff4a3b91efb06cf7",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    },
+    {
+      "path": "settings-light-390.webp",
+      "source_sha256": "484a298ba185ba2eef107c3ec2e7861629809983fe3591076d7e8bb2cc15c4b1",
+      "sha256": "924cf4a86629e8a3c099a37975a20eb4d5e3fea06e761fea7564f58f728bdf94",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    },
+    {
+      "path": "workspace-dark.webp",
+      "source_sha256": "5e6d55ce4a7737a292cc2c911884951c89f1433d7e18ced318a0e73ce7fe95ce",
+      "sha256": "d61a7481e4e52a26af44f90717c4e994714b4915bacbea9179d27d1b183a23a5",
+      "operation": "Actual native browser capture; lossless WebP conversion"
+    }
+  ],
+  "brand_sha256": "d60d164e24fdcf6532133b8ea43c77a201e4b9e9dbc396187b58d51d8590ef52",
+  "recording": {
+    "frames": 360,
+    "seconds": 9.147356033325195,
+    "sha256": "86dcde0cb29ec72c7a128dfb22118499151330ac281f9b843556ca86415102e3",
+    "scope": "Actual trusted pointer/keyboard tour of labelled renderer fixtures; source frame timestamps preserved; silent"
+  },
+  "references": [
+    "https://github.com/Denoax/portfolio",
+    "https://github.com/Denoax/konata-hyprland-dotfiles"
+  ]
+}

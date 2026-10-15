@@ -1,0 +1,55 @@
+{
+  "status": "PASS scoped documentation and authored-image checks",
+  "scope": "Real current interface with isolated documentation content; no model response or new VM qualification",
+  "README_sha256": "e2e92aaedcde135aaf413c43bb43d0076c0b743a737841eb77d609f566a2424d",
+  "requested_changes": [
+    "Fresh actual workspace capture with all panes closed",
+    "Local workspace label enlarged from11px to24px",
+    "Hermes \u00d7 Your local model identity",
+    "Outer documentation caption removed",
+    "Banner fitted to the existing990x352 profile canvas without crop or stretch"
+  ],
+  "assets": {
+    "source": "showcase/github/banner.html",
+    "source_sha256": "ebcc0fd70314a2020d82ad32b1e5aa0998553014285510d764cf17a8fe81f7de",
+    "video_sha256": "86dcde0cb29ec72c7a128dfb22118499151330ac281f9b843556ca86415102e3",
+    "frames": 139,
+    "fps": 15,
+    "operation": "Original HTML/CSS composition with a real interface recording; sampled at source pace, no interpolation or retiming; a presentation asset, not unedited app evidence",
+    "files": {
+      "banner.gif": {
+        "sha256": "b691bc8c2c7a2bf960b549b46f9adae1993547ad62f3404a1ccda99a743311d7",
+        "bytes": 839961
+      },
+      "banner.png": {
+        "sha256": "3b60609e0d4848b3ab31e13fb58dcfd5a5e54aed9e9b929aa0f8bc8d5b16d8bc",
+        "bytes": 73301
+      },
+      "social-preview.png": {
+        "sha256": "76ff4685e82b1853ac9018a4d1418cbbb0267e3747a36b6bf910d7a977a98c5d",
+        "bytes": 68531
+      }
+    },
+    "social_preview": {
+      "width": 1280,
+      "height": 640,
+      "under_1_MB": true
+    },
+    "banner_canvas": {
+      "width": 990,
+      "height": 352,
+      "fit": "Full1280x460 authored composition fitted without crop or stretch to the existing profile canvas"
+    }
+  },
+  "repository_preview_dimensions": [
+    1280,
+    640
+  ],
+  "banner_dimensions": [
+    990,
+    352
+  ],
+  "publication": "Canonical destination Denoax/hermes-workspace; remote identities are verified separately after publishing",
+  "runtime_changes": "None; app/model/native controls preserved",
+  "tests": "Reviewed runtime source identities retained; publication source checks recorded separately"
+}

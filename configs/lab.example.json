@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "project": "mani-hermes-vm-lab",
+  "execution_enabled": false,
+  "hardening_transaction_finished": false,
+  "fleet": {
+    "controller": {
+      "memory_mib": 3072,
+      "vcpus": 2
+    },
+    "worker_a": {
+      "memory_mib": 1536,
+      "vcpus": 1
+    },
+    "worker_b": {
+      "memory_mib": 1536,
+      "vcpus": 1
+    },
+    "max_active_guests": 3,
+    "gpu_passthrough": false
+  },
+  "network": {
+    "backend_proposal": "qemu_user_restrict",
+    "guest_egress": "deny",
+    "control_bind": "private_unix_or_loopback_only",
+    "host_home_shared": false,
+    "extra_nics": 0,
+    "cloud_fallback": false
+  },
+  "budgets": {
+    "max_parallel_model_jobs": 1,
+    "batch_wall_seconds": 5400,
+    "job_wall_seconds": 480,
+    "controller_heartbeat_timeout_seconds": 45,
+    "max_actions_per_job": 24,
+    "max_retry_per_case": 1,
+    "max_candidate_bytes": 32768,
+    "proposed_context_tokens": 8192,
+    "smoke_output_tokens": 1024
+  },
+  "smoke": {
+    "cases": [
+      "B01",
+      "B04",
+      "B08"
+    ],
+    "repeats": 1,
+    "arms": [
+      "normal",
+      "abliterated"
+    ]
+  },
+  "extended": {
+    "cases": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12"
+    ],
+    "seeds": [
+      41,
+      42,
+      43
+    ],
+    "counterbalance": true
+  },
+  "readiness_evidence_required": [
+    "target_host_confirmed",
+    "hardening_complete",
+    "kvm_access",
+    "updated_runtime",
+    "host_process_confinement",
+    "controlled_channels_work",
+    "guest_host_lan_wan_denied_v4_v6",
+    "no_shared_secrets",
+    "independent_watchdog",
+    "quota_expiry_replay_denial",
+    "cleanup_identity_checks",
+    "normal_setup_restore"
+  ]
+}

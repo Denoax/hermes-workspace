@@ -1,0 +1,12 @@
+{
+  "source": "showcase/github/workspace-motion.mp4",
+  "source_sha256": "86dcde0cb29ec72c7a128dfb22118499151330ac281f9b843556ca86415102e3",
+  "interaction.gif": {
+    "sha256": "f4e0c196566d3748f11aaf347519f7c03595bcda2738a0dc10afb6f47db54357",
+    "operation": "Full original recording at original pace, silent, 15fps and960px wide; GIF palette conversion"
+  },
+  "banner-still.webp": {
+    "sha256": "d61a7481e4e52a26af44f90717c4e994714b4915bacbea9179d27d1b183a23a5",
+    "operation": "Byte-identical fresh workspace-dark.webp capture with all panes closed; no crop or retouch"
+  }
+}

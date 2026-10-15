@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+results/
+*.gguf
+*.qcow2
+*.seed
+*.key
+secret.json
+
+# Local documentation review
+workspace/evidence/
+showcase/github/README-preview.html
+showcase/github/readme-portrait-gallery-*

@@ -1,0 +1,10 @@
+{
+  "Hermes_revision": "63279301bcbdc185c1b07b98a9312eb0c862f26d",
+  "runtime_zip_sha256": "df3b9b6bf0ab4f2fad513b034db20cd3b7ba8f0623b8e0a995572a7b9b7d76a7",
+  "runtime_iso_sha256": "b9c768272dbcf6ba53509297ed497a35f928341ff2a3e0c64b4a255c5dd922bb",
+  "runtime_iso_bytes": 53569536,
+  "source_files_and_dependency_members": 5174,
+  "wheel_count": 62,
+  "skipped_wheel_members": [],
+  "host_agent_execution": false
+}
