@@ -1,7 +1,7 @@
 {
   "status": "PASS scoped documentation and authored-image checks",
   "scope": "Real current interface with isolated documentation content; no model response or new VM qualification",
-  "README_sha256": "e2e92aaedcde135aaf413c43bb43d0076c0b743a737841eb77d609f566a2424d",
+  "README_sha256": "cbe9ab69d2c60b0c27028512932548aa339e1c17c60d4c0223ad8a762ea3686c",
   "requested_changes": [
     "Fresh actual workspace capture with all panes closed",
     "Local workspace label enlarged from11px to24px",
@@ -51,5 +51,7 @@
   ],
   "publication": "Canonical destination Denoax/hermes-workspace; remote identities are verified separately after publishing",
   "runtime_changes": "None; app/model/native controls preserved",
-  "tests": "Reviewed runtime source identities retained; publication source checks recorded separately"
+  "tests": "Reviewed runtime source identities retained; publication source checks recorded separately",
+  "active_header": "banner.png: fresh actual interface capture with Settings closed",
+  "historical_motion": "banner.gif is retained as motion documentation; it is not the active repository or profile header"
 }
