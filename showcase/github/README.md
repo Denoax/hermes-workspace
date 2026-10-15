@@ -15,9 +15,11 @@ monochrome interface rather than copied as a desktop/anime theme.
 - `banner.html` is original typography and CSS around actual Hermes captures.
   It uses the same existing Bebas Neue/DM Sans fonts and exact Hermes icon as the
   app. No brand image was generated.
-- `banner.png` is the still README fallback. `banner.gif` is the same composed
-  banner with the actual interface recording inside the frame. The banner is
-  presentation media, not an unedited live application capture.
+- `banner.png` is the active closed-Settings README/profile header. `banner.gif` is the historical motion version of the same composed
+  banner with the actual interface recording inside the frame. The composition is
+  presentation media, not an unedited live application capture. The latest owner
+  request keeps Settings closed in both active headers; the separate interaction
+  gallery retains the motion example.
 - `social-preview.png` is the matching 1280×640 solid-background image, below
   GitHub's 1 MB social-preview limit. Upload it under Repository Settings →
   Social preview; adding it to the README does not set that separate field.

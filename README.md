@@ -1,9 +1,6 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="showcase/github/banner.png">
-  <img src="showcase/github/banner.gif" alt="Hermes — the actual local workspace, fluid Settings navigation and glass pane motion" width="100%">
-</picture>
+<img src="showcase/github/banner.png" alt="Hermes × Your local model — local workspace with Settings closed" width="100%">
 
 # Hermes Workspace
 
