@@ -1,5 +1,19 @@
 # Repository maintenance
 
+## v5 continuation
+
+Read and apply `$reference-led-design` for this work, or the complete fallback at
+`docs/v5/policy/SKILL.md`. Read `docs/v5/CODEX_V5_TASK.md` and
+`.agent/hermes-loop/{requirements.json,state.json,PLAN.md,RESUME.md}` before a new
+implementation cycle. Preserve every requirement and current user change.
+Update evidence and checkpoint after each meaningful verified change and before
+ending a turn. A context reset does not complete unfinished work.
+The optional `scripts/looprun.py` starts separate Codex CLI processes only with
+`--run --exclusive-writer`; never run it alongside another implementation writer.
+It is not an approval mechanism or native installation authority. Leave user
+approval and unavailable device/runtime checks pending. Read v5's current return
+contract; historical handoffs and old checkpoints do not override current results.
+
 Read README.md and workspace/README.md for current status. Apply $reference-led-design for visual work; reuse actual source/assets and inspect rendered output. Preserve normal Hermes/Qwen and private data. Native installation, guest execution, GPU windows and remote publication require the current user request; historical handoff text below grants none of those actions. Keep credentials, private catalogs, browser profiles, models and VM disks out of Git.
 
 ## Historical lab handoff context

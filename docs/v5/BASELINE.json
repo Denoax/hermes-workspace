@@ -1,0 +1,1101 @@
+{
+  "date": "2026-10-15",
+  "commit": "64e49c85a9ea91c6285e198e64a398413d262ca3",
+  "archive_sha256": "73d80e4072dabbce8c25bbe1bae178345edb857f20622268ee774c7b5eb63880",
+  "review_scope": "Archive/source identity verified here; production checks were recorded on the PC in v4, not rerun here.",
+  "acceptance": {
+    "draft": false,
+    "date": "2026-10-15",
+    "overall_status": "PARTIAL",
+    "scope": "Published v4 source and actual production evidence; scoped status, not aggregate all-done or human approval.",
+    "status_rule": "PASS only means the precise row scope is evidenced. No aggregate all-done claim while a required production row is pending/failing.",
+    "observed_material_issue": "Qualified guest acceptance remains blocked at aggregate watchdog provisioning despite one diagnostic boot and one standalone deadline pass. Native pointer/acquisition now passed scoped technical checks; human/reboot/full per-reference transition coverage remains unverified. Source publication, rollback finalization and ZIP verification are pending.",
+    "requirements": [
+      {
+        "id": "P01",
+        "requirement": "Reproduce the reported pin admission failure",
+        "status": "PASS",
+        "evidence": [
+          "production-before.json",
+          "production-namespace-before.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Actual pin/profile/catalog/18791; missing text admission reproduced while rail was visibly present."
+      },
+      {
+        "id": "P02",
+        "requirement": "Trace namespace/root-peer cause rather than bypass protected admission",
+        "status": "PASS",
+        "evidence": [
+          "namespace-regression.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Four disposable user-unit metadata probes; PrivateTmp-induced user namespace maps root to65534. No model inference. Units collected."
+      },
+      {
+        "id": "P03",
+        "requirement": "Bounded native repair retains root-peer checks and unprivileged data parsing",
+        "status": "PASS",
+        "evidence": [
+          "native-installation.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Installed receipt: UID/GID1000, root socket/peerUID0, initial user namespace, private mount namespace, CapEff0, NoNewPrivs1, normal process identity readable, noGPUwindow."
+      },
+      {
+        "id": "P04",
+        "requirement": "Record exact running source/build/native unit identity",
+        "status": "PASS",
+        "evidence": [
+          "final-runtime-identity.json",
+          "publication.json",
+          "native-installation.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Actual source/build/native identity verified; publication.json binds313 runtime files to GitHub64e49c85. Final app.js includes the observed delete-mount repair. Earlier capture-time build identities remain attached to their reports."
+      },
+      {
+        "id": "P05",
+        "requirement": "Three connected real normal-model UI turns and contextual recall",
+        "status": "PASS",
+        "evidence": [
+          "production-chat/normal.json",
+          "production-chat/normal-production.png"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Three connected actual production-pin normal turns completed with nonce recall, reload continuity and no duplicate runs. The retained historical screenshot has an independently tracked error toast; it is not final visual signoff."
+      },
+      {
+        "id": "P06",
+        "requirement": "Three connected real candidate UI turns and contextual recall",
+        "status": "PASS",
+        "evidence": [
+          "production-chat/abliterated.json",
+          "production-chat/abliterated-production.png"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Three connected actual production-pin candidate turns completed, with nonce recall, reload continuity, native candidate hash b4fb33e35686e16b478008d00479ae129c4c8eb79805feac018a50e0ea2bcffc, alias mani-lab-qwen and8192-token context. The first completed turn is a genuine same-ID retry. No isolated server counted."
+      },
+      {
+        "id": "P07",
+        "requirement": "Measure admission wait, cold load, first text/token, total and errors for both arms",
+        "status": "PARTIAL",
+        "evidence": [
+          "production-chat/normal.json",
+          "production-chat/abliterated.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Exclusive phase timings for admission vs template setup are unavailable. Normal model was already running; no normal cold-load measurement or disk-cache-cold comparison is claimed. GPU timings remain unmeasured."
+        ],
+        "scope": "All six persisted application first-public-output/total timers and three candidate backend-load timers are recorded. Application first-output includes native admission/template setup. Observer times are separate; the candidate first turn was observed after reconnect and its ~0.01s observer interval is not end-to-end latency."
+      },
+      {
+        "id": "P08",
+        "requirement": "Observe real streaming and cancel real compute",
+        "status": "PASS",
+        "evidence": [
+          "lifecycle/cancel.json",
+          "lifecycle/streaming-before-cancel.png",
+          "lifecycle/cancel-production.png"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Actual production normal reply grew through8,20,24,38,73 characters before trusted Cancel; terminal cancelled at84 retained characters. Measured cancel acknowledgement0.17046799s, actual compute idle true, four normal hashes unchanged. This proves this tested normal cancellation boundary, not qualified guest cancellation."
+      },
+      {
+        "id": "P09",
+        "requirement": "Genuine failed-turn retry without duplicates; double-click/reconnect",
+        "status": "PASS",
+        "evidence": [
+          "lifecycle/retry.json",
+          "production-chat/abliterated.json",
+          "production-chat/normal.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Both genuine failed candidate admission and controlled production-service restart failures were retried through the actual pin with the same run/user message and completed. Restart case retained one pre-retry user message and same_turn_no_duplicate=true. Connected chats also retain reload continuity and no duplicate sends."
+      },
+      {
+        "id": "P10",
+        "requirement": "Preserve draft/attachments and show service/loading/recovery errors",
+        "status": "PARTIAL",
+        "evidence": [
+          "lifecycle/retry.json",
+          "uploads/uploads.json",
+          "production-chat/abliterated.json",
+          "visual/native-final-motion/visual.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Attachment retention through a failed/reconnected inference turn remains unverified. Upload-card pixel inspection and native file-picker interaction were not captured."
+        ],
+        "scope": "Actual retry/service-restart failure and loading/recovery states are measured; latest native visual runtime-error observer is clean. Real UTF8 upload, public speech sample CPU transcription and composer transcript/attachment-card DOM were verified, with original draft/view restored. No physical microphone or raw-audio-to-Qwen capability is inferred."
+      },
+      {
+        "id": "P11",
+        "requirement": "Final cleanup/fresh-pin normal→candidate→normal send sequence",
+        "status": "PASS",
+        "evidence": [
+          "final-sequence/normal-before/normal.json",
+          "final-sequence/candidate/abliterated.json",
+          "final-sequence/normal-after/normal.json",
+          "final-runtime-identity.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "After stopping earlier acceptance workers/backends, three fresh actual-pin production checks passed in order: one new normal reply, one candidate reply, then a normal reply after recovery. Each completed with reload persistence and no duplicate runs. Subsequent final identity verifies normal compute idle, both verified model links, four normal pins unchanged, native fleet absent/window closed."
+      },
+      {
+        "id": "P12",
+        "requirement": "Socket activation, close/reopen, configured idle transition, permitted restart recovery",
+        "status": "PARTIAL",
+        "evidence": [
+          "native-installation.json",
+          "lifecycle/retry.json",
+          "final-runtime-identity.json",
+          "final-sequence/normal-before/normal.json",
+          "final-sequence/candidate/abliterated.json",
+          "final-sequence/normal-after/normal.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Configured idle transition and separate socket-manager restart recovery remain unverified; production reboot remains separate P13."
+        ],
+        "scope": "Fresh pin close/reopen and controlled production-service restart recovery are measured, including the same failed candidate turn completing after restart. Final production socket remains loopback-only/authenticated. This does not certify every idle/socket-manager transition."
+      },
+      {
+        "id": "P13",
+        "requirement": "Reboot recovery",
+        "status": "UNVERIFIED",
+        "evidence": [],
+        "remaining_fields_or_checks": [
+          "Native reboot recovery remains unverified; do not reboot or unlock solely to turn this row green."
+        ],
+        "scope": "This run did not perform or certify a production reboot test. A pre-existing reboot exposed a missing runtime directory; source now repairs that validated prerequisite, but this does not substitute for reboot acceptance."
+      },
+      {
+        "id": "P14",
+        "requirement": "Preserve existing user projects/conversations through migration and cleanup",
+        "status": "PASS",
+        "evidence": [
+          "selective-cleanup.json",
+          "probe-attachment-cleanup.json",
+          "native-installation.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Exact positive test allowlist cleanup removed9 known conversations and1 known test project recoverably;1 unclassified conversation and its project ancestry were preserved. Three positively identified orphan probe attachments were removed with byte pins/no surviving references and private recovery bytes retained. Original source directories were not deleted; consistent private catalog backup exists. Unknown/user records were never inferred disposable."
+      },
+      {
+        "id": "A01",
+        "requirement": "Always-visible policy selector, granular settings, persistent policy across model/reload",
+        "status": "PARTIAL",
+        "evidence": [
+          "permissions/permissions.json",
+          "model-action/model-action.json",
+          "visual/visual.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Final custom/granular Settings, same-conversation model-switch and reload persistence matrix; final visual review."
+        ],
+        "scope": "Always-visible policy selector and real Ask/Chat-only/once/session/revoke decisions are evidenced. Model action approval is bound to the actual conversation."
+      },
+      {
+        "id": "A02",
+        "requirement": "Denied direct API and final-dispatch attempts cannot bypass Chat only",
+        "status": "PASS",
+        "evidence": [
+          "permissions/permissions.json",
+          "production-chat/normal.json",
+          "production-chat/abliterated.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Actual authenticated legacy RPC and final dispatcher attempts are denied in Chat only; explicit denials and app microphone denial were observed. Separate actual normal/candidate text conversations succeeded without action grants."
+      },
+      {
+        "id": "A03",
+        "requirement": "Allow once and narrow session grants; denial/revoke/replay/expiry/wrong conversation",
+        "status": "PARTIAL",
+        "evidence": [
+          "permissions/permissions.json",
+          "model-action/model-action.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Attach final hermetic expiry/version/stale-base regressions; qualified in-flight guest cancellation remains blocked separately."
+        ],
+        "scope": "Actual UI/API/dispatcher checks demonstrate once-only workspace edit, narrow session read, explicit deny, replay-stable result, wrong-conversation rejection and revocation removing the grant."
+      },
+      {
+        "id": "A04",
+        "requirement": "Descriptor paths, symlink escape and stale base versions",
+        "status": "PARTIAL",
+        "evidence": [
+          "permissions/permissions.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Attach current final descriptor/stale-base/read-drift regression report."
+        ],
+        "scope": "Actual permitted workspace write/read have result hashes; traversal and symlink escape were rejected. These checks target owned copies only."
+      },
+      {
+        "id": "A05",
+        "requirement": "Qualified guest execution and native network/filesystem enforcement",
+        "status": "BLOCKED",
+        "evidence": [
+          "history/qualification-cold-boot-failure.json",
+          "guest-boot-20261015T093823Z-77655d45.json",
+          "history/qualification-second-cold-boot-failure.json",
+          "watchdog-standalone-deadline.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Resolve and measure exact boot-readiness cause without bypassing policy; prove all five current watchdog scenarios and full compiler/confinement/recovery gates, then actual approved guest task and cancellation."
+        ],
+        "scope": "Protected full qualification remains blocked at the aggregate watchdog stage. A separate diagnostic no-agent fleet booted and cleaned up; one standalone absolute-deadline scenario later passed. Neither grants the missing all-five/compiler/confinement/recovery qualification, and no real permission→qualified guest execution/result or in-flight guest cancellation is claimed."
+      },
+      {
+        "id": "A06",
+        "requirement": "Original host diff application always separately approved",
+        "status": "PARTIAL",
+        "evidence": [],
+        "remaining_fields_or_checks": [
+          "Attach final separate-host-approval, stale-base and original-mode preservation regression report; label fixture demonstrations as fixtures."
+        ],
+        "scope": "Original-host application is separated from model tools and requires an exact once-approved validated diff. No current original file was mutated for this evidence refresh."
+      },
+      {
+        "id": "A07",
+        "requirement": "Model cannot approve itself; finite strict tool schema/result and run budgets",
+        "status": "PARTIAL",
+        "evidence": [
+          "model-action/model-action.json",
+          "history/model-action-schema-rejection.json",
+          "history/model-action-empty-union-arguments.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Attach final strict function-schema, no-self-approval, one-action/run/time/observation-budget tests; no unlimited agent loop or qualified guest result inferred."
+        ],
+        "scope": "Actual normal-model streamed tool proposal produced a pending workspace.read ticket; trusted UI approval dispatched a real copied-file read, and a subsequent real model turn consumed its bounded observation. Prior schema failures remain preserved."
+      },
+      {
+        "id": "A08",
+        "requirement": "Minimal audit and revocation cancellation remain truthful",
+        "status": "PARTIAL",
+        "evidence": [
+          "permissions/permissions.json",
+          "lifecycle/cancel.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Final minimal-audit inspection and latest concurrency regression report; actual owned in-flight guest revoke/cancel remains blocked by qualification."
+        ],
+        "scope": "Actual policy revoke removed a live session grant, and separate text cancellation reached real compute idle. Source has added responsive provider/native-poll cancellation boundaries with hermetic regressions."
+      },
+      {
+        "id": "R01",
+        "requirement": "Exact reference R01 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R02",
+        "requirement": "Exact reference R02 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R03",
+        "requirement": "Exact reference R03 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R04",
+        "requirement": "Exact reference R04 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R05",
+        "requirement": "Exact reference R05 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R06",
+        "requirement": "Exact reference R06 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R07",
+        "requirement": "Exact reference R07 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R08",
+        "requirement": "Exact reference R08 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R09",
+        "requirement": "Exact reference R09 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/delete-motion-final/delete-motion.json",
+          "human-review.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Human motion approval unverified."
+        ],
+        "scope": "Actual rebuilt delete tile starts48px, opens132px; Cancel and Escape measured without deletion or history/metadata changes. Native302-frame5.03s recording decoded and inspected; prior mount flash retained as adverse evidence. User could not review playback."
+      },
+      {
+        "id": "R10",
+        "requirement": "Exact reference R10 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "R11",
+        "requirement": "Exact reference R11 source-to-production parity",
+        "status": "PARTIAL",
+        "evidence": [
+          "reference-record.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+        ],
+        "scope": "Updated exact source-to-production reference record and final native acquisition/frame inspection are available. Per-reference status, source adaptation limits and human approval are distinct; no aggregate exact parity or continuous human motion approval is claimed."
+      },
+      {
+        "id": "V01",
+        "requirement": "Pointer-follow buddy movement, reversal, drag cancellation, keyboard and lifecycle",
+        "status": "PARTIAL",
+        "evidence": [
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/production-unedited-motion.mp4",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Actual hidden-tab/device lifecycle and system reduced-motion completeness remain unverified; subjective continuous-motion approval is not inferred from frame sheets."
+        ],
+        "scope": "Actual compositor+XTEST input and trusted DOM readbacks passed. Buddy pointer face spread4.95196 source CSS units, pressed expression, drag cancellation without theme change, keyboard toggle/restore and9.033333s unedited window-only motion capture were measured. Human smoothness approval remains pending."
+      },
+      {
+        "id": "V02",
+        "requirement": "Compact composer, full rail/colors, stable popovers, responsive/forced colors/reduced motion",
+        "status": "PARTIAL",
+        "evidence": [
+          "visual/visual.json",
+          "visual/native-final-motion/visual.json",
+          "visual/native-final-motion/motion-inspection.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Final per-reference visual parity/human review remains separate; populated project rail and the full requested transition matrix are incomplete."
+        ],
+        "scope": "Desktop/portrait light/dark production frames and trusted toolbar hit checks exist. Final native run passed9 Settings hit points, actual open/Escape close, visible-surface calibration, no runtime errors and restored view/data. Native window-only recording has542 decoded/encoded frames over9.033333s; capture sampling is not GPU/presentation timing."
+      },
+      {
+        "id": "V03",
+        "requirement": "Accepted click identity/cue count preserved",
+        "status": "PASS",
+        "evidence": [
+          "accepted-audio-preservation.json",
+          "visual/native-final-motion/visual.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Five accepted WAV assets are byte-identical to pre-v4; mute/default12% and cue behavior retained. This is preservation, not a new physical listening approval."
+      },
+      {
+        "id": "M01",
+        "requirement": "Browser microphone grant/denial/stop/cancel/device loss/track release and playback",
+        "status": "PARTIAL",
+        "evidence": [
+          "microphone/microphone.json"
+        ],
+        "remaining_fields_or_checks": [
+          "Physical listening/speech intelligibility and device unplug recovery unverified. Native permission-prompt clicking was not exercised; origin-scoped CDP settings were used."
+        ],
+        "scope": "Actual production browser media API, no fake device: app consent denial, origin-scoped browser denial/grant, real short record/stop/discard, muted playback control, zero remaining live tracks, restored permission/policy/view and zero uploads were measured. Cumulative capture across retained attempts1540.0ms; this draft initiated no further recording."
+      },
+      {
+        "id": "D01",
+        "requirement": "Verified source publication to existing repository",
+        "status": "PASS",
+        "evidence": [
+          "publication.json",
+          "source-export.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Ordinary fast-forward published source64e49c85a9ea91c6285e198e64a398413d262ca3; GitHub ref and treeb88a2285378d7d5f582e8c2c7af712b0c66db8c8 verified, clean checkout,313 runtime file bytes matched."
+      },
+      {
+        "id": "D02",
+        "requirement": "One sanitized complete-review ZIP, full manifest and clean-extraction rebuild/tests",
+        "status": "PASS",
+        "evidence": [
+          "clean-extraction.json",
+          "publication.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "All315 clean-extracted source payloads rebuilt byte-identically to the published manifest;307 host/16 frontend checks passed. Final packager verifies every final member/CRC/SHA and final extraction compares source bytes to this tested source. Final ZIP byte count, digest and total payload count are reported outside the ZIP to avoid self-reference.",
+        "finalization_owner": "root"
+      },
+      {
+        "id": "D03",
+        "requirement": "Private rollback instructions preserve current conversations and configs",
+        "status": "PASS",
+        "evidence": [
+          "ROLLBACK.md",
+          "native-installation.json",
+          "selective-cleanup.json",
+          "probe-attachment-cleanup.json"
+        ],
+        "remaining_fields_or_checks": [],
+        "scope": "Exact native/source/data rollback paths and drift refusals documented; private backups retained, current conversations kept by default. Crash-atomic process-death recovery remains unproven."
+      },
+      {
+        "id": "N01",
+        "requirement": "Five actual current-boot watchdog scenarios",
+        "status": "BLOCKED",
+        "evidence": [
+          "history/qualification-cold-boot-failure.json",
+          "history/qualification-second-cold-boot-failure.json",
+          "watchdog-standalone-deadline.json"
+        ],
+        "scope": "Two protected aggregate invocations failed before all five watchdog triggers, at fresh controller readiness. One subsequent standalone absolute_deadline scenario passed with an outside pidfd observer: controller2.202s,worker_b2.215s,worker_a2.300s; exact cleanup ok. That single scenario does not replace the current all-five qualification receipt.",
+        "remaining_fields_or_checks": [
+          "Identify the aggregate/standalone readiness discrepancy with one targeted instrumentation change if needed; prove all five original watchdog criteria without bypassing admission or altering budgets."
+        ]
+      },
+      {
+        "id": "N02",
+        "requirement": "Protected no-agent boot diagnostic only",
+        "status": "PASS",
+        "evidence": [
+          "guest-boot-20261015T093823Z-77655d45.json"
+        ],
+        "scope": "Exactly one fresh no-agent fleet reached health, using unchanged provision budget. Controller14 attempts/ready15.158s;worker_a57 attempts/ready48.810s;worker_b1 attempt/ready48.896s. Exact cleanup ok and normal profiles unchanged. qualification_granted=false; no model inference.",
+        "remaining_fields_or_checks": []
+      },
+      {
+        "id": "N03",
+        "requirement": "Copied model/backend artifact byte provenance",
+        "status": "PASS",
+        "evidence": [
+          "history/qualification-cold-boot-failure.json",
+          "production-chat/abliterated.json"
+        ],
+        "scope": "Protected full verification checked42 installed files and both model digests; actual candidate receipts matched the verified candidate digest. This does not prove upstream ablation lineage or qualify guest execution.",
+        "remaining_fields_or_checks": []
+      }
+    ],
+    "permanent_or_human_limits": [
+      "Human continuous motion approval pending; selected frames do not prove smoothness.",
+      "Physical microphone/listening and subjective visual approval not inferred.",
+      "R10 canonical designer/license identity uncertain.",
+      "Reasoning exposes true off/on; six-level visual source semantics cannot be claimed.",
+      "Candidate upstream ablation lineage remains unproven; no causal benchmark claim."
+    ],
+    "updated_utc": "2026-10-15T10:42:10.147845+00:00",
+    "finalization_pending": [],
+    "measured_results": {
+      "production_chat": {
+        "completed_connected_turns": 6,
+        "normal_turns": 3,
+        "candidate_turns": 3,
+        "port": 18791,
+        "isolated_servers_counted": false,
+        "normal": [
+          {
+            "application_first_public_output_seconds": 0.6033168750000186,
+            "application_total_before_recovery_seconds": 0.9143930059999548,
+            "candidate_backend_load_seconds": null
+          },
+          {
+            "application_first_public_output_seconds": 0.6333182910000232,
+            "application_total_before_recovery_seconds": 0.9582332960001168,
+            "candidate_backend_load_seconds": null
+          },
+          {
+            "application_first_public_output_seconds": 0.7201518879999185,
+            "application_total_before_recovery_seconds": 1.0758775739998327,
+            "candidate_backend_load_seconds": null
+          }
+        ],
+        "abliterated": [
+          {
+            "application_first_public_output_seconds": 14.877900309000324,
+            "application_total_before_recovery_seconds": 15.509664461000284,
+            "candidate_backend_load_seconds": 8.22218459800024
+          },
+          {
+            "application_first_public_output_seconds": 16.092143969000062,
+            "application_total_before_recovery_seconds": 16.70994445799988,
+            "candidate_backend_load_seconds": 8.424818038000012
+          },
+          {
+            "application_first_public_output_seconds": 16.632190861000254,
+            "application_total_before_recovery_seconds": 17.37479095300023,
+            "candidate_backend_load_seconds": 8.224080010000307
+          }
+        ],
+        "measurement_limits": "Application timers include admission/template setup; candidate backend load measured separately. Candidate first observer sample was post-reconnect and is excluded from end-to-end timing interpretation. No GPU timing or disk-cache-cold comparison.",
+        "additional_final_sequence_turns": 3,
+        "final_sequence": "normal→abliterated→normal, each one real actual-pin turn",
+        "final_sequence_evidence": [
+          "final-sequence/normal-before/normal.json",
+          "final-sequence/candidate/abliterated.json",
+          "final-sequence/normal-after/normal.json"
+        ]
+      },
+      "candidate_retry": {
+        "genuine_prior_state": "failed",
+        "same_run_retried_without_duplicate": true,
+        "reconnected_existing_retry": true
+      },
+      "normal_stream_cancel": {
+        "cancel_at_seconds": 2.8318775300003836,
+        "cancel_ack_seconds": 0.17046799000036117,
+        "actual_compute_idle": true,
+        "four_normal_hashes_unchanged": true
+      },
+      "permissions": {
+        "actual_checks": 12,
+        "check_names": [
+          "chat_only_dispatch_denied",
+          "legacy_API_denied",
+          "microphone_app_denied",
+          "explicit_deny_enforced",
+          "allow_once_workspace_write",
+          "execution_replay_stable",
+          "scoped_session_read",
+          "wrong_conversation_denied",
+          "path_escape_denied",
+          "symlink_escape_denied",
+          "revocation_removed_session_grant",
+          "actual_Wikipedia_search"
+        ],
+        "separate_real_model_proposal_pending": true,
+        "approved_real_read_completed": true
+      },
+      "microphone": {
+        "cumulative_capture_ms": 1540.0,
+        "final_attempt_capture_ms": 360.2,
+        "live_audio_tracks_after": 0,
+        "all_tracks_ended": true,
+        "observed_upload_requests": 0,
+        "raw_audio_exported": false,
+        "playback_muted": true,
+        "additional_recording_for_this_draft": false
+      },
+      "guest": {
+        "no_agent_diagnostic_boot_ready": true,
+        "diagnostic_qualification_granted": false,
+        "watchdog_gate_passed": false,
+        "real_permissioned_guest_result_verified": false,
+        "standalone_absolute_deadline": {
+          "status": "PASS one scenario only",
+          "all_three_VMs_exited": true,
+          "exit_seconds": {
+            "controller": 2.2022683739996864,
+            "worker_b": 2.2152447290000055,
+            "worker_a": 2.2996956309998495
+          },
+          "cleanup_status": "ok",
+          "qualification_granted": false
+        }
+      },
+      "service_restart_retry": {
+        "genuine_failure": "failed",
+        "final_state": "completed",
+        "same_turn_no_duplicate": true,
+        "before_retry_user_message_count": 1,
+        "normal_pins_unchanged": true
+      },
+      "runtime_final": {
+        "status": "PASS",
+        "root_peer_attested": true,
+        "normal_compute_idle": true,
+        "four_normal_hashes_unchanged": true,
+        "native_owned_fleet_active": false,
+        "native_window_status": "closed",
+        "unauthenticated_bootstrap_status": 401,
+        "source_commit_binding_pending": true
+      },
+      "selective_cleanup": {
+        "known_test_conversations_removed": 9,
+        "known_test_projects_removed": 1,
+        "unclassified_conversations_preserved": 1,
+        "originals_deleted": false,
+        "private_consistent_backup": true,
+        "probe_orphan_attachments_removed": 3,
+        "attachment_private_bytes_recoverable": true
+      },
+      "uploads": {
+        "UTF8_upload": true,
+        "public_speech_CPU_transcription": true,
+        "public_sample_seconds": 11,
+        "physical_microphone_used": false,
+        "cards_and_transcript_actual_DOM": true,
+        "upload_card_pixels_inspected": false,
+        "public_audio_in_archive": false,
+        "original_draft_restored": true
+      },
+      "audio_preservation": {
+        "accepted_WAVs_byte_identical": 5,
+        "runtime_default_percent": 12,
+        "new_sound_added": false,
+        "new_physical_audition": false
+      },
+      "native_motion": {
+        "status": "PASS scoped technical checks",
+        "native_pointer": "PASS",
+        "nine_point_Settings_hits": 9,
+        "decoded_frames": 542,
+        "seconds": 9.033333,
+        "runtime_error_observer_clean": true,
+        "human_continuous_motion_approval": "PENDING",
+        "GPU_timings": "UNMEASURED",
+        "recording_audio": "silent"
+      }
+    },
+    "evidence_identity": {
+      "README.md": {
+        "sha256": "061f1f147521b3478e8d82f277b9dfac86db32f5a7f4ed3d8187105b58db1a7e",
+        "bytes": 5029
+      },
+      "ROLLBACK.md": {
+        "sha256": "df9b95cf4f6500c3d1f81ba35b6c268e5ab53b6d2f1bcb8226bb5b0ca4676d0c",
+        "bytes": 2924
+      },
+      "accepted-audio-preservation.json": {
+        "sha256": "b4498ec2f2ee457a101cce7765e14937701f49baffde2c7976dc819b8e62f511",
+        "bytes": 1086
+      },
+      "checks/validation.json": {
+        "sha256": "6ab6c4b8f0e5f2d8284a5a1970f04562f3bb47182da31ee40b5f9cf6f6db3b04",
+        "bytes": 1030
+      },
+      "clean-extraction.json": {
+        "sha256": "30a1409d14855b172bde2995a965e3eb22c24729e698e0590c3876eec4bcf048",
+        "bytes": 1141
+      },
+      "final-health.json": {
+        "sha256": "384e87ceccbb058972ad550c30f8faf7a49aeb447adef4bffd12d5d267374f71",
+        "bytes": 1636
+      },
+      "final-runtime-identity.json": {
+        "sha256": "0f2e73ae5a7b640599320b98ca540d00235006b8ef3a49f98d66c608b1e84c57",
+        "bytes": 3762
+      },
+      "final-sequence/candidate/abliterated.json": {
+        "sha256": "b5e96182bf207ae0c7967b150e52a15cf73168ccc45b05d91ba0606e521cb7ae",
+        "bytes": 5207
+      },
+      "final-sequence/normal-after/normal.json": {
+        "sha256": "9fd1c2f19082502794a4c55c4e1ec51af76d0d8aa96e2cc395c1dc88b6c1e0b6",
+        "bytes": 4545
+      },
+      "final-sequence/normal-before/normal.json": {
+        "sha256": "daebb137724f215924464751e642859f7b7fb06df3128bba611859c3b0fda579",
+        "bytes": 4543
+      },
+      "guest-boot-20261015T093823Z-77655d45.json": {
+        "sha256": "718aa993974d8518db3e4a57e238de2692ef25d03e9f72e0dc62443405a025a6",
+        "bytes": 10805
+      },
+      "history/candidate-retry-navigation-observer.json": {
+        "sha256": "7b0714381a0439f4608f780f64d30e8c820e947a51ac6082a29f0609909d8d78",
+        "bytes": 1214
+      },
+      "history/candidate-retry-observer-before-acceptance.json": {
+        "sha256": "2b8b6cb4909b2c63cdea079bb4cc0551c099c71f677d3ff6bd3c3d3c7c380674",
+        "bytes": 2947
+      },
+      "history/candidate-window-directory-failure.json": {
+        "sha256": "e86f190b50c04bd6d4aac8c8a31cdd53f335de29c3ddd37507f6710db91306e3",
+        "bytes": 2455
+      },
+      "history/model-action-empty-union-arguments.json": {
+        "sha256": "f699510cf6cefa88e4967564a8510c700293f24e143653aad10351720af624f1",
+        "bytes": 2230
+      },
+      "history/model-action-schema-rejection.json": {
+        "sha256": "fb1a60f2d3e1b4a86e510b27e33a142710b59fdaefdd92f47311d1b50a387764",
+        "bytes": 2228
+      },
+      "history/observer-rate-limit-normal.json": {
+        "sha256": "de8128c1fe149c9057a7339fe38d070c94aed7ea0ce39d4e87da49b4bf9b1146",
+        "bytes": 870
+      },
+      "history/permission-observer-first/permissions.json": {
+        "sha256": "9c48a4ac5b96b688d771ccf270c7620b4c5ea8bf105ad5ca9153481f79354f97",
+        "bytes": 2587
+      },
+      "history/permission-revocation-observer.json": {
+        "sha256": "38397186eb6980b1056c6daa7a40d0a8d396c225325a926cd1d7b3a12567cdcb",
+        "bytes": 3023
+      },
+      "history/qualification-cold-boot-failure.json": {
+        "sha256": "a9f472e100e1bb616d5eb083582eb0af0a1eec9f0eb3a7c5a22a68cd3810408c",
+        "bytes": 3447
+      },
+      "history/qualification-second-cold-boot-failure.json": {
+        "sha256": "e204dd0e1883403acaabf39e38c6e5ede33ecddc01a5bb636b8a4bd58edb719e",
+        "bytes": 3434
+      },
+      "history/service-retry-observer-before-acknowledgement.json": {
+        "sha256": "d906923efe9add671ef545e59d3c1b14722f8caffb3e7ff81cf4d03678a8d77a",
+        "bytes": 3557
+      },
+      "human-review.json": {
+        "sha256": "e2fd2e26c1608b6d085645c187413c9324a0cb2113d31cda2e89f7304561cb89",
+        "bytes": 343
+      },
+      "input-identity.json": {
+        "sha256": "91720d4dc8c68825e8a41bab102077fda9358bcbe6141508ae5f4023110dacb1",
+        "bytes": 208
+      },
+      "lifecycle/cancel.json": {
+        "sha256": "2c1bd1c8a8899a5f7490932fd3e74c29fceab118f37623db7354cbc0f22b8779",
+        "bytes": 4004
+      },
+      "lifecycle/retry.json": {
+        "sha256": "607c0029ee96d742660b84b80822e8f99a7f9de0648af42c904f9a2468dcafe8",
+        "bytes": 5468
+      },
+      "microphone/history/attempt-1792057717780618320.json": {
+        "sha256": "7b81c1d9ff2ccf8af921b4796d0772d0024771cd4b118b6d78bb081e068defdf",
+        "bytes": 2483
+      },
+      "microphone/history/attempt-1792057848003740954.json": {
+        "sha256": "e64e9cf8dfa171e319c6941039f46261b3c0a9477276e7e368ce57dcd82f1f6a",
+        "bytes": 2752
+      },
+      "microphone/microphone.json": {
+        "sha256": "b4d6cade5f5ac80418ddebb7f53afc657a4fcb99f89a0a7be910f54665eb36a3",
+        "bytes": 3559
+      },
+      "model-action/model-action.json": {
+        "sha256": "b1bc591f0d2b719b009cf7446dafd1c4354402a74cc7ec3ba1e7459e277d6fb5",
+        "bytes": 4177
+      },
+      "namespace-regression.json": {
+        "sha256": "0846f8db2e9e45610087650e85a0f6a803c7139c8297f5e790d1768863a61b18",
+        "bytes": 5434
+      },
+      "native-installation.json": {
+        "sha256": "cb6fa7960b913f96bb0eb308ec34c1b4247c83f90f263435495cd8737322b654",
+        "bytes": 819
+      },
+      "permissions/permissions.json": {
+        "sha256": "989e01d33b1e06c621eba3882bdad1d1ed56f05737637331487d05e9d74f5057",
+        "bytes": 11174
+      },
+      "post-publication-normal/normal.json": {
+        "sha256": "25214005c9cbc18a51a04f6cbffb45e42c6be78a6abbfcab6fdde56e394cafe9",
+        "bytes": 4385
+      },
+      "probe-attachment-cleanup.json": {
+        "sha256": "339e0773526139c8a4bd13e0083105d23079c9f9413ccb93d3ee574b8dae7707",
+        "bytes": 692
+      },
+      "production-before.json": {
+        "sha256": "070d6401943762f269f967f5c73987c8fa3f6b415e68a385e6a0faee60170886",
+        "bytes": 885
+      },
+      "production-chat/abliterated.json": {
+        "sha256": "628939c57ae604ae93cda6d79a973891b49ca27727b77a1adba0a7c989f00524",
+        "bytes": 14834
+      },
+      "production-chat/normal.json": {
+        "sha256": "46477a88a3d8eb5e5c8c7f94587bbcae955400ddfa48084456304c09aa22c31e",
+        "bytes": 11019
+      },
+      "production-namespace-before.json": {
+        "sha256": "adccad99a9cd5cace85596ddd0e60e568ddccbd338ad7452ba6eb33ba19a7d8b",
+        "bytes": 234
+      },
+      "publication.json": {
+        "sha256": "576413a9e3ef6e9ce453629adf6d4ed55953c93e032e5f58da2fc298034423b6",
+        "bytes": 32960
+      },
+      "reference-record.json": {
+        "sha256": "095d47b767c3dbc383226f4aac764551936c0768bb1edc0ab1e50186eea8281e",
+        "bytes": 45939
+      },
+      "selective-cleanup.json": {
+        "sha256": "099a7fa6d6e3a5ebbab3a2be8b3bff969df3af77f513dcd26c7c2b82f1a7ff1f",
+        "bytes": 3075
+      },
+      "source-export-plan.json": {
+        "sha256": "4d8c311a2781627a2bc38f49f22b5c0315e4aa11e7527a2f1d48de2cace53cfd",
+        "bytes": 10987
+      },
+      "source-export.json": {
+        "sha256": "53dce984081b94b41170ef3193853f4e7c80b3b645fa4136ee14f67263f92887",
+        "bytes": 13777
+      },
+      "task-spec/CODEX_TASK.md": {
+        "sha256": "89df043f776e45e0dad69a037afa4328cb9c345736177b6a565796e3aa0dc816",
+        "bytes": 3611
+      },
+      "task-spec/DIAGNOSIS.md": {
+        "sha256": "2bdbc5b2d8a11e5763e8ece94964579c270d1f9954f160281bb3170ef9acb05c",
+        "bytes": 4850
+      },
+      "task-spec/PARITY_LOCK.md": {
+        "sha256": "3ff681b86ade3a83b7921a7228312065e93f80af6a95eb78bff8e6c544ba7223",
+        "bytes": 10126
+      },
+      "task-spec/PERMISSIONS.md": {
+        "sha256": "f9f3def546dda0d466d7e3cf59639d2cdfb0d695c8233e51fa29ce7ce1b9f3c2",
+        "bytes": 5077
+      },
+      "task-spec/PRODUCTION_ACCEPTANCE.md": {
+        "sha256": "8b252cb3f16152fa351d094ffc44107b7026184c042373dba6d8f36c7a4fd156",
+        "bytes": 4529
+      },
+      "task-spec/RETURN_CONTRACT.md": {
+        "sha256": "5c62efd9bcbc921eb0a1ed670b7ee2c779c7c52572d37f4d224d637d88471f5b",
+        "bytes": 2756
+      },
+      "task-spec/START_HERE.md": {
+        "sha256": "bd0a6414f39636e479d1b3d84722bf88102e65c0e381ddf30478fc3886b58a13",
+        "bytes": 2089
+      },
+      "uploads/uploads.json": {
+        "sha256": "7711506d8ffae2de7fa9a63415a352f693848e12c4322d7cda10baffe3a0c01a",
+        "bytes": 4624
+      },
+      "visual/attempt-initial-filter.json": {
+        "sha256": "2198382b9bd752f1018208ffd1f66b9d13c58186c8d98d464aa806d8020f2e0d",
+        "bytes": 1208
+      },
+      "visual/delete-motion/delete-motion.json": {
+        "sha256": "442916761b34db191c39b36e18ad48d922249474c5d5b56d887652604ed96394",
+        "bytes": 1702
+      },
+      "visual/delete-motion-final/delete-cancel-unedited.mp4": {
+        "sha256": "0a77db1c9e704deeb6ebd286c10c25a1ae0dd8d1c109f0d9cae3a05cb14a34b4",
+        "bytes": 110276
+      },
+      "visual/delete-motion-final/delete-cancel-unedited.mp4.window.json": {
+        "sha256": "2f971568e07492116d72da5bcd4959a886306a0833ea26b16ac7cf4dcf7525be",
+        "bytes": 966
+      },
+      "visual/delete-motion-final/delete-motion.json": {
+        "sha256": "255ba06a6f056a03bc54ee393307e90f05fb3cda28d338f84a247798e5944556",
+        "bytes": 13297
+      },
+      "visual/delete-motion-final/motion-inspection.json": {
+        "sha256": "f6688eace3bbc2b7b4a6ab1be7144d28e580a00d7e751f29001d38a40378dc33",
+        "bytes": 1283
+      },
+      "visual/delete-motion-verified/delete-cancel-unedited.mp4": {
+        "sha256": "9321f25382617f651c0b74a295acf8c53eb1f64525bd1dc27b4c816a985794b5",
+        "bytes": 57916
+      },
+      "visual/delete-motion-verified/delete-cancel-unedited.mp4.window.json": {
+        "sha256": "34be18b62d58dea7c615f624d64394b79f6203aa31835fb569d21af1693020ce",
+        "bytes": 966
+      },
+      "visual/delete-motion-verified/delete-motion.json": {
+        "sha256": "e6e69c55e11157f7d3845f79bc7ad433d0224c303aae6b1e1a07792611d8dc5e",
+        "bytes": 12221
+      },
+      "visual/diagnostic-classification.json": {
+        "sha256": "2b28b768334942e6bbe51f0ee655034385ab00fa2dfce5a72c409916383cf914",
+        "bytes": 1905
+      },
+      "visual/encoding-timebase-diagnostic.json": {
+        "sha256": "ef05f5ea14a77a0d8b46072a8fa3a7226b4897b5be7475c2842c906f380aa3cc",
+        "bytes": 677
+      },
+      "visual/followup/visual.json": {
+        "sha256": "043c9675dbf7aa06e48ca8432fc1cda19ae4deac7426ef0bb48bcf28ac81dd5f",
+        "bytes": 11784
+      },
+      "visual/motion-inspection.json": {
+        "sha256": "79fc5878d78e1fcb6d1ecd85bb4b910a5e5ede3cbf7c3b6193e0a9761bc03b7c",
+        "bytes": 1303
+      },
+      "visual/native-bindings-check.json": {
+        "sha256": "296001bdb20ad8b77c85c3155878d84700fe952b7abdcbd5c28efec593232e78",
+        "bytes": 668
+      },
+      "visual/native-final-motion/motion-inspection.json": {
+        "sha256": "4f9e3340778ced83a6600aaecb4d49dd15b3e5f7ba6eeee6305c93515e20d7c0",
+        "bytes": 2155
+      },
+      "visual/native-final-motion/production-unedited-motion.mp4": {
+        "sha256": "c46547842588e1d8214e4ef4843145d8293b0b42bbcf153ce881a9b030048ec0",
+        "bytes": 450647
+      },
+      "visual/native-final-motion/production-unedited-motion.mp4.window.json": {
+        "sha256": "318bec6e208a4368f8edaf58f644addf146d6f838c4459dce0deb4c63128d92b",
+        "bytes": 966
+      },
+      "visual/native-final-motion/visual.json": {
+        "sha256": "931439c23f35919fa6c0898d583820f9ea20e07913c60ba0bd4de42c0ef18c5f",
+        "bytes": 30806
+      },
+      "visual/native-followup/visual.json": {
+        "sha256": "3b7693d17f0f68361df9a1cb6295f66f63f7fb21fa96a2e6ba70adb25f8f58a6",
+        "bytes": 2781
+      },
+      "visual/native-followup-calibrated/visual.json": {
+        "sha256": "afb0d2203305d24ffaa48f27b76f120043f4ed66aca02cdce5c2e0d7d785396f",
+        "bytes": 23451
+      },
+      "visual/native-followup-classification.json": {
+        "sha256": "577700d262fd92bc5fd70ce6fc730eb0221dff12c0a8b758a26b0e6b8b1117d5",
+        "bytes": 2091
+      },
+      "visual/native-paired/visual.json": {
+        "sha256": "74244c0db193ed9f537014f54674e7d9828a74d2479ef80182dae57548fd8469",
+        "bytes": 22388
+      },
+      "visual/native-surface-readonly.json": {
+        "sha256": "dc1fad925d5e512fe07a8053241effa109bf32a33d7e9b7cbb8356a56061eae8",
+        "bytes": 220
+      },
+      "visual/native-user-ready/visual.json": {
+        "sha256": "fb16f9f102d09ae0f7d2505703496595ed3e499de3e05e4469a5d4685fb2f7d6",
+        "bytes": 23538
+      },
+      "visual/native-verified/visual.json": {
+        "sha256": "844d4950beef143a8a961f34102c4964b0ee0f7aacb71787092e78ec37b8534c",
+        "bytes": 22760
+      },
+      "visual/native-xtest/visual.json": {
+        "sha256": "24de451262b07ba917af0e4e5676457d2453d417356a6b2763ff0239306f1823",
+        "bytes": 25477
+      },
+      "visual/production-unedited-motion.mp4": {
+        "sha256": "c2a3884a1d259094dc766445d95d4ebbeab365dd6159c5e44f8a28c86692a477",
+        "bytes": 419756
+      },
+      "visual/react-review.json": {
+        "sha256": "27197e7d769ad55fa55dd6b76b0ff252afa338770063b74e8e859b6f5a431116",
+        "bytes": 1673
+      },
+      "visual/visual.json": {
+        "sha256": "29bfe25436c96fa3b12fda707bf3bf038c86d7c46f25ff847d3ef73151b08723",
+        "bytes": 115361
+      },
+      "watchdog-standalone-deadline.json": {
+        "sha256": "775f86611a89f06e4fb2dcac0da9251796e272ebe4856145bde6637eafbc4608",
+        "bytes": 866
+      }
+    },
+    "latest_native_repeat_report": {
+      "report": "workspace-20261015T094619Z.json",
+      "sha256": "60271e7abea555b68aab02c8122ab07ce19d5f28b17e30552f99df52d77a389b",
+      "bytes": 2869,
+      "failures": [
+        {
+          "kind": "RuntimeError",
+          "reason": "current_VM_watchdog_gate_failed"
+        }
+      ],
+      "qualification_complete": false,
+      "archive_import_pending": false,
+      "archive_evidence": "history/qualification-second-cold-boot-failure.json"
+    },
+    "source_freeze_pending": false,
+    "evidence_hash_scope": "Digests below bind report/artifact bytes at this draft update, not current source file identities or the eventual publication commit. Reports may contain capture-time source digests; revalidate current source/served identity after freeze.",
+    "status_counts": {
+      "PASS": 17,
+      "PARTIAL": 23,
+      "UNVERIFIED": 1,
+      "BLOCKED": 2
+    },
+    "post_publication_normal": "post-publication-normal/normal.json",
+    "remaining_gaps_are_not_passes": [
+      "Full current-boot watchdog and qualified guest execution BLOCKED",
+      "Human visual review unavailable; R07 continuous voice clip / R08 guest transition remain unverified",
+      "Reboot, physical listening/unplug, AT, alternate browser, high-refresh and upstream ablation lineage unverified"
+    ]
+  },
+  "human_review": {
+    "status": "UNVERIFIED",
+    "normal_speed_playback_offered": true,
+    "user_observation": "I couldn’t review the playback",
+    "visual_approval": false,
+    "new_sound_audition": false,
+    "scope": "Actual unedited 9.03s main motion and 5.03s delete-confirm videos played natively; user could not review. No subjective approval inferred."
+  },
+  "current_boot_VM_gate": "BLOCKED; current-source all-five aggregate receipt not obtained"
+}

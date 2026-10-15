@@ -1,0 +1,1885 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-15T13:23:05.697559+00:00",
+  "status": "PARTIAL_TECHNICAL_EVIDENCE_HUMAN_REVIEW_PENDING",
+  "scope": {
+    "live_app_or_GUI_used_by_this_audit": false,
+    "current_source_read": true,
+    "actual_saved_PNGs_opened": 32,
+    "source_stills_opened": [
+      "brain-sheet.png",
+      "metal-sheet.png",
+      "hud-sheet.png",
+      "rare-original-harness.png",
+      "R11-dribbble-full-page.png",
+      "folders-reference-image.jpg"
+    ],
+    "continuous_playback_review_by_this_audit": "NOT_PERFORMED_FRAME_AND_RECEIPT_REVIEW_ONLY",
+    "generated_media_used": false,
+    "source_or_runtime_changed": false
+  },
+  "visual_thesis": "Quiet neutral chat workspace with readable real content,an inset nested rail and compact composer; exact reference anatomy retained where meaningful while model,permission and action semantics remain truthful.",
+  "input_reference_plan_sha256": "4b2745e4103842334e629aec65899c53d6845e3ebede41a2a95b867b6e2c69ed",
+  "current_source_sha256": {
+    "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+    "workspace/frontend/src/style.css": "fc6380187ec0419be97709e8a63cc4c3856e10a05332dad3a215b62ad1c74147",
+    "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+    "workspace/frontend/src/components/ai-status.tsx": "189ef948417898197c88b0a8fb8c2e5bbbfb7b4ee28a68da9022215af3d8c394",
+    "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+    "workspace/frontend/src/components/folder-component.tsx": "80823fee49ff7099c1e0510231aed1da8ddabbdcaa56ae52a2e91b665e3a1bbb",
+    "workspace/frontend/src/components/voice-note.tsx": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+    "workspace/frontend/src/components/task-list.tsx": "c454c38e57d795d12916f536e7dfa98f3b9433a87fa0733069299f7a918e8258",
+    "workspace/frontend/src/components/delete-button.tsx": "2be4b52f7297bd95742895932aea10166cbc69ee288ea9a314528c43363751da",
+    "workspace/ui/dist/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+    "workspace/ui/dist/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341",
+    "workspace/frontend/src/MessageMarkdown.tsx": "96a8f99f55d71625bc098c9e4e8af9ec12f02d39182e62ef0090b5b2d6f3f1ee",
+    "workspace/frontend/src/lib/citations.ts": "80a857db3f7664cbbe3f133e3dbb974fe2de8794a73c479804cf2e28833610b3"
+  },
+  "evidence_reports": {
+    "review/visual/visual.json": {
+      "sha256": "02b094a098feb7ce91745f557b2e6cb2abae6a61a1a4cfa686dbb423eef4ede5",
+      "status": "PASS scoped technical checks",
+      "served_sha256": {
+        "/hermes-workspace": "4d0300484094fd9b48a0b4c84147d8f47452c38ff41fd93356ca6cc10ea8d194",
+        "/assets/app.js": "f2d8d6ffdb617680a3ff062189e76e4361687b1dfcdd14a709152bf38b4d27e8",
+        "/assets/app.css": "df722076b27cae99140db0cc8792d05216f34862f63159a30a3984aa49d4a1bf",
+        "/interface-audio.mjs": "817511c213ba2e64398d8c767662cd368601b5abab6d7c5451d9db41b5c1ff05"
+      },
+      "source_sha256": {
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "scripts/probe_v4_visual.py": "abd3b4e29519d5f66b92128ef436a2607e5e41c4ee1c387d7f9cfb4389eebc6a"
+      },
+      "unverified": [
+        "Live inference/status/search/voice/task states are not manufactured by this visual-only probe; see separate production action/model evidence.",
+        "Actual app-mode hidden-tab cleanup remained unverified; see visibility reason."
+      ]
+    },
+    "review/voice/voice.json": {
+      "sha256": "991bea0c7a497224eceedb9a5fc608325895ade07f9a41efc818bd7ca4f71af3",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_chat.py": "11680e60277fe03865473c212347a9a77f68ad31994b49be652bf21579b4b281",
+        "scripts/probe_v4_uploads.py": "21c8ed01dd80a02ea40deb072f1ae6f057d790bcb0489ff28ad70163e0cc6c95",
+        "scripts/probe_v4_visual.py": "bbb81f1f63dfa5fd42d7f3f661a71e63f762395a7df7debff96fea080e659b42",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/voice.py": "1bb3b7a9e53dfd5a0c5c9039a111ceb4e40375fa3a1877ca7b3998d73795db35",
+        "workspace/frontend/src/main.tsx": "ddccbe3bd5fb26f652808a29283df1e352c455ad3633d8fe453001e24d2b6607",
+        "workspace/frontend/src/recording.ts": "f6b541ca55a923a265ec7f7bc698008942cb2f66324ed82868ebc2c2695e5eca",
+        "workspace/frontend/src/components/voice-note.tsx": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+        "workspace/frontend/src/style.css": "af38310e74d6464b7ce6c6070397e645f5e31775df3ed1b7d32b808c5e3b3d4f"
+      },
+      "unverified": [
+        "Physical microphone/device capture, listening and intelligibility are not exercised.",
+        "Late grant, device loss and recorder release are labelled source fixtures, not physical checks.",
+        "Human visual and continuous-motion approval remain pending."
+      ]
+    },
+    "review/retention/retention.json": {
+      "sha256": "306665366f9242f7d9d9f1fe7fac73ff2f6f62d2d046aa1c24b660c4c54d07c0",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_lifecycle.py": "f5bc7564abde412c723b428ee103ce07b5c9c22e212e6ae3d99a5819944cf034",
+        "scripts/probe_v4_chat.py": "11680e60277fe03865473c212347a9a77f68ad31994b49be652bf21579b4b281",
+        "scripts/probe_v4_uploads.py": "21c8ed01dd80a02ea40deb072f1ae6f057d790bcb0489ff28ad70163e0cc6c95",
+        "workspace/chat.py": "9e578692a976e01ef120d69a02fd3e8f0ac867738ebc365b8cd28a70c49f61fd",
+        "workspace/conversations.py": "7e3acf53a422fbd69f774590b9d0e6bbce4101fa1c94479a7476217927fe7554",
+        "workspace/catalog.py": "e34d0437665122a347241080ba8499ba84bdda2258cfb9849e43a4a308b1a65e",
+        "workspace/attachments.py": "611b516217bfccbc0119b45d875184c3a302f5afe077d32e30522a23d6b2d5eb",
+        "workspace/models.py": "45c2407e42839cb02e9e764325b161a99c9f159dcb6650c4387fb9d7004b7687",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/frontend/src/main.tsx": "ddccbe3bd5fb26f652808a29283df1e352c455ad3633d8fe453001e24d2b6607",
+        "workspace/production_client.py": "2bec1f8b5e4ff4c9d530be7bad775bef1f7e441d741e6e06b05dc5d5499d5353",
+        "configs/backend-artifacts.lock.json": "560a28dbe71b021887a8d6d546a4c128cd02ee99e8bce67a4ace506e5a7e19fa",
+        "configs/normal-profile.lock.json": "2df28a19ae54e3cd6fc431c7e1a30c5981b819fe88b3697ed09fd49bae576ba0",
+        "workspace/frontend/src/Buddy.tsx": "91aca163b774bf17349562e954416559ea81c009ae791a2fbd051446f9a3ac72",
+        "workspace/frontend/src/api.ts": "d8265e61265fc664ac79092c96b97d9bb51ea5ce3d4d6014ae8f65defd124d30",
+        "workspace/frontend/src/buddy.css": "1345263b8ed9568d78322c488bd3f1dcbfbe99ec5f6ce5b62814bbf115249f81",
+        "workspace/frontend/src/components/ai-status.tsx": "189ef948417898197c88b0a8fb8c2e5bbbfb7b4ee28a68da9022215af3d8c394",
+        "workspace/frontend/src/components/delete-button.tsx": "2be4b52f7297bd95742895932aea10166cbc69ee288ea9a314528c43363751da",
+        "workspace/frontend/src/components/folder-component.tsx": "80823fee49ff7099c1e0510231aed1da8ddabbdcaa56ae52a2e91b665e3a1bbb",
+        "workspace/frontend/src/components/task-list.tsx": "c454c38e57d795d12916f536e7dfa98f3b9433a87fa0733069299f7a918e8258",
+        "workspace/frontend/src/components/voice-note.tsx": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+        "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/lib/activity-status.ts": "ed8bfb10ef195f4c3cbba1e7fefa670235361de4638c1fec2b7dd9219465323d",
+        "workspace/frontend/src/lib/citations.ts": "e9b917c8729b28e53b4313fdd04650ac318be4e9d79b1802733612678d15240f",
+        "workspace/frontend/src/lib/draft-selection.ts": "a2f2ff1bce03f3ede31393345b42ff136735c53a84b2be266a4aef9d169862ff",
+        "workspace/frontend/src/lib/folder-tree.ts": "d20fb283a03a2980cf4d07e610bce93ebe55586d644990db8c6d7e9d3b2952c0",
+        "workspace/frontend/src/lib/reduced-motion.ts": "d3939d4bbb30eb612a1ed623fdf8abd7aec4a5ab336f8ad87b713af46db29499",
+        "workspace/frontend/src/lib/use-draft-attachments.ts": "65975156bd08b7a8253134e1f7fe7acaa76ef553654bd65cef9f9017424e2fe9",
+        "workspace/frontend/src/lib/utils.ts": "59371d8c838499566afc757807c390309c18ff9acdd196248455359846ac46df",
+        "workspace/frontend/src/permissions.tsx": "9bd6fc646fddc6bad19ed88fa885d6652e4fdfa16ce6137a5436d2b19451d697",
+        "workspace/frontend/src/recording.ts": "f6b541ca55a923a265ec7f7bc698008942cb2f66324ed82868ebc2c2695e5eca",
+        "workspace/frontend/src/style.css": "af38310e74d6464b7ce6c6070397e645f5e31775df3ed1b7d32b808c5e3b3d4f"
+      },
+      "unverified": [
+        "Trusted browser pointer/file-input automation is not physical native-input review.",
+        "Normal restoration and protected admission must be measured; authorization flags do not bypass either."
+      ]
+    },
+    "review/chat-normal-repeat/chat.json": {
+      "sha256": "0248f8f127997802c646c38bf8af407b799bb97ee32e8c5b6955775b5a615cf1",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "unverified": null
+    },
+    "review/chat-abliterated/chat.json": {
+      "sha256": "66fef35e4c7fe90520a78421b6c3243200ef5f129156a2f0289060059fe061e9",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "unverified": null
+    },
+    "review/chat-cancel/chat.json": {
+      "sha256": "e886e70e2c2da70f2f755072e2ba98bff4025345410052c2121d0d1dde3ec8d5",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "app.js": "f2d8d6ffdb617680a3ff062189e76e4361687b1dfcdd14a709152bf38b4d27e8",
+        "app.css": "df722076b27cae99140db0cc8792d05216f34862f63159a30a3984aa49d4a1bf"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/main.tsx": "ddccbe3bd5fb26f652808a29283df1e352c455ad3633d8fe453001e24d2b6607",
+        "workspace/frontend/src/style.css": "af38310e74d6464b7ce6c6070397e645f5e31775df3ed1b7d32b808c5e3b3d4f",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/ui/dist/app.js": "f2d8d6ffdb617680a3ff062189e76e4361687b1dfcdd14a709152bf38b4d27e8",
+        "workspace/ui/dist/app.css": "df722076b27cae99140db0cc8792d05216f34862f63159a30a3984aa49d4a1bf",
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/chat.py": "9e578692a976e01ef120d69a02fd3e8f0ac867738ebc365b8cd28a70c49f61fd"
+      },
+      "unverified": null
+    },
+    "review/final-chat-normal/chat.json": {
+      "sha256": "12c5422a3fc092baba0e8b32632e5b89dff488a66b66545d4c8b79e460f13a6d",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/style.css": "196db504808e09214da1876d180423e55f3b02448b7803adad2fb80dd2bb71b5",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/ui/dist/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "workspace/ui/dist/app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2",
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/chat.py": "9e578692a976e01ef120d69a02fd3e8f0ac867738ebc365b8cd28a70c49f61fd"
+      },
+      "unverified": null
+    },
+    "review/final-chat-abliterated/chat.json": {
+      "sha256": "c7fe380d8f6e25a9395fdd48d1472541ed29cb3786908ff4f59ce8bbf84ff1f0",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/style.css": "196db504808e09214da1876d180423e55f3b02448b7803adad2fb80dd2bb71b5",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/ui/dist/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "workspace/ui/dist/app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2",
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/chat.py": "9e578692a976e01ef120d69a02fd3e8f0ac867738ebc365b8cd28a70c49f61fd"
+      },
+      "unverified": null
+    },
+    "review/shell-supplemental/shell.json": {
+      "sha256": "20c7e82f511b3d0e092b9c1f8e06cfc069fa2f87dd4c6951b249a965b595148b",
+      "status": "FAIL",
+      "served_sha256": {
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "084ccb5f0d564003b3d4a87e595ec9b5299f1226cee6532a1ce9a894a054240d",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "196db504808e09214da1876d180423e55f3b02448b7803adad2fb80dd2bb71b5",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "unverified": null
+    },
+    "review/shell-targeted-repeat/shell.json": {
+      "sha256": "3122324ac511704164e64d79b805f71779709108892ae3ffe30236c30da0fa1c",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "084ccb5f0d564003b3d4a87e595ec9b5299f1226cee6532a1ce9a894a054240d",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "196db504808e09214da1876d180423e55f3b02448b7803adad2fb80dd2bb71b5",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "unverified": null
+    },
+    "review/vm/readiness-investigation.json": {
+      "sha256": "cbf229609f95f3859d87d3fcce3da0fb5831f7be2878ce11559b986ea303e4ac",
+      "status": "PARTIAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "unverified": null
+    },
+    "review/final-gallery/visual.json": {
+      "sha256": "d07a5dfca8d060de2e367f0c452b3645ddd60420758a7ffa4caa5c6551e8f25c",
+      "status": "PASS scoped technical checks",
+      "served_sha256": {
+        "/hermes-workspace": "4d0300484094fd9b48a0b4c84147d8f47452c38ff41fd93356ca6cc10ea8d194",
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "8f9fb8a8ab2105f370ea0abcf4d6edd9a90bcd3f46d93dbe078e112b964ac1a2",
+        "/interface-audio.mjs": "817511c213ba2e64398d8c767662cd368601b5abab6d7c5451d9db41b5c1ff05"
+      },
+      "source_sha256": {
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2"
+      },
+      "unverified": [
+        "Live inference/status/search/voice/task states are not manufactured by this visual-only probe; see separate production action/model evidence.",
+        "Native compositor cursor and physical input not checked by this invocation."
+      ]
+    },
+    "review/final-retention/retention.json": {
+      "sha256": "1a43c6c4643fb2c54696a73a115b4a4fd50cc0fb323216f60b062d08075bdb8f",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_lifecycle.py": "f5bc7564abde412c723b428ee103ce07b5c9c22e212e6ae3d99a5819944cf034",
+        "scripts/probe_v4_chat.py": "11680e60277fe03865473c212347a9a77f68ad31994b49be652bf21579b4b281",
+        "scripts/probe_v4_uploads.py": "21c8ed01dd80a02ea40deb072f1ae6f057d790bcb0489ff28ad70163e0cc6c95",
+        "workspace/chat.py": "9e578692a976e01ef120d69a02fd3e8f0ac867738ebc365b8cd28a70c49f61fd",
+        "workspace/conversations.py": "7e3acf53a422fbd69f774590b9d0e6bbce4101fa1c94479a7476217927fe7554",
+        "workspace/catalog.py": "e34d0437665122a347241080ba8499ba84bdda2258cfb9849e43a4a308b1a65e",
+        "workspace/attachments.py": "611b516217bfccbc0119b45d875184c3a302f5afe077d32e30522a23d6b2d5eb",
+        "workspace/models.py": "45c2407e42839cb02e9e764325b161a99c9f159dcb6650c4387fb9d7004b7687",
+        "workspace/server.py": "980bee850e905872d973adfdf8d46457e6c900b98f9d703b3ee0c108423e7bff",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/production_client.py": "2bec1f8b5e4ff4c9d530be7bad775bef1f7e441d741e6e06b05dc5d5499d5353",
+        "configs/backend-artifacts.lock.json": "560a28dbe71b021887a8d6d546a4c128cd02ee99e8bce67a4ace506e5a7e19fa",
+        "configs/normal-profile.lock.json": "2df28a19ae54e3cd6fc431c7e1a30c5981b819fe88b3697ed09fd49bae576ba0",
+        "workspace/frontend/src/Buddy.tsx": "91aca163b774bf17349562e954416559ea81c009ae791a2fbd051446f9a3ac72",
+        "workspace/frontend/src/MessageMarkdown.tsx": "a3ab3aab5cbcd047595dd091f73dfd50afb257711192d8ea8b58e21b84dd813a",
+        "workspace/frontend/src/api.ts": "d8265e61265fc664ac79092c96b97d9bb51ea5ce3d4d6014ae8f65defd124d30",
+        "workspace/frontend/src/buddy.css": "1345263b8ed9568d78322c488bd3f1dcbfbe99ec5f6ce5b62814bbf115249f81",
+        "workspace/frontend/src/components/ai-status.tsx": "189ef948417898197c88b0a8fb8c2e5bbbfb7b4ee28a68da9022215af3d8c394",
+        "workspace/frontend/src/components/delete-button.tsx": "2be4b52f7297bd95742895932aea10166cbc69ee288ea9a314528c43363751da",
+        "workspace/frontend/src/components/folder-component.tsx": "80823fee49ff7099c1e0510231aed1da8ddabbdcaa56ae52a2e91b665e3a1bbb",
+        "workspace/frontend/src/components/task-list.tsx": "c454c38e57d795d12916f536e7dfa98f3b9433a87fa0733069299f7a918e8258",
+        "workspace/frontend/src/components/voice-note.tsx": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+        "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/lib/activity-status.ts": "ed8bfb10ef195f4c3cbba1e7fefa670235361de4638c1fec2b7dd9219465323d",
+        "workspace/frontend/src/lib/citations.ts": "80a857db3f7664cbbe3f133e3dbb974fe2de8794a73c479804cf2e28833610b3",
+        "workspace/frontend/src/lib/draft-selection.ts": "a2f2ff1bce03f3ede31393345b42ff136735c53a84b2be266a4aef9d169862ff",
+        "workspace/frontend/src/lib/folder-tree.ts": "d20fb283a03a2980cf4d07e610bce93ebe55586d644990db8c6d7e9d3b2952c0",
+        "workspace/frontend/src/lib/policy-state.ts": "9d9a84c87eac5bc0583195b2f4f8b767bd6e90b02a149df7fa605f5a2350ffd2",
+        "workspace/frontend/src/lib/reduced-motion.ts": "d3939d4bbb30eb612a1ed623fdf8abd7aec4a5ab336f8ad87b713af46db29499",
+        "workspace/frontend/src/lib/run-receipts.ts": "6a9b7ed71eee7c3750c7d94b6a778c5771ac313d31863136deb6b2b71d0ea93c",
+        "workspace/frontend/src/lib/use-draft-attachments.ts": "65975156bd08b7a8253134e1f7fe7acaa76ef553654bd65cef9f9017424e2fe9",
+        "workspace/frontend/src/lib/utils.ts": "59371d8c838499566afc757807c390309c18ff9acdd196248455359846ac46df",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef",
+        "workspace/frontend/src/recording-session.ts": "f7c6fac25132c25104bffd1f9ebfba8fc83338fd40c29f00f5e0ecad54425e06",
+        "workspace/frontend/src/recording.ts": "f6b541ca55a923a265ec7f7bc698008942cb2f66324ed82868ebc2c2695e5eca",
+        "workspace/frontend/src/style.css": "196db504808e09214da1876d180423e55f3b02448b7803adad2fb80dd2bb71b5"
+      },
+      "unverified": [
+        "Trusted browser pointer/file-input automation is not physical native-input review.",
+        "Normal restoration and protected admission must be measured; authorization flags do not bypass either."
+      ]
+    },
+    "review/citation-repeat/citation.json": {
+      "sha256": "485f449962366cec3eb2110c88a43b6f789ae59309f380c3ad36c62770fb18c5",
+      "status": "FAIL",
+      "served_sha256": {
+        "app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "app.css": "c3d3c783b6038d286e20090759951013e45fc2881c1dcab44fe23a6631aa8989"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/MessageMarkdown.tsx": "a3ab3aab5cbcd047595dd091f73dfd50afb257711192d8ea8b58e21b84dd813a",
+        "workspace/frontend/src/lib/citations.ts": "80a857db3f7664cbbe3f133e3dbb974fe2de8794a73c479804cf2e28833610b3",
+        "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+        "workspace/ui/dist/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "workspace/ui/dist/app.css": "c3d3c783b6038d286e20090759951013e45fc2881c1dcab44fe23a6631aa8989"
+      },
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/citation-preview/citation.json": {
+      "sha256": "4e82af422eac1b4ab0f4772bb9b47498e88af00591a9defe3fca2a10dde4a80e",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "app.css": "8884631ceb8c888317876c7b19aec85958a268acd56e64721fda0e1e44ed67bc"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/MessageMarkdown.tsx": "a3ab3aab5cbcd047595dd091f73dfd50afb257711192d8ea8b58e21b84dd813a",
+        "workspace/frontend/src/lib/citations.ts": "80a857db3f7664cbbe3f133e3dbb974fe2de8794a73c479804cf2e28833610b3",
+        "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+        "workspace/ui/dist/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "workspace/ui/dist/app.css": "8884631ceb8c888317876c7b19aec85958a268acd56e64721fda0e1e44ed67bc"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/citation-final/citation.json": {
+      "sha256": "6c5e02ad58b813d79e39b44f2890f741522950e7e5beb06c2bbac4b13005b42b",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341"
+      },
+      "source_sha256": {
+        "workspace/frontend/src/MessageMarkdown.tsx": "96a8f99f55d71625bc098c9e4e8af9ec12f02d39182e62ef0090b5b2d6f3f1ee",
+        "workspace/frontend/src/lib/citations.ts": "80a857db3f7664cbbe3f133e3dbb974fe2de8794a73c479804cf2e28833610b3",
+        "workspace/frontend/src/components/web-search.tsx": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+        "workspace/ui/dist/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "workspace/ui/dist/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/forced-colors-repair/shell.json": {
+      "sha256": "2844b8dcc76fc2eeecc7ea8b4b4dc66578f8612c36bb8550e6e7f9d6129c3455",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "c3d3c783b6038d286e20090759951013e45fc2881c1dcab44fe23a6631aa8989"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "85d32a7fb52f46755e6d5ae5fb5d52e29063e3d879b93300e3dfde61547e1d26",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/forced-colors-final/shell.json": {
+      "sha256": "629abfd258bc72552b313d8ee71a590e838016d7f11260766a07b8010e4f18d8",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "8884631ceb8c888317876c7b19aec85958a268acd56e64721fda0e1e44ed67bc"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "8a4614b329b1d4fa0a6f2d628857f45ceca63cf3844f3d1c34623862e2f63ffb",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/reference-light-final/shell.json": {
+      "sha256": "0b4d8e9bec82db26de95879d7f77e01dba4395152969eb9daebcb9fb71cc4c22",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "/assets/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "/assets/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "fc6380187ec0419be97709e8a63cc4c3856e10a05332dad3a215b62ad1c74147",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/css-repair/shell.json": {
+      "sha256": "58c02f1ccbc8e08d1b3b79298e621c4074d2b5395f888228d5ec1ea1123e34a2",
+      "status": "FAIL",
+      "served_sha256": {
+        "/assets/app.js": "01ba53c8fda5226654b57205e45b28a05e139be626d5f576482e0be14b94bc4f",
+        "/assets/app.css": "c3d3c783b6038d286e20090759951013e45fc2881c1dcab44fe23a6631aa8989"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "85d32a7fb52f46755e6d5ae5fb5d52e29063e3d879b93300e3dfde61547e1d26",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/layout-final/shell.json": {
+      "sha256": "13fa896bbede5df307d17ffbdc6bd0278943311b5b8248202ee58a146cacac54",
+      "status": "FAIL",
+      "served_sha256": {
+        "/assets/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "/assets/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "fc6380187ec0419be97709e8a63cc4c3856e10a05332dad3a215b62ad1c74147",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/layout-final-repeat/shell.json": {
+      "sha256": "57e58215b70eb525802a0429c7b5437689822c630a8f7aa000078d2fb884931e",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": {
+        "/assets/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "/assets/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341"
+      },
+      "source_sha256": {
+        "scripts/production_pin.py": "3d6fdcbd13640a48d8766ae98919e49484d40a3dd9c9b7950a9eb995f89369c8",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "workspace/frontend/src/main.tsx": "7f115cd1dd349c75b8f558ea896db4d57708b043195e1e1ac014833ed11870f3",
+        "workspace/frontend/src/controls.tsx": "a6b50aa6031e3987157e185dcae95ab27ce5cf574991d04eb215ec444d05de71",
+        "workspace/frontend/src/style.css": "fc6380187ec0419be97709e8a63cc4c3856e10a05332dad3a215b62ad1c74147",
+        "workspace/frontend/src/permissions.tsx": "48e8969372c5332ae499867c35962ce66bbe8396311dff5cee8dadf782c4e0ef"
+      },
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/actions-final/run.json": {
+      "sha256": "62dc90267cf7f03c1b8085745dfd6ab05239783db4822f111e5371d2ac1d3a2e",
+      "status": "FAIL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/actions-final/owned/actions.json": {
+      "sha256": "9438332b66e6c30754e84f46cbf0706197cd296d9e64cccacbc905f46be4793b",
+      "status": "PARTIAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/actions-delete-final/run.json": {
+      "sha256": "a74d0e4b825b74308602dc78fe1f97134d5c36c973098ab1d4165e622bbf2414",
+      "status": "PASS_SCOPED_TECHNICAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "scope_note": "Scoped technical evidence only."
+    },
+    "review/actions-delete-final/owned/actions.json": {
+      "sha256": "69a8867104e83c1fb1ca2a6eaf4c6f3c7ccf2e3f3f5a84162b6c27c27feeb90c",
+      "status": "PARTIAL",
+      "served_sha256": null,
+      "source_sha256": null,
+      "scope_note": "Inspect exact successful row/subset and limitations; top-level failure is preserved."
+    },
+    "review/gallery-final/visual.json": {
+      "sha256": "5e3961db8b83deecbe2a74e38421f9765e05f256a0f1197d14e97f3ed9ec8d97",
+      "status": "PASS scoped technical checks",
+      "served_sha256": {
+        "/hermes-workspace": "4d0300484094fd9b48a0b4c84147d8f47452c38ff41fd93356ca6cc10ea8d194",
+        "/assets/app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+        "/assets/app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341",
+        "/interface-audio.mjs": "817511c213ba2e64398d8c767662cd368601b5abab6d7c5451d9db41b5c1ff05"
+      },
+      "source_sha256": {
+        "workspace/launcher.py": "0a9b91efe580e5c40de2d0dbfebd39ca03128231974b50c22c5bf986386193e5",
+        "workspace/capture.py": "ea51fd908f422d8da5f8bb6d03d2a5f600468b0f285f60d950ba5a74124f481a",
+        "scripts/probe_v4_visual.py": "77247cac7b5e109a6dc3480fc008546dfc6d591880971d4b61dea7caac2aa7b2"
+      },
+      "scope_note": "Scoped technical evidence only."
+    }
+  },
+  "evidence_build_bounds": {
+    "current_source_snapshot": {
+      "app.js": "b1dcfadc7b977a56e0b42a19da4c323a0006f929907a0685c5710352385b00a9",
+      "app.css": "79613abf184866df60f6894ff6c70838ab65ec08ba23f5c44b2c4eadd8245341",
+      "receipts": [
+        "review/citation-final/citation.json",
+        "review/gallery-final/visual.json",
+        "review/layout-final-repeat/shell.json"
+      ]
+    },
+    "earlier_recorded_builds": "Model/voice/retention and earlier full visual/native reference checks keep their exact served/source hashes. Backend/flow evidence remains scoped to those receipts; later CSS and stable-citation renderer changes are verified separately.",
+    "no_approval_inference": "Source,tests,native inputs,capture metadata and scopedPASS do not establish full1:1reference parity,human approval,physical devices or reboot persistence."
+  },
+  "candidate_integrated_core_checks": [
+    {
+      "id": "R04",
+      "path": "workspace/frontend/src/components/ai-status.tsx",
+      "current_sha256": "189ef948417898197c88b0a8fb8c2e5bbbfb7b4ee28a68da9022215af3d8c394",
+      "candidate_baseline_sha256": "189ef948417898197c88b0a8fb8c2e5bbbfb7b4ee28a68da9022215af3d8c394",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    },
+    {
+      "id": "R05",
+      "path": "workspace/frontend/src/components/web-search.tsx",
+      "current_sha256": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+      "candidate_baseline_sha256": "b79afcf4b8a53281c10390dea8ae8d5aefd841207b4f508b23fbc86e4ddd18f5",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    },
+    {
+      "id": "R06",
+      "path": "workspace/frontend/src/components/folder-component.tsx",
+      "current_sha256": "80823fee49ff7099c1e0510231aed1da8ddabbdcaa56ae52a2e91b665e3a1bbb",
+      "candidate_baseline_sha256": "80823fee49ff7099c1e0510231aed1da8ddabbdcaa56ae52a2e91b665e3a1bbb",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    },
+    {
+      "id": "R07",
+      "path": "workspace/frontend/src/components/voice-note.tsx",
+      "current_sha256": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+      "candidate_baseline_sha256": "bc980b0c2015868aefa5578e92a546b692670358d78717e281e292bcb349141e",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    },
+    {
+      "id": "R08",
+      "path": "workspace/frontend/src/components/task-list.tsx",
+      "current_sha256": "c454c38e57d795d12916f536e7dfa98f3b9433a87fa0733069299f7a918e8258",
+      "candidate_baseline_sha256": "c454c38e57d795d12916f536e7dfa98f3b9433a87fa0733069299f7a918e8258",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    },
+    {
+      "id": "R09",
+      "path": "workspace/frontend/src/components/delete-button.tsx",
+      "current_sha256": "2be4b52f7297bd95742895932aea10166cbc69ee288ea9a314528c43363751da",
+      "candidate_baseline_sha256": "2be4b52f7297bd95742895932aea10166cbc69ee288ea9a314528c43363751da",
+      "same_bytes_as_candidate_baseline": true,
+      "exact_original_provenance_in_reference": true,
+      "note": "Integrated app copy is adapted code; matching candidate bytes is not matching upstream original bytes or visual approval."
+    }
+  ],
+  "references": [
+    {
+      "id": "R01",
+      "url": "https://www.inspora.design/posts/galaxy-brain-effort-slider",
+      "creator": "ozzy / @ozzyxs1a (original creator link retained from supplied Inspora record)",
+      "source_observations": [
+        "Original video: 1890×1032, 60 fps, 5.55 seconds. Native panel bounds approximately (505,248)–(1385,764), 880×516; track approximately (551,547)–(1337,627), 786×80.",
+        "The panel has an Effort/value header, question mark, Faster/Smarter labels and a thin dark track. A pink bilobed brain thumb is approximately the track height. Dots and a longer recommendation tick sit in the track. The sampled sequence reaches Galaxy, where violet/pink square pixels and short radial rays replace the quiet track."
+      ],
+      "required_core": "Effort header/value/help, Faster/Smarter alignment, recessed thin track, traveling bilobed brain, quiet endpoint ticks and pixel-rich endpoint accent.",
+      "comparison_criteria": {
+        "geometry": [
+          "Compare normalized track/panel ratio, track radius and brain/track-height ratio. Original panel about880×516 and track786×80; these are approximate source-pixel bounds, not CSS target dimensions.",
+          "At actual popover size preserve two visually distinct reachable detents; brain remains recognizable at both endpoints."
+        ],
+        "material": [
+          "Original quiet brain is pink with darker lobe grooves; Galaxy brain remains bilobed and violet with small bright flecks. Pixel density increases toward endpoint; short rays escape its edge."
+        ],
+        "input": [
+          "Actual range pointer/drag, Arrow keys, Home/End, rapid Off→On→Off interruption, disabled unsupported state and focus ring."
+        ],
+        "semantics": [
+          "Expose only actual off/on thinking. Source Low/Medium/High/Extra/Max/Galaxy visual sequence does not establish six backend effort levels. Keep supported-state help accurate."
+        ],
+        "motion": [
+          "Capture full thumb travel, fill progression, endpoint hold and reverse at actual size; check no disconnected squares replace the brain silhouette. Source clip alone does not establish pointer/keyboard behavior."
+        ],
+        "typography": [
+          "Compare header/value/help and Faster/Smarter/recommendation hierarchy with source at normalized scale. Retain installed approved font; source pixels do not establish an exact font license or family."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/controls.tsx",
+        "workspace/frontend/src/style.css"
+      ],
+      "exact_source": {
+        "ref": "brain",
+        "url": "https://media.inspora.design/posts/d6549513-e763-43c9-b3e0-3a50ccf033be.mp4",
+        "creator_links": [
+          "https://x.com/neropursue?s=11",
+          "https://x.com/ozzyxs1a/status/2107523169649389677"
+        ],
+        "bytes": 502280,
+        "sha256": "bbeaa2656fccf3dca9dff8b9ee42be5bca01c9ba179f40e1d8ce61c3bef9ae6a",
+        "seconds": 5.55,
+        "observed_frame_seconds": 2.22
+      },
+      "rights": "No clip/creator runtime-asset license established. Independently author code from inspected principles; keep exact clips and decoded source frames private and exclude from source/review ZIP.",
+      "status": "PASS_SCOPED_NATIVE_TWO_STATE_BEHAVIOR_HUMAN_PARITY_UNVERIFIED",
+      "axes": {
+        "geometry": "Current 330px panel keeps Effort/value/help, Faster/Smarter alignment, 30px recessed track and 42px traveling thumb. Saved On crop visibly retains the bilobed brain; source estimates (880×516 panel, 786×80 track) are normalized comparisons, not claimed CSS equality.",
+        "material": "Visible violet brain grooves, bright flecks, outward short rays and a square-pixel track are present. It is no longer the previous hidden-brain/smooth-track implementation. Exact spectral luminosity and source Galaxy particle density remain subjective comparison gaps.",
+        "typography": "Header/value, supporting Faster/Smarter and two-state helper text follow the reference hierarchy at product scale. Rubik/current app font and accurate On/Off replace source named levels; original font identity is not inferred.",
+        "input": "Actual native keyboard/drag/Off-On checks pass in prior dark targeted and current light reference runs. Range min0/max1/step1 is verified; no unsupported effort levels are fabricated. Reduced/forced preference behavior is separately checked on a fresh native qualification.",
+        "semantics": "Only min0/max1/step1 thinking Off/On are exposed. Source Low/Medium/High/Extra/Max/Galaxy is a visual sequence, not evidence the installed backend supports six effort levels. Unsupported backend state stays disabled.",
+        "motion": "Native unedited actual keyboard,thumb travel,drag and endpoint sequence exists for light and dark reference runs. Authored .45s travel and short pixel/ray fades remain an adaptation. Saved endpoint PNGs and receipt were inspected here; uninterrupted human source/candidate review and exact source timing remain unverified."
+      },
+      "evidence": [
+        "review/visual/reasoning-on.png",
+        "review/visual/visual.json",
+        "review/shell-supplemental/shell.json",
+        "review/shell-targeted-repeat/R01-on.png",
+        "review/shell-targeted-repeat/shell.json",
+        "review/shell-targeted-repeat/R01-R02-native-unedited.mp4",
+        "review/reference-light-final/shell.json",
+        "review/reference-light-final/R01-on.png"
+      ],
+      "adaptations": [
+        "Two truthful backend detents replace six visual source states.",
+        "Panel scaled to existing composer and keyboard range semantics."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R02",
+      "url": "https://www.inspora.design/posts/iquid-metal",
+      "creator": "@BrettFromDJ (original creator link retained from supplied Inspora record)",
+      "source_observations": [
+        "Original video: 3090×2160, 60 fps, 16 seconds. A dark upright vertical-gradient circular face has a thin silver reflective rim with separated amber, blue and white spectral seams.",
+        "Rim reflections move throughout sampled states; the face and arrow stay upright. The reference glyph is a send arrow; the Hermes plus glyph is an explicit product adaptation."
+      ],
+      "required_core": "Upright dark round face and glyph, very thin polished rim, unequal silver/white reflections with sparse blue/amber spectral seams.",
+      "comparison_criteria": {
+        "geometry": [
+          "Compare circularity and rim/diameter ratio on the actual40px composer plus; do not judge only a magnified demo. Source face/glyph remain upright while reflections move."
+        ],
+        "material": [
+          "Dark vertical face gradient and bright elongated silver streaks must read as reflective metal rather than a thick rainbow border. Preserve separation of face, rim and outer shadow."
+        ],
+        "input": [
+          "Keep real plus-menu action, readable focus, hover/press/release, rapid close/reopen and pointer leave. Source clip gives visual material, not proof of a particular hover/shader algorithm."
+        ],
+        "semantics": [
+          "The original send arrow becomes Hermes plus by explicit product adaptation; real Send remains separate. No unsupported inference about the original implementation technique."
+        ],
+        "motion": [
+          "Inspect independently moving highlights at normal size/speed, fixed face, press/reverse and loop seam. Record idle and both-model cost; suspend invisible/reduced-motion material work."
+        ],
+        "typography": [
+          "Keep the upright plus stroke crisp at18px within40px control. Original arrow glyph is explicitly replaced; preserve focus/accessible label independently of decorative metal."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/controls.tsx",
+        "workspace/frontend/src/style.css"
+      ],
+      "exact_source": {
+        "ref": "metal",
+        "url": "https://media.inspora.design/posts/87cdfa67-7160-49c4-bfd4-d97d95d22d02.mp4",
+        "creator_links": [
+          "https://x.com/neropursue?s=11",
+          "https://x.com/BrettFromDJ/status/2002114751078543846"
+        ],
+        "bytes": 1799527,
+        "sha256": "34c630a3157f0261c6120e89bee21434ce7e50ec584c95c149c0e40f52ed5813",
+        "seconds": 16.0,
+        "observed_frame_seconds": 6.4
+      },
+      "rights": "No clip/creator runtime-asset license established. Independently author code from inspected principles; keep exact clips and decoded source frames private and exclude from source/review ZIP.",
+      "status": "PASS_SCOPED_NATIVE_MATERIAL_INPUT_HUMAN_PARITY_UNVERIFIED",
+      "axes": {
+        "geometry": "Current compact round plus control has a thin reflective rim around an upright dark face. Saved full-shell and voice crops show it at actual composer size; source send-circle diameter is not copied literally.",
+        "material": "Original source sheet shows uneven white/silver reflection arcs with small amber/blue seams and a dark vertical face gradient. Product uses three independently moving conic reflection layers; similarity in stills does not establish equivalent liquid quality or creator technique.",
+        "typography": "Reference is an upright send glyph; Hermes retains an upright plus glyph with accessible action-menu labeling. No font claim applies to the icon.",
+        "input": "Actual native hover,press,open/close/reverse checks pass in dark targeted and light reference runs. Original plus action remains intact. Separate failed post-zoom native calibration is retained and is not relabeled as a coupled sequence PASS.",
+        "semantics": "Preserved plus-menu purpose differs deliberately from the reference send action. Hover/pressed effects do not move the face or invent backend activity.",
+        "motion": "Actual native reflection observations change while the face stays fixed; pointer/press/reversal sequences are recorded in both reference runs. Whole-app idle CPU proxy is scoped technical evidence only. Three CSS reflection cycles and hover override are implementation values,not proved creator technique or exact source timing; human material/motion parity and isolated GPU/presentation cost remain unverified."
+      },
+      "evidence": [
+        "review/visual/plus-actions.png",
+        "review/voice/voice-seek-speed.png",
+        "review/shell-supplemental/shell.json",
+        "review/shell-targeted-repeat/shell.json",
+        "review/shell-targeted-repeat/R01-R02-native-unedited.mp4",
+        "review/reference-light-final/shell.json",
+        "review/css-repair/shell.json"
+      ],
+      "adaptations": [
+        "Plus action and small composer scale retained.",
+        "Authored CSS reflection approximation; original rendering technology is unknown."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R03",
+      "url": "https://www.inspora.design/posts/hypnotizing-ui",
+      "creator": "@k_grajeda (original creator link retained from supplied Inspora record)",
+      "source_observations": [
+        "Original video: 2038×1658, 100 fps, 27.72 seconds. A black top-attached notch joins a horizontal black band with concave upper corners and rounded lower corners.",
+        "A muted context row sits above a bright current-action row. A small cluster of luminous peach, pink or blue squares changes shape to the left of the current action. Width follows text. Samples show Thinking, Reading file, Reading input.tsx and Creating prototype. At exactly 11.088 seconds the label is Thinking above the context Read input.tsx 23 lines. Samples do not define exact phase boundaries."
+      ],
+      "required_core": "Top-attached black notch with concave shoulders, rounded lower corners, muted context above bright current action, luminous small square cluster; width follows actual text.",
+      "comparison_criteria": {
+        "geometry": [
+          "Compare attachment to header, shoulder concavity, two-line baseline spacing, cluster scale and dynamic width. Original joins a horizontal black band; Hermes header adaptation must be named."
+        ],
+        "material": [
+          "Near-black mass, soft shadow and restrained peach/pink/blue light; no large generic spinner or invented progress bar."
+        ],
+        "input": [
+          "Cancel remains reachable without an invisible overlay; do not block Files/Details/Settings or shift their triggers."
+        ],
+        "semantics": [
+          "Drive admission/loading/generating/tool/waiting approval/cancelling/recovery/error from actual lifecycle. Original example filenames and line counts are not Hermes telemetry."
+        ],
+        "motion": [
+          "Compare entry, text-width change, cluster pattern evolution, rapid state interruption and exit across actual phases. Exact source11.088s is Thinking under Read input.tsx23lines; sampled states do not establish exact phase boundaries."
+        ],
+        "typography": [
+          "Muted compact context above brighter slightly larger current-action text; preserve baseline and ellipsis without obscuring actual status. Do not copy source filenames."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/controls.tsx",
+        "workspace/frontend/src/style.css"
+      ],
+      "exact_source": {
+        "ref": "hud",
+        "url": "https://media.inspora.design/posts/9f9a0da6-f2fd-469e-b789-822d5a40b79c.mp4",
+        "creator_links": [
+          "https://x.com/neropursue?s=11",
+          "https://x.com/k_grajeda/status/2008640405886382541"
+        ],
+        "bytes": 1891964,
+        "sha256": "96647ac123fa768ef44e8cd7089879f0f5c1d8459ec45386763f67254fbab635",
+        "seconds": 27.72,
+        "observed_frame_seconds": 11.088000000000001
+      },
+      "rights": "No clip/creator runtime-asset license established. Independently author code from inspected principles; keep exact clips and decoded source frames private and exclude from source/review ZIP.",
+      "status": "PARTIAL_ACTUAL_LIFECYCLE_TECHNICAL_FULL_PHASE_MOTION_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual streaming PNG has a top-attached black notch with concave shoulders, rounded lower corners and compact context/action rows. Current authored indicator has FOUR squares arranged across a cross/diamond (x0,4,8,4; y4,0,4,8), not the stale nine-cell grid.",
+        "material": "Reference black notch, subdued contextual gray and luminous warm/cool small squares are adapted to product themes. Actual stream capture shows the dark surface and tiny colored cluster; full phase color coverage needs separate actual outcomes.",
+        "typography": "Muted model/elapsed context sits above brighter Working/action text. Product-specific useful phase labels replace source file names/line counts; no invented percentage is shown.",
+        "input": "Actual stream-cancel receipt includes genuine active output and cancellation. Still shows both notch close/stop affordance and composer stop. Admission/approval/recovery/error interactions are not all demonstrated by this one stream capture.",
+        "semantics": "Activity is derived from real run state. Final normal and abliterated receipts each complete three actual turns; retained restart test demonstrates a real failure and retry. Guest progress remains blocked and must never be substituted with task fixtures.",
+        "motion": "Current four-square opacity/scale sequence is1.7s with157ms stagger; notch text/layout follows phase. Unedited actual stream/cancel video exists, but this audit inspected PNGs and metadata only. A full matched lifecycle phase/reversal human review remains unverified."
+      },
+      "evidence": [
+        "review/chat-cancel/streaming-before-cancel.png",
+        "review/chat-cancel/chat.json",
+        "review/chat-cancel/actual-stream-cancel-unedited.mp4",
+        "review/retention/retention.json"
+      ],
+      "adaptations": [
+        "Truthful model/run context replaces reference file/line context.",
+        "Four-square authored morph is an adaptation, not an exact time-aligned reconstruction."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R04",
+      "url": "https://www.rareui.com/components/aistatus",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The source has a 32 px inline status, 20 px icon container with an 18 px SVG, 14 px text and an 8 px gap.",
+        "Source swap spring: 0.5 seconds, bounce 0.15. Icon spring: 0.55 seconds, bounce 0.35."
+      ],
+      "required_core": "Original32px inline status,20px icon container/18pxSVG,14px label and8px gap; icon/text swaps retain source geometry.",
+      "comparison_criteria": {
+        "geometry": [
+          "Match source icon/text baseline and compact row at actual response width in light/dark; global button rules must not resize descendant core."
+        ],
+        "material": [
+          "Preserve restrained source icon color, type weight and secondary detail hierarchy within neutral shell."
+        ],
+        "input": [
+          "Status is informative, not a fake interactive progress affordance; any cancel action has its own meaningful label."
+        ],
+        "semantics": [
+          "Map real lifecycle to statuses, preserving error/approval/cancel truth; no generated percentage or done state before backend acknowledgement."
+        ],
+        "motion": [
+          "Source SWAP spring0.5s/bounce0.15 and ICON0.55s/bounce0.35. Compare entry/exit and rapid updates, reduced motion and hidden cleanup; constants are source facts, not measured displayed durations."
+        ],
+        "typography": [
+          "Original label14px, detail secondary and icon/text gap8px. Compare current output baseline and weight; full labels remain accessible when details truncate."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/ai-status.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/ai-status.tsx",
+        "git_blob_sha1": "828ed9d11ae7437c9ffe0cd472777b48b1bd9988",
+        "bytes": 16396,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/ai-status.tsx",
+        "sha256": "58d1a6ac343bc0d5e7d2edb4cd558c84a053599652653649e9543289ebeb8661",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "PASS_SCOPED_REAL_MODEL_STATUS_CORE_FULL_SWAP_REVIEW_UNVERIFIED",
+      "axes": {
+        "geometry": "Pinned AiStatus core retains32px row,20px icon container,18px SVG and14px label hierarchy. Actual final chat PNGs show Completed beside check; actual active-stream PNG shows Working beside active symbol.",
+        "material": "Subdued gray/lavender icon and label are preserved within the dark transcript; states are not replaced by ornamental cards.",
+        "typography": "Status remains subordinate to message text, with readable concise state names; product label maps actual backend phases.",
+        "input": "State rendering follows genuine model lifecycle, not a demo selector. Actual cancellation and reload/history receipts exist. The source fixture harness is strictly anatomy-only.",
+        "semantics": "Current adapter maps active to thinking, completed to done and other terminal failure to error. Both models complete three real turns through the production pin. Broader phase-specific status anatomy still needs applicable real action evidence.",
+        "motion": "Original source spring constants(.5s/.15bounce status; .55s/.35bounce icon) are retained in the integrated core. Actual recordings exist; phase swap continuity and exact reference parity have not received human approval."
+      },
+      "evidence": [
+        "review/final-chat-normal/production-final.png",
+        "review/final-chat-abliterated/production-final.png",
+        "review/chat-cancel/streaming-before-cancel.png"
+      ],
+      "adaptations": [
+        "Truthful phase mapping and transcript embedding."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R05",
+      "url": "https://www.rareui.com/components/websearch",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The source uses a compact search pill, stacked favicons with a delayed hover fan, expanded result cards and citation previews.",
+        "Source swap spring: 0.55 seconds, bounce 0.1. Open spring: 0.5 seconds, bounce 0.08. Hover spread delay: 150 ms; preview delay: 300 ms."
+      ],
+      "required_core": "Compact pill, provider/results summary, stacked favicon fan, expanded result cards and citation hover preview.",
+      "comparison_criteria": {
+        "geometry": [
+          "Compare collapsed/expanded heights, favicon overlap/fan spacing, result-card typography and preview collision at narrow edge."
+        ],
+        "material": [
+          "Source light neutral rounded surfaces adapt to Hermes theme; actual provider icon replaces unsupported demo favicon claims."
+        ],
+        "input": [
+          "Pointer hover fan and delayed citation preview, keyboard expansion/links/focus, Escape/outside collapse and rapid hover/leave/reopen."
+        ],
+        "semantics": [
+          "Actual provider is Wikipedia. Real query/results/citationURLs, no fabricated counts/progress; preserve empty/error/cancel states."
+        ],
+        "motion": [
+          "Source SWAP0.55s/bounce0.1, OPEN0.5s/bounce0.08, fan delay150ms and preview delay300ms. Record uninterrupted expand→fan→preview→collapse and reverse."
+        ],
+        "typography": [
+          "Compare12.5px result title/17px line-height, clear provider/citation hierarchy and label truncation; do not present duplicate provider text as a fabricated source."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/web-search.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/web-search.tsx",
+        "git_blob_sha1": "a463b2243f83dc880c608ac71c1de5cf02973b70",
+        "bytes": 30873,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/web-search.tsx",
+        "sha256": "76c3f8f633b6f76446b6faa35b9ccc2de16e97ca762111d545bed661a0cb179f",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "PASS_SCOPED_REAL_SEARCH_AND_ASSISTANT_CITATION_HUMAN_PARITY_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual provider-result fan width,expand/collapse/reverse and closed state pass owned-action checks. Genuine assistant inline chip uses the original WebSearchCitation core. Final preview bounds are about252×126.8px with a51px,three-line excerpt,fully inside workspace; the old603px clipped preview remains adverse evidence.",
+        "material": "Actual final native hover PNG shows a restrained dark card,readable title and three-line excerpt above the genuine Wikipedia chip. A scoped prose rule restores the original line-clamp display defeated by later Tailwind block utility; original Rare UI core bytes remain unchanged.",
+        "typography": "Genuine source1 title,canonical Wikipedia host and a clipped-to-three-lines excerpt remain readable. The actual normal-model answer emits [1],which resolves to its attached source group,not a later global search. Three added SSR regressions protect per-message/current/invalid metadata scope; technical tests do not constitute human typography approval.",
+        "input": "Actual completed Wikipedia search and operator approval produce a canonical attachment with four sources. Native result fan,expand/collapse/reversal pass. Existing genuine model answer passes native hover,trusted Tab focus and reload persistence without another generation; same citation DOM node remains mounted across4.2s idle. No external navigation was issued.",
+        "semantics": "Operator-requested real Wikipedia result is attached to a positively created Citation check session,leaving the permission-case draft intact. Actual normal model emits the citation and passes native context65536/process identity; href matches source1 and persists after reload. This does not demonstrate an autonomous model-proposed search action.",
+        "motion": "Actual native preview recording captures hover/focus entry with observed opacity/transform settling and bounded geometry; result fan/expand/collapse/reverse have separate actual action recordings. Stable module-level Markdown renderer preserves local preview state across parent rerenders. Uninterrupted human comparison remains unverified."
+      },
+      "evidence": [
+        "review/actions-final/owned/actions.json",
+        "review/citation-repeat/citation.json",
+        "review/citation-preview/citation.json",
+        "review/citation-final/citation.json",
+        "review/citation-final/citation-native-hover.png",
+        "review/citation-final/citation-native-unedited.mp4"
+      ],
+      "adaptations": [
+        "Real Wikipedia provider and per-turn persisted citation identity."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R06",
+      "url": "https://www.rareui.com/components/foldercomponent",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The complete medium surface is 321×270 px: rounded back, three light paper cards, translucent asymmetric flap. Small, medium and large scales are 0.65, 1 and 1.35.",
+        "Hover fans the cards; click lifts the flap. Card spring stiffness/damping: 120/13; flap: 120/14."
+      ],
+      "required_core": "Full321×270 medium folder with rounded back, three layered light paper cards and translucent asymmetric flap; sm/md/lg scale0.65/1/1.35.",
+      "comparison_criteria": {
+        "geometry": [
+          "Keep complete anatomy legible in plus/import panel, not scale(.23) or pointer-disabled thumbnail. Check panel fits390px and source edges/cards are not clipped."
+        ],
+        "material": [
+          "Preserve inset lights, card shadows, translucent flap and source flap silhouette; theme adaptation must retain depth separation."
+        ],
+        "input": [
+          "Hover fans cards, click/Enter/Space lifts flap and enters actual picker/import flow; test pointer leave, Escape, cancellation and error without fictitious import success."
+        ],
+        "semantics": [
+          "Source demo interaction becomes real folder selection/import outcomes; do not confuse visual flap open with completed import."
+        ],
+        "motion": [
+          "Source card stiffness/damping120/13 and flap120/14. Review hover→open→cancel→hover-out and midtransition reversal, reduced motion."
+        ],
+        "typography": [
+          "Original folder cards use abstract paper lines; any real import caption/status remains readable outside decorative card anatomy and does not imply placeholder contents were imported."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/folder-component.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/folder-component.tsx",
+        "git_blob_sha1": "f6ffb0131a4e7d6456e38819035d43dd034d20fd",
+        "bytes": 14971,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/folder-component.tsx",
+        "sha256": "b4a76341e592d5048a39de5d56ace38a526da21bb3065ffb9f5b1ff0aced30dd",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "PASS_SCOPED_OPERATOR_ASSISTED_NATIVE_IMPORT_UNASSISTED_PARENTING_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual folder-open PNG shows the full321×270 medium core: back panel, three papers and asymmetric front flap inside an Import folder overlay. Responsive surface is not globally reduced to a tiny rail icon.",
+        "material": "Translucent flap, paper shadows and dark neutral folder preserve the core depth anatomy. Blue original fixture color changes to product dark material; this is an explicit color adaptation.",
+        "typography": "Reference decorative folder has no required body copy. Product adds concise import explanation and an independent Choose folder control so the drawing does not replace actual task affordance.",
+        "input": "All three actual native chooser phases,preview,cancel and commit/copy pass the owned import subset in actions-final. Ticket,snapshot bytes/copied manifest and unchanged originals are verified. Each fresh chooser required scoped operator-only floating/focus; no global compositor rule or direct import-API substitute was used. Unassisted production chooser parenting/focus remains unverified.",
+        "semantics": "Actual native chosen source was the dedicated harmless owned fixture. Reviewed files README.md and notes/context.txt were copied into a new owned project,snapshot SHA e4bffe620ab43d2c1c37027239b7fa0dbc833934f4b9e233055a1b0892223019; originals remain unchanged. This is an operator-assisted copy workflow,not a claim of unattended production chooser behavior.",
+        "motion": "Full-size component hover/click/keyboard and native import phase recordings exist; latest dark folder frame is inspected. Separate chooser pixels are outside Hermes-XID recordings. Human continuous motion and physical-device review remain unverified; original paper/flap spring core is retained."
+      },
+      "evidence": [
+        "review/visual/folder-open.png",
+        "review/visual/visual.json",
+        "review/final-gallery/settled-native-dark-folder.png",
+        "review/final-gallery/settled-native-light-folder.png",
+        "review/actions-final/run.json",
+        "review/actions-final/owned/actions.json",
+        "review/gallery-final/settled-native-dark-folder.png"
+      ],
+      "adaptations": [
+        "Neutral theme palette.",
+        "Separate task copy and chooser around original full anatomy."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R07",
+      "url": "https://www.rareui.com/components/voicenote",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The source is a rounded waveform capsule. The left play triangle splits into pause bars; a time/speed control sits at the right.",
+        "Control diameter is 0.76 times bar height. Icon spring: 0.34 seconds. Edge lights coast up and down over 0.45 seconds."
+      ],
+      "required_core": "Rounded waveform capsule, proportional play/pause control at0.76×barheight, actual waveform with time/speed control; play triangle divides into pause bars.",
+      "comparison_criteria": {
+        "geometry": [
+          "Source sm/md/lg heights40/52/64px; compare waveform spacing and0.68 peak-height ratio, time legibility and controls at actual attachment width."
+        ],
+        "material": [
+          "Neutral pill, restrained waveform contrast and edge-light glows; keep active/idle differentiation without obscuring data."
+        ],
+        "input": [
+          "Real media play/pause/seek/speed and keyboard controls; recording family uses actual device levels, stop/cancel and late permission/device failure cleanup. Do not reopen microphone merely to fill an evidence row."
+        ],
+        "semantics": [
+          "Drive playback with media clock and measured waveform/duration; no timer-only audio. Record/send/upload consent stays explicit. Public JFK upload is not physical microphone evidence."
+        ],
+        "motion": [
+          "Source ICON0.34s spring/bounce0.2, GLOW0.5s, SPIN_UP/down0.45s, tap0.25s/bounce0.3. Distinguish glow easing from orbit acceleration. Record play→pause→seek→end/reverse at actual size."
+        ],
+        "typography": [
+          "Time/speed text must stay legible in the chosen40/52/64px size family. Compare current elapsed/total distinction using actual media time, not rounded timer-only labels."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/voice-note.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/voice-note.tsx",
+        "git_blob_sha1": "83e59d792352b1a1064f3750abddabbf82e78842",
+        "bytes": 21395,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/voice-note.tsx",
+        "sha256": "6a04a691811c241c96db9b9082612d0ce3a0bfa1996b9c297ab7481568c0dce4",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "PARTIAL_REAL_UPLOAD_PLAYBACK_CPU_STT_PASS_FRESH_LIVE_GUM_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual voice crop shows capsule control,40 real waveform bars,play/pause area, elapsed clock and1.5x speed at compact composer scale. Pinned source sizes40/52/64 and proportioned controls remain core geometry.",
+        "material": "Dark capsule, bright played waveform bars, muted future bars and compact speed chip are legible. The source light harness is anatomy only; saved production crop demonstrates the dark adaptation.",
+        "typography": "0:07,1.5x,public-jfk.wav and actual public-speech transcript are readable. Eleven-second duration is measured audio metadata, not an invented recorder timer.",
+        "input": "Actual production public-file upload,CPU transcription,muted play/pause/seek/rate and moving clock pass. App denial occurs before getUserMedia(calls0). Fresh v5 live getUserMedia grant,record/stop/cancel and physical microphone/speaker quality remain unverified. Prior device receipts and source fixtures are not promoted to current production hardware approval.",
+        "semantics": "Source sample is official pinned public JFK speech,352078bytes,SHA59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e. Transcript contains ask not. Public sample is not physical-microphone or speaker-quality evidence; raw sample is excluded from review/public export.",
+        "motion": "Actual unedited voice playback recording and media-clock values prove technical progression, seeking and1.5x playback. Physical listening and uninterrupted human comparison remain unverified. Device-loss/late-grant source tests remain fixtures, not hardware approval."
+      },
+      "evidence": [
+        "review/voice/voice-seek-speed.png",
+        "review/voice/voice.json",
+        "review/voice/voice-playback-unedited.mp4"
+      ],
+      "adaptations": [
+        "Real attachment metadata/transcript binding.",
+        "Muted technical playback preserves privacy and is not a sound-quality audition."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R08",
+      "url": "https://www.rareui.com/components/tasklist",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The source uses soft compact task rows, a completion circle, a strike-through, a small flick/nudge and reordering of completed rows.",
+        "Fill: 0.24 seconds; pop: 0.34 seconds; tick: 0.22 seconds; strike: 0.38 seconds; reorder spring stiffness/damping: 320/30."
+      ],
+      "required_core": "Soft compact rows, completion ring/tick, strike-through, flick/nudge, reordered completed rows.",
+      "comparison_criteria": {
+        "geometry": [
+          "Source md uses24px completion circle,15px/24px text,14px radius and8px list gap; compare real long task wrapping and stable first-line check alignment."
+        ],
+        "material": [
+          "Subtle raised rows and accent only for actual status; no excessive card chrome."
+        ],
+        "input": [
+          "Only appropriate actual task actions can dispatch/cancel/revoke; a visual checkbox must not invent backend completion or bypass server permissions."
+        ],
+        "semantics": [
+          "Use genuinely dispatched qualified guest tasks/results for required live R08 progression. Attachment/search receipts or fixtures may illustrate source anatomy but cannot substitute for guest execution evidence."
+        ],
+        "motion": [
+          "Source fill0.24s/pop0.34s/tick0.22s+0.06delay/strike0.38s/nudge0.3s; reorder stiffness320/damping30. Review actual completion/reorder, failure/cancel and reverse where domain permits."
+        ],
+        "typography": [
+          "Source md label15px/24px line height with check aligned to first line; compare wrapped real long task names and multi-line strike-through."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/task-list.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/task-list.tsx",
+        "git_blob_sha1": "68ab0d0fa8796d0eef8495b82f5e229524e9ff5f",
+        "bytes": 10157,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/task-list.tsx",
+        "sha256": "9038a6110902f0d944740f91e19e0bfc2cbee8a9397ba7f1f780f72ec6802657",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "BLOCKED_CURRENT_NATIVE_GUEST_QUALIFICATION",
+      "axes": {
+        "geometry": "Pinned TaskList core retains rounded task rows,circle fill/tick/strike and reordering structure. Current adapter also displays real non-guest action rows in Activity, but those do not prove qualified guest task execution.",
+        "material": "Soft rows and restrained completion styling are retained in source. No current genuine guest-task production PNG was inspected; fixture appearance cannot promote rendered guest status.",
+        "typography": "Product action summary/state labels replace sample task text; source sample labels are not product execution evidence.",
+        "input": "Actual guest start/progression/completion/reorder is blocked until current all-five qualification succeeds. No permission bypass, force-enabled agents or host-shell fallback is accepted.",
+        "semantics": "Current native guest admission/qualification remains blocked pending native authentication; all-five current qualified guest execution is not proved. Historical deadline diagnosis and proposal tests do not satisfy this gate. Non-guest action progression remains distinctly scoped and no host fallback is accepted.",
+        "motion": "Source fill.24s,pop.34,tick.22+.06,strike.38,nudge.3 and reorder320/30 describe core motion. Actual uninterrupted qualified guest completion/reorder remains BLOCKED; human motion review remains pending."
+      },
+      "evidence": [
+        "review/vm/readiness-investigation.json"
+      ],
+      "adaptations": [
+        "Real action/task state adapter; no fabricated task progress."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R09",
+      "url": "https://www.rareui.com/components/deletebutton",
+      "creator": "Swami Malode / Rare UI",
+      "source_observations": [
+        "The idle bin is a 48 px rounded square. An in-place panel extends to show confirm/check and cancel/cross controls while the bin lid lifts and the wall shape changes.",
+        "Width: 0.62 seconds; lid: 0.6 seconds; wall: 0.56 seconds; enter: 0.44 seconds after a 0.14-second delay; exit: 0.3 seconds. Escape returns to idle."
+      ],
+      "required_core": "48px compact bin tile expands in place into confirm/check and cancel/cross panel; lid lifts and wall shape changes.",
+      "comparison_criteria": {
+        "geometry": [
+          "Preserve explicit initial width48px to prevent prior full-width mount flash. Check idle/mid/open widths, panel clipping and separate confirm/cancel hitboxes."
+        ],
+        "material": [
+          "Retain original subdued rounded tile, bin silhouette, lid/wall material and symbol contrast in both themes."
+        ],
+        "input": [
+          "Open→Cancel/Escape/outside as supported, rapid reverse and confirm only on positively owned test record; await real server acknowledgement and retain failure."
+        ],
+        "semantics": [
+          "Deletion needs owned scope and current authorization; no repeated global reset. Undo is only offered if backend actually supports it."
+        ],
+        "motion": [
+          "Source width0.62s/lid0.6s/wall0.56s/enter0.44s+0.14delay/exit0.3s. Review mount plus interrupted open/cancel/reopen and success/error acknowledgement at normal speed."
+        ],
+        "typography": [
+          "Confirm/cancel symbols stay crisp and distinct with proper accessible names. Failure/busy text belongs to real outcome and must not replace the compact bin silhouette."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/components/delete-button.tsx",
+        "workspace/frontend/src/main.tsx"
+      ],
+      "exact_source": {
+        "repository": "https://github.com/swamimalode07/rare-ui",
+        "commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+        "path": "components/ui/delete-button.tsx",
+        "git_blob_sha1": "f85192e7a895ba413281ff64deb6d93769d1b9c6",
+        "bytes": 8449,
+        "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/delete-button.tsx",
+        "sha256": "04fb156b7872476052095e79186026349feae9d318554df767f108c3af592ef1",
+        "verified_pin": true
+      },
+      "rights": "Application integration allowed subject to exact MIT + Commons Clause + Attribution terms; preserve full notices and visible Rare UI credit. Do not redistribute standalone originals/harness/component collection.",
+      "status": "PASS_SCOPED_OWNED_DELETION_AND_REVERSAL_HUMAN_MOTION_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual delete-only final run verifies compact layout width48px and settled screen width47.996px. Prior46.8px sample occurred while parent dialog scale was about.97 during entry; the adverse observer failure is retained,not treated as a product mount regression. Original compact-width repair remains intact.",
+        "material": "Pinned soft tile and bin motion surfaces remain in source. No current v5 delete-open/confirm PNG was inspected yet; old v4 evidence is historical only.",
+        "typography": "Product confirmation uses genuine item labels only in owned scope; no original user title should enter published captures. Cancel/confirm affordances remain explicit.",
+        "input": "Delete-only resumed final run passes Cancel,Escape and genuine deletion of the positively created empty conversation fa01627cfcb7457ab18b671cf73f9a80,with cleanup allPASS. Earlier import run failed at the entry-scale width observation; successful import and successful delete-only outcomes are reported separately.",
+        "semantics": "Only the known empty review conversation is deleted. Backend absence and positive IDs are checked; current conversations and unrelated user records remain outside scope. This is an actual authoritative deletion outcome,not a component fixture.",
+        "motion": "Original bin/width/reversal core is retained. Native cancel/Escape/commit recording and settled parent guard exist; source width.62s/lid.6s/wall.56s remain component facts. Continuous human matched-scale review remains unverified."
+      },
+      "evidence": [
+        "review/actions-final/run.json",
+        "review/actions-delete-final/run.json",
+        "review/actions-delete-final/owned/actions.json"
+      ],
+      "adaptations": [
+        "Repaired compact initial width.",
+        "Authoritative scoped record deletion, not a standalone component demo."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R10",
+      "url": "https://de.pinterest.com/pin/333055334963544751/",
+      "creator": "UNVERIFIED for exact supplied pin; related Brainwave source is not identity proof",
+      "source_observations": [
+        "The bundled Brainwave image was inspected: soft white inset rail, black brand title, rounded selected row, pale branch guides, compact count chip and orange/green folder outlines.",
+        "The fresh exact Pinterest URL was unavailable. The preceding research reported a different returned canonical pin. Original designer and license remain uncertain."
+      ],
+      "required_core": "Exact supplied-pin hierarchy: white inset navigation, black identity, rounded selected row, pale rounded branch guides, count chip and orange/green outlined folders.",
+      "comparison_criteria": {
+        "geometry": [
+          "Compare real populated nested folders, branch alignment/indent, icon/text/count columns, long-title truncation, row density and collapse recovery. Source image is735×920; it is a private reference image, not a runtime asset."
+        ],
+        "material": [
+          "Color belongs to user-chosen folder outlines; selection is tonal and distinct; supporting rail text recedes while readable."
+        ],
+        "input": [
+          "Actual expansion, selection, color, rename, counts and long titles; hover secondary actions also discoverable by focus. Test pointer/corners/center, keyboard and200%zoom."
+        ],
+        "semantics": [
+          "Counts and selection derive from real catalog. Preserve exact pin333055334963544751 and unresolved returned canonical468163323787275414; related Brainwave/Jordan sources do not prove the original identity."
+        ],
+        "motion": [
+          "Expansion/collapse reveals stable branches without shifting header/composer; interruption must preserve actual selection and focus. Original static image supplies no source motion."
+        ],
+        "typography": [
+          "Keep real identity above subdued section labels; align icon/title/count columns and truncate long titles without losing keyboard/full-title discovery. Do not copy Brainwave wordmark."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/main.tsx",
+        "workspace/frontend/src/style.css"
+      ],
+      "exact_source": {
+        "supplied_pin": "333055334963544751",
+        "reported_returned_canonical": "468163323787275414",
+        "canonical_identity": "UNVERIFIED",
+        "bundled_image_sha256": "bf262d43ef2a64efa98ee029a8fa60a1698a839ac3d601a32597e5643816c53e"
+      },
+      "rights": "Designer and asset license unresolved. Independently author hierarchy only; no Brainwave logo/robot/image redistribution.",
+      "status": "PASS_SCOPED_POPULATED_RAIL_SOURCE_IDENTITY_AND_HUMAN_PARITY_UNVERIFIED",
+      "axes": {
+        "geometry": "Actual v5 light/dark PNGs show a populated nested rail with parent/child indentation, fine branch guides, outline folder icons, count chips and rounded selection. Long test titles ellipsize while project dashboard wraps its own title; rail and transcript are separate scroll areas.",
+        "material": "Light source white rail and pale guides become white/near-white in light Hermes and dark/gray in dark Hermes. Colored outline folders remain distinct without copying Brainwave artwork.",
+        "typography": "Latest current-build populated gallery uses meaningful names with the nonce in suffix; long rail names ellipsize while project title wraps. Forced-colors final light/dark screenshots now show readable selected names after selecting explicit system Highlight/HighlightText pairs and transparent descendant backgrounds. The earlier black glyph rectangles remain adverse evidence.",
+        "input": "Owned nesting,selection,disclosure and stable metadata checks pass without touching unknown conversations. Fresh fallback runs pass browser-emulated forced colors/contrast/transparency; actual names were inspected and are readable. Native physical devices/OS assistive technology remain unverified.",
+        "semantics": "Exact supplied Pinterest pin333055334963544751 is retained. Returned canonical468163323787275414 and original designer remain UNVERIFIED; related Jordan Hughes/Brainwave material is supporting discovery only, not exact-source identity proof.",
+        "motion": "Source supplied image is static and cannot establish motion. Hermes disclosure/panel transitions are original app behavior; native visual unedited recording exists but this audit is frame-only and human continuity approval is pending."
+      },
+      "evidence": [
+        "review/visual/native-light.png",
+        "review/visual/native-dark.png",
+        "review/visual/visual.json",
+        "review/owned-navigation.json",
+        "review/final-gallery/settled-native-light.png",
+        "review/final-gallery/settled-native-dark.png",
+        "review/shell-targeted-repeat/forced-colors-dark.png",
+        "review/forced-colors-final/shell.json",
+        "review/forced-colors-final/forced-colors-dark.png",
+        "review/forced-colors-final/forced-colors-light.png",
+        "review/gallery-final/settled-native-light.png"
+      ],
+      "adaptations": [
+        "Original product data model and long-title support.",
+        "Dark theme and colored folders; no external logo/robot/artwork reuse."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    },
+    {
+      "id": "R11",
+      "url": "https://dribbble.com/shots/21673507-Task-Management-Dashboard",
+      "creator": "Awsmd (exact original Dribbble page identity previously inspected)",
+      "source_observations": [
+        "Fresh Iris capture of the exact page at 1440×1100 CSS pixels and device scale 2 shows Task Management Dashboard by Awsmd above the artwork.",
+        "The broad neutral silver-gray shell appears translucent over blurred gray shapes. It has two fine white edges, large rounded outer corners and a solid white inset rail. A near-black rounded pill marks selected navigation. The rail occupies approximately 16.8% of the application width, with approximately 3% left inset and a 3% rail-to-main gap. Opaque white and black content surfaces sit over the central translucent field.",
+        "A second fresh Iris full-page capture at 1440×3456 CSS pixels, scale 1, includes the complete original artwork and exact page identity; no substitute shot was used."
+      ],
+      "required_core": "Exact Awsmd shot21673507: neutral silver-gray translucent shell, fine double white edges, solid white inset rail, near-black selected pill and restrained header actions.",
+      "comparison_criteria": {
+        "geometry": [
+          "Original measured proportions are approximate: rail16.8%appwidth, leftinset~3%, rail/main gap~3%. Compare at equivalent source crop; Hermes fixed/capped rail differs legitimately across widths and must be documented.",
+          "V5 outergap12px/radius22px are candidate starting values, not source measurements or established parity."
+        ],
+        "material": [
+          "No green cast, heavy grain, jagged edges or busy full-screen backdrop. Code-authored neutral translucency should preserve opaque content readability; dark theme is explicit adaptation of static light source."
+        ],
+        "input": [
+          "Files/Details/Settings stay top-right with ≤1CSSpx trigger drift (Hermes criterion), no shell/composer/reading-anchor shift; real pointer and focus return at normal zoom/scaling and200%zoom."
+        ],
+        "semantics": [
+          "Actual chat content replaces source dashboard stats/cards; no copied iDraft branding/background/illustration or invented data. Linear hierarchy supports this shell, not a replacement identity."
+        ],
+        "motion": [
+          "Static source does not establish original transition timing. Hermes panel ceiling230ms, bounded transform origin and safe reversal are product criteria; reduced motion/transparency and forced colors need usable settled states."
+        ],
+        "typography": [
+          "Preserve hierarchy between Hermes identity, quiet navigation, message content and header actions; source dashboard labels/statistics are not Hermes content or a font-copy permission."
+        ]
+      },
+      "implementation_paths": [
+        "workspace/frontend/src/main.tsx",
+        "workspace/frontend/src/style.css"
+      ],
+      "exact_source": {
+        "shot_id": "21673507",
+        "creator": "Awsmd",
+        "reused_capture_sha256": "6161a016b9224de9c252042b099d4877b9c3998d6a2926e33d6f588ba355cf69"
+      },
+      "rights": "Original public static artwork is visual study; no Hermes runtime artwork/branding/background license established. Original code adapts shell geometry/material only.",
+      "status": "PASS_SCOPED_RENDERED_SHELL_TECHNICAL_HUMAN_MATERIAL_MOTION_UNVERIFIED",
+      "axes": {
+        "geometry": "Exact Awsmd screenshot has a neutral translucent enclosing shell,white inset rail and gap-separated content; source rail estimate16.8%appwidth,leftinset3%,gap3% are study estimates. Actual Hermes light/dark frames retain separated rounded rail/main surfaces,stable top-right Files/Details/Settings and bottom composer. Product fixed/capped rail differs intentionally.",
+        "material": "Latest gallery-final shell/Settings/folder frames are legible and tied to current build. Selected-label forced-colors failure is repaired in fresh final light/dark emulated captures; normal panel and shell materials remain quiet. Old faint entrance Settings and old black selected-label captures stay adverse. Human material approval remains unverified.",
+        "typography": "Source dashboard typography informs hierarchy,not content. Hermes title/nav are strong; supporting section labels are subdued and real message text remains primary. No fake dashboard metrics or source iDraft branding are imported.",
+        "input": "Composer desktop/narrow checks,10 prior viewport/theme checks,model/policy persistence and native buddy behavior pass their scoped invocations. True200%zoom row passes with footer/buddy separated in its actual frame. Its subsequent native calibration failed; fresh standalone fallback and layout repeat pass separately. No combined post-zoom calibration/cleanup success is claimed.",
+        "semantics": "Current gallery and actual model/history/retention receipts demonstrate real conversations and controls on their recorded build hashes. Final native one-turn checks cover both models and restored normal on the current build; older voice receipts are not relabeled as blanket final-build coverage. Source publication identity and remote verification are recorded in review/publication.json in the complete review archive.",
+        "motion": "Actual native unedited12.533s shell recording exists,with measured capture metadata but no GPU/presentation timing claim. Panel entrance/reversal and buddy source behavior have technical checks. This audit viewed saved PNGs only; continuous human review remains pending."
+      },
+      "evidence": [
+        "review/visual/native-light.png",
+        "review/visual/native-dark.png",
+        "review/shell-supplemental/settings-groups.png",
+        "review/final-chat-normal/production-final.png",
+        "review/final-chat-abliterated/production-final.png",
+        "review/final-gallery/visual.json",
+        "review/final-gallery/settled-native-light-settings.png",
+        "review/final-gallery/settled-native-dark-settings.png",
+        "review/gallery-final/visual.json",
+        "review/gallery-final/settled-native-dark-settings.png",
+        "review/css-repair/shell.json",
+        "review/layout-final-repeat/shell.json",
+        "review/forced-colors-final/shell.json"
+      ],
+      "adaptations": [
+        "Actual chat hierarchy replaces dashboard card/metric content.",
+        "Fixed/capped rail,dark theme,responsive drawer and compact composer."
+      ],
+      "human_visual_approval": "PENDING",
+      "uninterrupted_human_motion_review": "PENDING"
+    }
+  ],
+  "inspected_actual_images": [
+    {
+      "path": "review/visual/native-light.png",
+      "sha256": "0bbb4102d8207631a8fdbf0fdba53028bf5e828380ad7e1bc096e8f05036f736",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual populated nested rail; white inset sidebar, near-white main sheet, black selected project/conversation, colored outline folders and small counts. Long owned verification titles dominate the dashboard; this is test content, not a populated user-data screenshot."
+    },
+    {
+      "path": "review/visual/native-dark.png",
+      "sha256": "be8baf844128de6ae7fb7a448faa70a41713b879d24c900d730381c232aa19dd",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Same populated hierarchy and compact composer in dark theme; selected rows invert to pale gray, border and branch lines remain subdued."
+    },
+    {
+      "path": "review/visual/reasoning-on.png",
+      "sha256": "f5db9062463dac74e3bc761a9fc3e7d048f4767a027ecaae0c6665adc95731d6",
+      "pixels": [
+        330,
+        189
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "At 330×189 crop, a recognizable violet bilobed brain remains at the right endpoint, with brighter pixels within and rays around it. The track shows discrete square pixels growing denser toward the right. Effort On, Faster/Smarter and truthful two-state help are legible."
+    },
+    {
+      "path": "review/visual/390x844-light.png",
+      "sha256": "d47e2ab39f668713fb2a2379931bff3aa83dea008e5245a4c2c102577981f0ee",
+      "pixels": [
+        390,
+        844
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual saved 390×844 emulated viewport shows single-column dashboard, hidden rail with menu trigger, wrapped long title and compact composer; primary model and permission labels remain present. This is not physical-phone evidence."
+    },
+    {
+      "path": "review/visual/folder-open.png",
+      "sha256": "2a2256b28f715b0b6cc2cea7a9e32271ed34805f812a0ed3a36f41b819038115",
+      "pixels": [
+        1440,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual dark import overlay displays full three-paper/folder anatomy, asymmetric translucent front flap, independent text and Choose folder control. It is not a tiny rail-icon substitute. Geometry is visible; successful native folder import is a separate pending outcome."
+    },
+    {
+      "path": "review/voice/voice-seek-speed.png",
+      "sha256": "efbc366f6d99019edc07edc7b33e6064adc0d47c8b2fd7dd7783a9ca6bb407fa",
+      "pixels": [
+        784,
+        153
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual composer crop shows real waveform, play triangle, 0:07 clock, 1.5x chip, public-jfk.wav attachment and real public-speech transcript. The report independently records moving media clock, pause, seek and rate changes. Playback was muted."
+    },
+    {
+      "path": "review/chat-normal-repeat/production-final.png",
+      "sha256": "d6d62ef968141379c166c99703503b4cb62e40b3b74604851a69f5afba409db8",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Earlier actual normal-model three-turn verification conversation with final Completed label, stable composer and Normal selection. Final-build replacement is available below."
+    },
+    {
+      "path": "review/chat-abliterated/production-final.png",
+      "sha256": "693ae2b21a4c8d4ee70f07c25a78d6bc7df45ea797a8ec78657045908ca6883f",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Earlier actual abliterated-model three-turn verification conversation; selected label reads Abliterated and third reply includes :3. Final-build replacement is available below."
+    },
+    {
+      "path": "review/retention/retry-A-completed-B-unsent.png",
+      "sha256": "b0c75218710260d77338618a1fc0b619614953ba815f751a2e26450b8d28e644",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual retried A is Completed with only A attached to its submitted message. B attachment chip and unsent B text remain separately in the composer. Screenshot supports, but does not alone prove, the canonical ID/run and restart assertions in retention.json."
+    },
+    {
+      "path": "review/chat-cancel/streaming-before-cancel.png",
+      "sha256": "af2f17ec7c242dc13726777a2f6f0468c5c69e050dcf89eff65b93970e871fb7",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual normal-model partial reply is visible before cancellation, with top-attached black activity notch, small colored cluster, useful model/elapsed context and stop controls. Model refusal text is genuine, not a task fixture."
+    },
+    {
+      "path": "review/visual/native-light-settings.png",
+      "sha256": "4ac4de70e1a7fc48a50dd1ec183842570516be4818bf4f718e549073d6b96c9f",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "ADVERSE: Settings panel/content are almost transparent in this older entrance-phase frame and underlying project text is visible. Do not use it as settled material proof or README gallery. The newer settled settings-groups crop replaces it for legibility."
+    },
+    {
+      "path": "review/shell-supplemental/actual-browser-200-percent.png",
+      "sha256": "3e1ae06b27fb396862a1cf5994ec99c3d4cd56f22d6bed41ed4cd0b92c1d74da",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual browser accelerator zoom screenshot: doubled compositor-pixel text and controls; 660×450 CSS viewport at DPR2 recorded independently. Composer essential controls remain in view. Buddy overlaps its theme label at this extreme enlarged layout; no physical-accessibility approval is inferred."
+    },
+    {
+      "path": "review/shell-supplemental/settings-groups.png",
+      "sha256": "15a153737bdd77a9f91d3ee3692469b4affd119b6a4656ff50b7cfdea33f60d3",
+      "pixels": [
+        406,
+        764
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Newer settled dark Settings crop is opaque/legible. It shows Less motion, Click volume 12%, Chat only permissions, granular capability rows and explicit unavailable guest execution. This replaces the adverse old translucent entrance frame for static panel evidence."
+    },
+    {
+      "path": "review/final-chat-normal/production-final.png",
+      "sha256": "73da5cfafed7456147cd5e4804c16fea98e842123c5cefaada7c304456a4ac88",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Final current-build actual normal three-turn conversation: remembered nonce is stable across three replies and reload; Completed row is visible. Model picker explicitly reads Qwen3.6 · Normal."
+    },
+    {
+      "path": "review/final-chat-abliterated/production-final.png",
+      "sha256": "687b32404ffd06937841432f990377028e64842700e935bf7c99a62752df7750",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Final current-build actual abliterated three-turn conversation: remembered nonce is stable across three replies and reload; Completed row is visible. Model picker explicitly reads Qwen3.6 · Abliterated."
+    },
+    {
+      "path": "review/final-gallery/settled-native-light.png",
+      "sha256": "b86dce197d2c2395690ca0edf99296176d12cff472eeadaf861db5d79c91deec",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual light shell with populated nested folders,meaningful labels and nonce suffix. Fine borders,compact composer and yellow buddy are legible. A small Dark mode hover tooltip is visible above the buddy; honest input state,not a clean marketing composite."
+    },
+    {
+      "path": "review/final-gallery/settled-native-dark.png",
+      "sha256": "87433b00727df2760a5676f0d34c6963947f553c175eef92c002978ceca7963c",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual dark shell with the same owned nested content,subtle branch guides,pale selected rows and compact model/permissions controls. Settings trigger retains keyboard focus ring."
+    },
+    {
+      "path": "review/final-gallery/settled-native-light-settings.png",
+      "sha256": "3f8ce14994878ed90e883937dd5a3f953f6e07e5c7416498994cbf77b6a3544a",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual settled light Settings surface is opaque and fully legible,including click volume,capability rows,guest-unavailable explanation and revoke control. Underlying title is occluded by the panel as expected."
+    },
+    {
+      "path": "review/final-gallery/settled-native-dark-settings.png",
+      "sha256": "c0dd01f857daee9a671df7a7cc74da50f026a0badabdec38f6da91e38edd5217",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual settled dark Settings surface is legible with a defined panel edge and focus on close; scrollable permissions grouping remains visible. This and the light counterpart supersede the old transparent entrance frame."
+    },
+    {
+      "path": "review/final-gallery/settled-native-dark-folder.png",
+      "sha256": "d57382b27efc91772198da8233f345aaa26b865cccd053f93acea7cccf4c47ab",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual dark Import folder overlay shows intact full-size folder,papers,translucent flap and Choose folder. This settled state is not a successful import receipt."
+    },
+    {
+      "path": "review/final-gallery/settled-native-light-folder.png",
+      "sha256": "7d01c4539e4bbd5f2d1bedabe6699102a40e03262714bf1056425cbe892df3ee",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build light Import folder overlay shows intact white/translucent folder and dark paper faces. The palette adapts to theme while preserving three-paper/front-flap anatomy."
+    },
+    {
+      "path": "review/shell-targeted-repeat/R01-on.png",
+      "sha256": "5de918f6b47442106194020d11742145a0b06bc717cea69e08ac704328e9f62c",
+      "pixels": [
+        330,
+        189
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual targeted native motion repeat endpoint retains the visible violet bilobed brain,pixel track,rays and truthful Effort On. Receipt records actual keyboard,drag and native material sequence."
+    },
+    {
+      "path": "review/shell-targeted-repeat/forced-colors-dark.png",
+      "sha256": "3572a9e897e72533ecb5532c20646956abed1301235958dde66ce59e1d6eb299",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "ADVERSE: browser-emulated forced-colors dark selected project/conversation names are visually unreadable within large black rectangular areas inside cyan selected rows. Nonselected labels and essential controls remain visible. Existing scoped fallback assertions did not test selected-label contrast."
+    },
+    {
+      "path": "review/final-retention/retry-A-completed-B-unsent.png",
+      "sha256": "b28a4ca7e61851eff1f842f3c1b4e15e1cab1a3f8bb7d2ddc0ffde3f1f0a838d",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Current final-build actual candidate retry completes A while preserving B chip/text unsent in composer. The selected model is Abliterated. Canonical run/message/attachment assertions remain in the final-retention receipt."
+    },
+    {
+      "path": "review/citation-final/citation-native-hover.png",
+      "sha256": "f58e883e8ccfb402a2b9fae6a12b9c417cb519778244eed5ad4a0fc97944dbe4",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Final-build actual native hover on genuine assistant [1] shows a legible compact Linux kernel source preview entirely within the workspace. Title and three-line excerpt are visible. Canonical Wikipedia href,real attachment and model answer are preserved; no response regenerated for this preview-only run."
+    },
+    {
+      "path": "review/forced-colors-final/forced-colors-dark.png",
+      "sha256": "754bbdc7573d152767d28c417288bcd340894292d68ee848a6aab203946bebfa",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Final actual browser-emulated forced-colors dark selected project/conversation names are now readable as black text on cyan system Highlight; selected child backgrounds no longer conceal their glyphs. This repairs the earlier observed black rectangles. It is browser emulation,not OS/AT certification."
+    },
+    {
+      "path": "review/forced-colors-final/forced-colors-light.png",
+      "sha256": "c0ad810f82d23d2aaab05f4f096ca506673db6572581e2620f09948913d81766",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Final browser-emulated forced-colors light preference uses the same effective forced palette and readable selected names. Light application preference does not establish a distinct physical OS high-contrast theme."
+    },
+    {
+      "path": "review/css-repair/actual-browser-200-percent.png",
+      "sha256": "089b028b431b369c6df7ade4658099ea7871fad53f07341bdfda8370341ad144",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual native-accelerator200%zoom frame after footer repair shows the enlarged buddy separated from Dark workspace label and sound control. Composer essentials remain visible. Zoom row passed; later same-invocation native recalibration failed and is retained separately."
+    },
+    {
+      "path": "review/gallery-final/settled-native-light.png",
+      "sha256": "9ea89334ce5d1c1ba67493e9dbbd9070dd1fd9694b841003e3e9f91ea360e188",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Latest final-build populated light shell with meaningful nested labels/nonce suffix,quiet rail/main surfaces,compact composer and buddy. A small genuine Dark mode hover tooltip is visible; no screenshot editing was used."
+    },
+    {
+      "path": "review/gallery-final/settled-native-dark-settings.png",
+      "sha256": "9fe89686a3d967e561ba73cde8f963a3bc7208757cbfe76bc7554a7624c25421",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Latest final-build dark Settings is settled and legible: click volume,granular permissions,guest-unavailable explanation and revoke affordance. Ordinary panel material is opaque enough to occlude underlying text."
+    },
+    {
+      "path": "review/gallery-final/settled-native-dark-folder.png",
+      "sha256": "2aacdaf9c3f3e85f3e323186548d3972ad82d27bb118c7589dade3e7e81ab627",
+      "pixels": [
+        1320,
+        900
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Latest final-build full-size dark folder/papers/flap anatomy is intact in the import overlay. Actual native chooser/import outcome is separately proven in actions-final; this frame is static visual evidence."
+    },
+    {
+      "path": "review/reference-light-final/R01-on.png",
+      "sha256": "0e942f8bbae4bfe7444860c4aec8a54b9b1a63e42e76183d7250378b5c5d6a73",
+      "pixels": [
+        330,
+        189
+      ],
+      "agent_opened_actual_png": true,
+      "observation": "Actual native light-shell R01 On endpoint retains dark source-led popover,violet bilobed brain,discrete pixel field and radial accent. Receipt also verifies the R01/R02 native sequence and preserves the two real detents."
+    }
+  ],
+  "adverse_evidence_preserved": [
+    {
+      "path": "review/visual/native-light-settings.png",
+      "scope": "entrance-phase near-transparent Settings capture",
+      "replacement": "review/shell-supplemental/settings-groups.png"
+    },
+    {
+      "path": "review/shell-supplemental/shell.json",
+      "scope": "R01/R02 native calibration failure and fallback generic RuntimeError; completed other rows remain scoped PASS",
+      "replacement": "Root targeted repeat must supply final status; retain original receipt."
+    },
+    {
+      "path": "review/shell-targeted-repeat/forced-colors-dark.png",
+      "scope": "Selected project/conversation text visually unreadable despite passing native-range/reflection fallback assertions.",
+      "resolution": "Repaired in review/forced-colors-final actual light/dark captures; source image remains historical adverse."
+    },
+    {
+      "path": "review/citation-preview/citation-native-hover.png",
+      "scope": "Observer passed settling while actual603px tooltip was clipped.",
+      "resolution": "Actual citation-final preview about126.8px/3 snippet lines fully inside workspace."
+    },
+    {
+      "path": "review/actions-final/run.json",
+      "scope": "Import successful,then delete-width observer sampled entry scale and failed46.8px.",
+      "resolution": "Separate actions-delete-final proves48px layout,47.996 settled and actual owned deletion."
+    },
+    {
+      "path": "review/css-repair/shell.json",
+      "scope": "Composer+actual200%zoom rows pass,but following native calibration fails.",
+      "resolution": "Fresh standalone final fallback passes; combined post-zoom calibration remains unproved."
+    }
+  ],
+  "root_outcome_updates": {
+    "R01_R02_native_both_theme_sequences": {
+      "status": "PASS_SCOPED_TECHNICAL",
+      "paths": [
+        "review/shell-targeted-repeat/shell.json",
+        "review/reference-light-final/shell.json"
+      ]
+    },
+    "R05_actual_search_citation": {
+      "status": "PASS_SCOPED_TECHNICAL",
+      "paths": [
+        "review/actions-final/owned/actions.json",
+        "review/citation-final/citation.json"
+      ],
+      "not_demonstrated": "Autonomous model-proposed search; human source parity."
+    },
+    "R06_actual_native_picker_import": {
+      "status": "PASS_SCOPED_OPERATOR_ASSISTED",
+      "path": "review/actions-final/owned/actions.json",
+      "unverified": "Unassisted production chooser parenting/focus."
+    },
+    "R09_actual_owned_delete": {
+      "status": "PASS_SCOPED_TECHNICAL",
+      "path": "review/actions-delete-final/run.json"
+    },
+    "forced_colors_actual_selected_names": {
+      "status": "PASS_SCOPED_BROWSER_EMULATION",
+      "path": "review/forced-colors-final/shell.json"
+    },
+    "true200percentzoom_footer": {
+      "status": "PASS_ROW_WITH_SEPARATE_LATER_FAILURE",
+      "path": "review/css-repair/shell.json",
+      "unverified": "Coupled post-zoom native recalibration success."
+    },
+    "R07_live_GUM": {
+      "status": "UNVERIFIED",
+      "scope": "Actual public upload/CPU STT/playback pass; fresh live recording is not claimed."
+    },
+    "R08_current_qualified_guest_tasks": {
+      "status": "BLOCKED_NATIVE_AUTH_QUALIFICATION",
+      "path": "review/vm/readiness-investigation.json"
+    },
+    "retention": {
+      "status": "PASS_SCOPED_TECHNICAL",
+      "path": "review/final-retention/retention.json"
+    },
+    "publication": {
+      "evidence": "review/publication.json in the complete review archive",
+      "interpretation": "Consult this artifact for the exact published commit,remote verification and source/archive identities."
+    }
+  },
+  "README_gallery_recommendations": [
+    {
+      "rank": 1,
+      "path": "review/gallery-final/settled-native-light.png",
+      "caption": "Projects and conversations · light workspace",
+      "reason": "Latest current-build populated rail/project/composer and buddy.",
+      "limit": "Owned review names/nonces and a small genuine Dark mode hover tooltip remain visible.",
+      "sha256": "9ea89334ce5d1c1ba67493e9dbbd9070dd1fd9694b841003e3e9f91ea360e188",
+      "pixels": [
+        1320,
+        900
+      ]
+    },
+    {
+      "rank": 2,
+      "path": "review/citation-final/citation-native-hover.png",
+      "caption": "Real local answer with a verified Wikipedia source preview",
+      "reason": "Latest current-build actual model answer,source-bound citation and legible native-hover preview.",
+      "limit": "Operator supplied the genuine search attachment; no autonomous search or human motion approval claim.",
+      "sha256": "f58e883e8ccfb402a2b9fae6a12b9c417cb519778244eed5ad4a0fc97944dbe4",
+      "pixels": [
+        1320,
+        900
+      ]
+    },
+    {
+      "rank": 3,
+      "path": "review/gallery-final/settled-native-dark-folder.png",
+      "caption": "Folder import · full-size interactive source anatomy",
+      "reason": "Latest current-build dark shell and full folder/papers/flap rendering with real Choose folder affordance.",
+      "limit": "This frame is static; actual native import is separately operator-assisted and verified in actions-final.",
+      "sha256": "2aacdaf9c3f3e85f3e323186548d3972ad82d27bb118c7589dade3e7e81ab627",
+      "pixels": [
+        1320,
+        900
+      ]
+    }
+  ],
+  "README_gallery_alternative": {
+    "path": "review/voice/voice-seek-speed.png",
+    "sha256": "efbc366f6d99019edc07edc7b33e6064adc0d47c8b2fd7dd7783a9ca6bb407fa",
+    "caption": "Local audio attachment · real waveform,CPU transcript and playback",
+    "reason": "Useful capability detail from the actual earlier recorded build; no raw audio export or physical microphone/speaker approval."
+  },
+  "rights_and_export": {
+    "private_source_media": "All third-party exact clips,decoded frames,reference sheets,original source-artwork,harnesses and private raw audio are excluded from BOTH public source and review ZIP.",
+    "permitted_public_material": "URL/blob/SHA provenance,license notices,independent code observations and owned actual Hermes production screenshots/recordings,subject to scope/privacy review.",
+    "Rare_UI": "Preserve exact MIT + Commons Clause + Attribution terms and visible credit. Integrated application code is allowed subject to those terms; standalone original component/harness redistribution is not.",
+    "R10_identity": "Exact supplied pin retained; returned canonical/original creator/license remain UNVERIFIED. No Brainwave logo/robot/artwork copied.",
+    "R01_R03_R11": "No runtime-asset license established for source clips/artwork; authored adaptations only.",
+    "audio": "Official pinned public speech is test input only. No raw voice/audio included in gallery or export."
+  },
+  "remaining_gaps": [
+    "Uninterrupted normal-speed human source/candidate motion review and matched-scale material/typography/overall design approval.",
+    "Physical pointer/keyboard/phone and assistive-technology/OS high-contrast verification; browser emulation is scoped technical evidence.",
+    "Fresh v5 live microphone getUserMedia grant/record/stop/cancel and physical speaker/microphone quality.",
+    "Current native all-five guest qualification/execution remains blocked pending native authentication; no host fallback.",
+    "Unassisted production native chooser parenting/focus; verified import required scoped per-dialog operator float/focus.",
+    "Coupled post-zoom native recalibration success remains unverified after retained failure,despite zoom row and fresh fallback PASS.",
+    "Autonomous model-proposed search/action flow is not demonstrated by operator-proposed action acceptance.",
+    "GPU/presentation/high-refresh timing and reboot persistence are unverified.",
+    "R10 supplied-pin returned canonical/original creator/license identity remains unresolved."
+  ],
+  "source_byte_verification": [
+    {
+      "id": "R01",
+      "private_reused_source_sha256": "bbeaa2656fccf3dca9dff8b9ee42be5bca01c9ba179f40e1d8ce61c3bef9ae6a",
+      "expected_sha256": "bbeaa2656fccf3dca9dff8b9ee42be5bca01c9ba179f40e1d8ce61c3bef9ae6a",
+      "matches": true,
+      "bytes": 502280
+    },
+    {
+      "id": "R02",
+      "private_reused_source_sha256": "34c630a3157f0261c6120e89bee21434ce7e50ec584c95c149c0e40f52ed5813",
+      "expected_sha256": "34c630a3157f0261c6120e89bee21434ce7e50ec584c95c149c0e40f52ed5813",
+      "matches": true,
+      "bytes": 1799527
+    },
+    {
+      "id": "R03",
+      "private_reused_source_sha256": "96647ac123fa768ef44e8cd7089879f0f5c1d8459ec45386763f67254fbab635",
+      "expected_sha256": "96647ac123fa768ef44e8cd7089879f0f5c1d8459ec45386763f67254fbab635",
+      "matches": true,
+      "bytes": 1891964
+    },
+    {
+      "id": "R04",
+      "private_reused_source_sha256": "58d1a6ac343bc0d5e7d2edb4cd558c84a053599652653649e9543289ebeb8661",
+      "expected_sha256": "58d1a6ac343bc0d5e7d2edb4cd558c84a053599652653649e9543289ebeb8661",
+      "matches": true,
+      "bytes": 16396,
+      "git_blob_sha1": "828ed9d11ae7437c9ffe0cd472777b48b1bd9988",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R05",
+      "private_reused_source_sha256": "76c3f8f633b6f76446b6faa35b9ccc2de16e97ca762111d545bed661a0cb179f",
+      "expected_sha256": "76c3f8f633b6f76446b6faa35b9ccc2de16e97ca762111d545bed661a0cb179f",
+      "matches": true,
+      "bytes": 30873,
+      "git_blob_sha1": "a463b2243f83dc880c608ac71c1de5cf02973b70",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R06",
+      "private_reused_source_sha256": "b4a76341e592d5048a39de5d56ace38a526da21bb3065ffb9f5b1ff0aced30dd",
+      "expected_sha256": "b4a76341e592d5048a39de5d56ace38a526da21bb3065ffb9f5b1ff0aced30dd",
+      "matches": true,
+      "bytes": 14971,
+      "git_blob_sha1": "f6ffb0131a4e7d6456e38819035d43dd034d20fd",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R07",
+      "private_reused_source_sha256": "6a04a691811c241c96db9b9082612d0ce3a0bfa1996b9c297ab7481568c0dce4",
+      "expected_sha256": "6a04a691811c241c96db9b9082612d0ce3a0bfa1996b9c297ab7481568c0dce4",
+      "matches": true,
+      "bytes": 21395,
+      "git_blob_sha1": "83e59d792352b1a1064f3750abddabbf82e78842",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R08",
+      "private_reused_source_sha256": "9038a6110902f0d944740f91e19e0bfc2cbee8a9397ba7f1f780f72ec6802657",
+      "expected_sha256": "9038a6110902f0d944740f91e19e0bfc2cbee8a9397ba7f1f780f72ec6802657",
+      "matches": true,
+      "bytes": 10157,
+      "git_blob_sha1": "68ab0d0fa8796d0eef8495b82f5e229524e9ff5f",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R09",
+      "private_reused_source_sha256": "04fb156b7872476052095e79186026349feae9d318554df767f108c3af592ef1",
+      "expected_sha256": "04fb156b7872476052095e79186026349feae9d318554df767f108c3af592ef1",
+      "matches": true,
+      "bytes": 8449,
+      "git_blob_sha1": "f85192e7a895ba413281ff64deb6d93769d1b9c6",
+      "git_blob_matches": true
+    },
+    {
+      "id": "R10",
+      "private_reused_source_sha256": "bf262d43ef2a64efa98ee029a8fa60a1698a839ac3d601a32597e5643816c53e",
+      "expected_sha256": "bf262d43ef2a64efa98ee029a8fa60a1698a839ac3d601a32597e5643816c53e",
+      "matches": true,
+      "bytes": 37470
+    },
+    {
+      "id": "R11",
+      "private_reused_source_sha256": "6161a016b9224de9c252042b099d4877b9c3998d6a2926e33d6f588ba355cf69",
+      "expected_sha256": "6161a016b9224de9c252042b099d4877b9c3998d6a2926e33d6f588ba355cf69",
+      "matches": true,
+      "bytes": 414138
+    }
+  ]
+}

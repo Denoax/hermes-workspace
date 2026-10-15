@@ -1,0 +1,13 @@
+# Finish and return protocol
+
+Read and apply `$reference-led-design`. Follow the user's established complete-review ZIP protocol after implementation; do not stop at a preview, mockup or list of instructions.
+
+1. Finish source, build and relevant regressions in the existing project. Preserve the current tree and collect a private rollback record before migrations/native updates. Keep authentication, root admission and screen lock.
+2. Install/reload through the existing bounded native workflow. Verify exact running source/build identity and execute the production acceptance sequence after test cleanup. Save real captures and measurements, explicitly distinguishing fixtures, direct backend tests and actual pin tests.
+3. Commit and publish verified source to the existing Denoax/hermes-workspace repository using its established authorized workflow. Preserve unrelated changes. Do not force-push or publicly upload private review state. Confirm remote commit/tree identity. If publication requires new permission under current repository instructions, prepare the full reviewed commit first, then state the precise remaining gate; do not invent a gate.
+4. Produce one final complete sanitized review ZIP under /home/mani/Downloads with source, dependency locks, applicable fonts/licenses/credits, measured evidence, exact reference-to-implementation record, permission contracts, migration/rollback instructions, acceptance results and gaps. Exclude credentials, cookies, private logs, raw private files and third-party source media used only for comparison. Do not include a new standalone Rare UI component collection.
+5. Generate a sorted SHA-256 manifest for all payload files. Clean-extract the ZIP, verify every member/manifest digest and byte count, rebuild from the extracted source, and run relevant packaged checks without accidentally starting test GPU backends. Record outcomes. Ensure final source and published commit correspond to what the pin serves; if verification changes source, rebuild/retest/repackage the final identity.
+6. Verify normal Qwen is recovered and healthy at its preserved context/configuration, test backends are stopped and the production pin can still send a real message after cleanup. Do not delete user records to leave an empty app.
+7. Return a concise completion message with: what actually changed; commit link; production conversation evidence for both local models; permissions enforcement and UI-motion evidence; normal recovery/cleanup outcome; complete ZIP path, bytes, SHA-256 and payload verification count; private rollback path; honest unresolved gaps.
+
+Test totals cannot substitute for live replies, visual parity or human approval. Do not claim that this planning package itself fixed the PC.

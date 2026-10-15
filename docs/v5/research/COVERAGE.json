@@ -1,0 +1,253 @@
+{
+  "scope": "Bounded coverage map, not an assertion that all important internet content was inspected",
+  "routes": [
+    {
+      "id": "G01",
+      "name": "Pinterest",
+      "url": "https://www.pinterest.com/",
+      "status": "DISCOVERY_PARTIAL",
+      "note": "One pin opened with a persistent sign-in overlay; traced public leads to creator sources. No sign-in or hidden-state bypass.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G02",
+      "name": "Dribbble",
+      "url": "https://dribbble.com/tags/ai-website",
+      "status": "SEARCH_AND_SELECTED_SHOTS_INSPECTED",
+      "note": "Exact Awsmd, Jordan Hughes and Brainwave originals inspected. Gallery popularity is not a production-quality guarantee.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G03",
+      "name": "Lusion Labs",
+      "url": "https://labs.lusion.co/",
+      "status": "LIVE_RENDER_UNAVAILABLE_ARCHIVE_INSPECTED",
+      "note": "Blank live page after one reload; published Awwwards source image inspected separately.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G04",
+      "name": "FreeFrontend WebGL",
+      "url": "https://freefrontend.com/webgl/",
+      "status": "COLLECTION_TEXT_READ",
+      "note": "Discovery and implementation examples; no blanket trust in performance/browser-support claims.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G05",
+      "name": "FreeFrontend menus",
+      "url": "https://freefrontend.com/javascript-menus/",
+      "status": "CURATOR_TO_ORIGINAL_TRACED",
+      "note": "Responsive sidebar example traced to Jhey's original CodePen.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G06",
+      "name": "Rare UI",
+      "url": "https://www.rareui.com/",
+      "status": "CURRENT_TEXT_AND_PRIOR_PINNED_SOURCE",
+      "note": "Five exact pages readable now; AI status page limited. Preserve six existing original source pins and attribution.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G07",
+      "name": "CollectUI",
+      "url": "https://collectui.com/",
+      "status": "CURRENT_HOME_TEXT_ONLY",
+      "note": "The retrieved homepage presents a curated-inspiration newsletter. Do not assume the old challenge archive is currently available.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G08",
+      "name": "on.design",
+      "url": "https://on.design/?view=gallery",
+      "status": "RETRIEVAL_FAILED",
+      "note": "No current visual findings claimed.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G09",
+      "name": "Inspo MCP",
+      "url": "https://inspomcp.dev/",
+      "status": "DISCOVERY_SITE_TEXT_READ",
+      "note": "Links to real sites can aid source discovery; agent-ready claims do not prove human authorship or reuse rights.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G10",
+      "name": "Inspora",
+      "url": "https://www.inspora.design/",
+      "status": "PRIOR_CLIPS_REUSED_CURRENT_TEXT_PARTIAL",
+      "note": "Reuse exact R01-R03 clip identities and creator links. No new approximation gets promoted to parity.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G11",
+      "name": "Magic UI",
+      "url": "https://magicui.design/",
+      "status": "TEXT_AND_PINNED_LICENSE",
+      "note": "Open-source repository distinguished from Pro products; selective implementation study.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G12",
+      "name": "Motion Primitives",
+      "url": "https://motion-primitives.com/docs/morphing-popover",
+      "status": "SEARCH_AND_PINNED_LICENSE_DIRECT_FETCH_LIMITED",
+      "note": "Specific docs found in search; direct retrieval limited. Source and license are available; no accessibility guarantee.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G13",
+      "name": "Uiverse",
+      "url": "https://uiverse.io/",
+      "status": "TEXT_AND_PINNED_LICENSE",
+      "note": "Verify creator, exact item, external assets and integration behavior separately.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G14",
+      "name": "21st",
+      "url": "https://21st.dev/",
+      "status": "GALLERY_TEXT_READ",
+      "note": "Discovery only; no blanket authorship, license or visual-quality certification.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G15",
+      "name": "Component Gallery",
+      "url": "https://component.gallery/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Useful for comparing semantic component anatomy across design systems.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G16",
+      "name": "Awwwards",
+      "url": "https://www.awwwards.com/",
+      "status": "SELECTED_PRIMARY_RECORDS_READ",
+      "note": "Devouring Details listing and dated Lusion records used with access limits recorded.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G17",
+      "name": "CSS Design Awards",
+      "url": "https://www.cssdesignawards.com/woty/lusion-v3/44311/",
+      "status": "PRIMARY_JURY_RECORD_READ",
+      "note": "Lusion v3 Website of the Year 2023; final score 9.27. Award scope remains that dated version.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G18",
+      "name": "The FWA",
+      "url": "https://thefwa.com/",
+      "status": "EMPTY_RETRIEVAL",
+      "note": "No award or visual claim based on the empty current page.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G19",
+      "name": "Siteinspire",
+      "url": "https://www.siteinspire.com/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Good discovery route for strong composition; selected entries still need original-site inspection.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G20",
+      "name": "Godly",
+      "url": "https://godly.website/",
+      "status": "RETRIEVAL_FAILED",
+      "note": "No current visual findings claimed.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G21",
+      "name": "Curated",
+      "url": "https://curated.design/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Page sections and site discovery; follow the actual source, check asset provenance.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G22",
+      "name": "Minimal Gallery",
+      "url": "https://minimal.gallery/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Composition discovery rather than proof of app behavior.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G23",
+      "name": "Landbook",
+      "url": "https://land-book.com/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Marketing/landing composition discovery; screen concepts are not tested application flows.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G24",
+      "name": "Mobbin",
+      "url": "https://mobbin.com/",
+      "status": "PUBLIC_HOME_ONLY",
+      "note": "Useful flow-research category. No paid or signed-in screen collection inspected.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G25",
+      "name": "Page Flows",
+      "url": "https://pageflows.com/",
+      "status": "RETRIEVAL_FAILED",
+      "note": "No premium or complete flow inspection claimed.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G26",
+      "name": "Hoverstat.es",
+      "url": "https://www.hoverstat.es/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Alternative and experimental web references; use only where the Hermes task benefits.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G27",
+      "name": "Httpster",
+      "url": "https://httpster.net/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Independent site-discovery route; entries are not implementation licenses.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G28",
+      "name": "Rebrand Gallery",
+      "url": "https://www.rebrand.gallery/",
+      "status": "DIRECTORY_TEXT_READ",
+      "note": "Branding discovery; no third-party logo reuse approved.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G29",
+      "name": "Behance",
+      "url": "https://www.behance.net/",
+      "status": "FETCH_FORBIDDEN",
+      "note": "Current retrieval failed; no project-level findings claimed.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G30",
+      "name": "Layers",
+      "url": "https://layers.to/explore",
+      "status": "PUBLIC_SHELL_ONLY",
+      "note": "Search shell and navigation available; no individual design inspection claimed.",
+      "checked_date": "2026-10-15"
+    },
+    {
+      "id": "G31",
+      "name": "Apple HIG motion",
+      "url": "https://developer.apple.com/design/human-interface-guidelines/motion",
+      "status": "JS_SHELL_ONLY",
+      "note": "Reference located; use the readable W3C and web.dev sources for concrete checks in this package.",
+      "checked_date": "2026-10-15"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "policy": "Read and apply $reference-led-design; no generated media; exact references, original code or licensed reuse",
+  "references": [
+    {
+      "id": "R01",
+      "url": "https://www.inspora.design/posts/galaxy-brain-effort-slider",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R02",
+      "url": "https://www.inspora.design/posts/iquid-metal",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R03",
+      "url": "https://www.inspora.design/posts/hypnotizing-ui",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R04",
+      "url": "https://www.rareui.com/components/aistatus",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R05",
+      "url": "https://www.rareui.com/components/websearch",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R06",
+      "url": "https://www.rareui.com/components/foldercomponent",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R07",
+      "url": "https://www.rareui.com/components/voicenote",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R08",
+      "url": "https://www.rareui.com/components/tasklist",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R09",
+      "url": "https://www.rareui.com/components/deletebutton",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R10",
+      "url": "https://de.pinterest.com/pin/333055334963544751/",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    },
+    {
+      "id": "R11",
+      "url": "https://dribbble.com/shots/21673507-Task-Management-Dashboard",
+      "production_parity_status": "UNVERIFIED",
+      "comparison_required": true
+    }
+  ],
+  "human_approval": "PENDING",
+  "replaces_historical_visual_completion_claims": true
+}

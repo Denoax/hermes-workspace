@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { rpc } from "./api";
+import { keepNewerPolicy } from "./lib/policy-state";
 export type Capability = "read" | "write" | "guest" | "search" | "microphone";
 export type Action = {
   id: string;
@@ -45,28 +46,32 @@ export function usePermissions(
 ) {
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [updating, setUpdating] = useState(false);
+  const acceptPolicy = useCallback(
+    (next: Policy) => setPolicy((current) => keepNewerPolicy(current, next)),
+    [],
+  );
   const sessionOwner = useRef(session);
   sessionOwner.current = session;
   const refreshPolicy = useCallback(
     async (owner: string | null = session) => {
       const next = await rpc<Policy>("permissions.read", { session_id: owner });
-      if (sessionOwner.current === next.session_id) setPolicy(next);
+      if (sessionOwner.current === next.session_id) acceptPolicy(next);
       return next;
     },
-    [session],
+    [session, acceptPolicy],
   );
   useEffect(() => {
     let alive = true;
     setPolicy(null);
     rpc<Policy>("permissions.read", { session_id: session })
       .then((next) => {
-        if (alive) setPolicy(next);
+        if (alive) acceptPolicy(next);
       })
       .catch(report);
     return () => {
       alive = false;
     };
-  }, [session]);
+  }, [session, acceptPolicy]);
   async function update(
     mode: string,
     capabilities?: Partial<Record<Capability, boolean>>,
@@ -91,7 +96,7 @@ export function usePermissions(
         mode,
         capabilities: selected,
       });
-      if (sessionOwner.current === id) setPolicy(next);
+      if (sessionOwner.current === id) acceptPolicy(next);
     } catch (error) {
       report(error);
     } finally {

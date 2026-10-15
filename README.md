@@ -7,11 +7,25 @@
 **Hermes × your local model.**<br>
 Local conversations, persistent projects and explicit boundaries.
 
-[Local use](#local-use) · [Capabilities](#capabilities) · [Production repair and permissions](docs/PRODUCTION_V4.md) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
+[Local use](#local-use) · [Capabilities](#capabilities) · [V5 verification](docs/V5_VERIFICATION.md) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
 
-<img src="showcase/local-chat/dark-1440.png" alt="Actual current Hermes interface, ready for a conversation" width="100%">
+<img src="showcase/local-chat/v5-dark.png" alt="Actual v5 Hermes workspace with populated project navigation" width="100%">
 
 </div>
+
+## V5
+
+The neutral shell, nested navigation and compact composer run in the existing
+Hermes pin. Unsent attachment selections persist per conversation, with checked
+metadata and guards against late uploads or submit acknowledgements clearing a
+newer draft. The working v4 backend repair, protected admission, accepted sounds
+and portfolio buddy remain in place.
+
+Both local models passed connected production conversations; cancellation and
+failure/reconnect/retry were exercised against the real application. See
+[measured checks and remaining limits](docs/V5_VERIFICATION.md) and the
+[durable continuation workflow](docs/v5/LOOP_ENGINEERING.md). Guest qualification
+and human/physical review have separate gates.
 
 ## The workspace
 
@@ -19,9 +33,9 @@ Ordinary chat needs no project or task selection. Replies stream from the instal
 
 | Dark | Light |
 | --- | --- |
-| ![Current dark interface](showcase/local-chat/dark-1440.png) | ![Current light interface](showcase/local-chat/light-1440.png) |
+| ![V5 dark interface](showcase/local-chat/v5-dark.png) | ![V5 light interface](showcase/local-chat/v5-light.png) |
 
-The banner retains the accepted repository artwork. The gallery shows the current implementation. Earlier glass/tile recordings remain historical assets; that emission renderer is retired from the current app.
+The banner retains the accepted repository artwork. These two frames show the final v5 build through the actual production pin. A presentation filter limits navigation to newly created review projects. Earlier gallery images and glass/tile recordings remain historical assets; that emission renderer is retired from the current app.
 
 ## Capabilities
 
@@ -43,7 +57,7 @@ Normal chat preserves its existing service and 65,536 context. The candidate use
 
 The candidate label identifies the pinned local artifact. Its upstream ablation lineage remains unproven; these checks establish working conversations, not a causal quality benchmark. Physical microphone, assistive technology, alternate browser, high-refresh and human motion/listening coverage remain separate limits.
 
-[v4 measured verification and remaining gaps](docs/V4_VERIFICATION.md): production chat works for both local models. Qualified guest execution remains unavailable while the complete current-boot watchdog gate is unresolved.
+[V5 measured verification and remaining gaps](docs/V5_VERIFICATION.md): production chat works for both local models. Qualified guest execution remains unavailable while the complete current-boot watchdog gate is unresolved. The [v4 verification](docs/V4_VERIFICATION.md) is retained as historical evidence.
 
 ## Local use
 

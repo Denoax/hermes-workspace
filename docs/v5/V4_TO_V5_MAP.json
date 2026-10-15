@@ -1,0 +1,651 @@
+{
+  "scope": "Original statuses remain historical. These mappings retain every v4 acceptance row. New source/runtime checks are not pre-passed.",
+  "rows": [
+    {
+      "v4_id": "P01",
+      "v4_status": "PASS",
+      "v4_requirement": "Reproduce the reported pin admission failure",
+      "v5_tasks": [
+        "BASE-01"
+      ],
+      "original_evidence": [
+        "production-before.json",
+        "production-namespace-before.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P02",
+      "v4_status": "PASS",
+      "v4_requirement": "Trace namespace/root-peer cause rather than bypass protected admission",
+      "v5_tasks": [
+        "BASE-01",
+        "NATIVE-01"
+      ],
+      "original_evidence": [
+        "namespace-regression.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P03",
+      "v4_status": "PASS",
+      "v4_requirement": "Bounded native repair retains root-peer checks and unprivileged data parsing",
+      "v5_tasks": [
+        "NATIVE-01"
+      ],
+      "original_evidence": [
+        "native-installation.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P04",
+      "v4_status": "PASS",
+      "v4_requirement": "Record exact running source/build/native unit identity",
+      "v5_tasks": [
+        "NATIVE-01",
+        "SOURCE-01"
+      ],
+      "original_evidence": [
+        "final-runtime-identity.json",
+        "publication.json",
+        "native-installation.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P05",
+      "v4_status": "PASS",
+      "v4_requirement": "Three connected real normal-model UI turns and contextual recall",
+      "v5_tasks": [
+        "CHAT-01"
+      ],
+      "original_evidence": [
+        "production-chat/normal.json",
+        "production-chat/normal-production.png"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P06",
+      "v4_status": "PASS",
+      "v4_requirement": "Three connected real candidate UI turns and contextual recall",
+      "v5_tasks": [
+        "CHAT-02"
+      ],
+      "original_evidence": [
+        "production-chat/abliterated.json",
+        "production-chat/abliterated-production.png"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P07",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Measure admission wait, cold load, first text/token, total and errors for both arms",
+      "v5_tasks": [
+        "METRIC-01"
+      ],
+      "original_evidence": [
+        "production-chat/normal.json",
+        "production-chat/abliterated.json"
+      ],
+      "remaining": [
+        "Exclusive phase timings for admission vs template setup are unavailable. Normal model was already running; no normal cold-load measurement or disk-cache-cold comparison is claimed. GPU timings remain unmeasured."
+      ]
+    },
+    {
+      "v4_id": "P08",
+      "v4_status": "PASS",
+      "v4_requirement": "Observe real streaming and cancel real compute",
+      "v5_tasks": [
+        "CHAT-03"
+      ],
+      "original_evidence": [
+        "lifecycle/cancel.json",
+        "lifecycle/streaming-before-cancel.png",
+        "lifecycle/cancel-production.png"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P09",
+      "v4_status": "PASS",
+      "v4_requirement": "Genuine failed-turn retry without duplicates; double-click/reconnect",
+      "v5_tasks": [
+        "CHAT-03"
+      ],
+      "original_evidence": [
+        "lifecycle/retry.json",
+        "production-chat/abliterated.json",
+        "production-chat/normal.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P10",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Preserve draft/attachments and show service/loading/recovery errors",
+      "v5_tasks": [
+        "CHAT-03"
+      ],
+      "original_evidence": [
+        "lifecycle/retry.json",
+        "uploads/uploads.json",
+        "production-chat/abliterated.json",
+        "visual/native-final-motion/visual.json"
+      ],
+      "remaining": [
+        "Attachment retention through a failed/reconnected inference turn remains unverified. Upload-card pixel inspection and native file-picker interaction were not captured."
+      ]
+    },
+    {
+      "v4_id": "P11",
+      "v4_status": "PASS",
+      "v4_requirement": "Final cleanup/fresh-pin normal→candidate→normal send sequence",
+      "v5_tasks": [
+        "SOURCE-01"
+      ],
+      "original_evidence": [
+        "final-sequence/normal-before/normal.json",
+        "final-sequence/candidate/abliterated.json",
+        "final-sequence/normal-after/normal.json",
+        "final-runtime-identity.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "P12",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Socket activation, close/reopen, configured idle transition, permitted restart recovery",
+      "v5_tasks": [
+        "RECOVERY-01"
+      ],
+      "original_evidence": [
+        "native-installation.json",
+        "lifecycle/retry.json",
+        "final-runtime-identity.json",
+        "final-sequence/normal-before/normal.json",
+        "final-sequence/candidate/abliterated.json",
+        "final-sequence/normal-after/normal.json"
+      ],
+      "remaining": [
+        "Configured idle transition and separate socket-manager restart recovery remain unverified; production reboot remains separate P13."
+      ]
+    },
+    {
+      "v4_id": "P13",
+      "v4_status": "UNVERIFIED",
+      "v4_requirement": "Reboot recovery",
+      "v5_tasks": [
+        "REBOOT-01"
+      ],
+      "original_evidence": [],
+      "remaining": [
+        "Native reboot recovery remains unverified; do not reboot or unlock solely to turn this row green."
+      ]
+    },
+    {
+      "v4_id": "P14",
+      "v4_status": "PASS",
+      "v4_requirement": "Preserve existing user projects/conversations through migration and cleanup",
+      "v5_tasks": [
+        "NATIVE-01",
+        "SOURCE-01"
+      ],
+      "original_evidence": [
+        "selective-cleanup.json",
+        "probe-attachment-cleanup.json",
+        "native-installation.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "A01",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Always-visible policy selector, granular settings, persistent policy across model/reload",
+      "v5_tasks": [
+        "UI-03",
+        "PERM-01"
+      ],
+      "original_evidence": [
+        "permissions/permissions.json",
+        "model-action/model-action.json",
+        "visual/visual.json"
+      ],
+      "remaining": [
+        "Final custom/granular Settings, same-conversation model-switch and reload persistence matrix; final visual review."
+      ]
+    },
+    {
+      "v4_id": "A02",
+      "v4_status": "PASS",
+      "v4_requirement": "Denied direct API and final-dispatch attempts cannot bypass Chat only",
+      "v5_tasks": [
+        "PERM-01"
+      ],
+      "original_evidence": [
+        "permissions/permissions.json",
+        "production-chat/normal.json",
+        "production-chat/abliterated.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "A03",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Allow once and narrow session grants; denial/revoke/replay/expiry/wrong conversation",
+      "v5_tasks": [
+        "PERM-01",
+        "VM-03"
+      ],
+      "original_evidence": [
+        "permissions/permissions.json",
+        "model-action/model-action.json"
+      ],
+      "remaining": [
+        "Attach final hermetic expiry/version/stale-base regressions; qualified in-flight guest cancellation remains blocked separately."
+      ]
+    },
+    {
+      "v4_id": "A04",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Descriptor paths, symlink escape and stale base versions",
+      "v5_tasks": [
+        "PERM-01"
+      ],
+      "original_evidence": [
+        "permissions/permissions.json"
+      ],
+      "remaining": [
+        "Attach current final descriptor/stale-base/read-drift regression report."
+      ]
+    },
+    {
+      "v4_id": "A05",
+      "v4_status": "BLOCKED",
+      "v4_requirement": "Qualified guest execution and native network/filesystem enforcement",
+      "v5_tasks": [
+        "VM-02",
+        "VM-03"
+      ],
+      "original_evidence": [
+        "history/qualification-cold-boot-failure.json",
+        "guest-boot-20261015T093823Z-77655d45.json",
+        "history/qualification-second-cold-boot-failure.json",
+        "watchdog-standalone-deadline.json"
+      ],
+      "remaining": [
+        "Resolve and measure exact boot-readiness cause without bypassing policy; prove all five current watchdog scenarios and full compiler/confinement/recovery gates, then actual approved guest task and cancellation."
+      ]
+    },
+    {
+      "v4_id": "A06",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Original host diff application always separately approved",
+      "v5_tasks": [
+        "PERM-01"
+      ],
+      "original_evidence": [],
+      "remaining": [
+        "Attach final separate-host-approval, stale-base and original-mode preservation regression report; label fixture demonstrations as fixtures."
+      ]
+    },
+    {
+      "v4_id": "A07",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Model cannot approve itself; finite strict tool schema/result and run budgets",
+      "v5_tasks": [
+        "PERM-01"
+      ],
+      "original_evidence": [
+        "model-action/model-action.json",
+        "history/model-action-schema-rejection.json",
+        "history/model-action-empty-union-arguments.json"
+      ],
+      "remaining": [
+        "Attach final strict function-schema, no-self-approval, one-action/run/time/observation-budget tests; no unlimited agent loop or qualified guest result inferred."
+      ]
+    },
+    {
+      "v4_id": "A08",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Minimal audit and revocation cancellation remain truthful",
+      "v5_tasks": [
+        "PERM-01",
+        "VM-03"
+      ],
+      "original_evidence": [
+        "permissions/permissions.json",
+        "lifecycle/cancel.json"
+      ],
+      "remaining": [
+        "Final minimal-audit inspection and latest concurrency regression report; actual owned in-flight guest revoke/cancel remains blocked by qualification."
+      ]
+    },
+    {
+      "v4_id": "R01",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R01 source-to-production parity",
+      "v5_tasks": [
+        "REF-R01"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R02",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R02 source-to-production parity",
+      "v5_tasks": [
+        "REF-R02"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R03",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R03 source-to-production parity",
+      "v5_tasks": [
+        "REF-R03"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R04",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R04 source-to-production parity",
+      "v5_tasks": [
+        "REF-R04"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R05",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R05 source-to-production parity",
+      "v5_tasks": [
+        "REF-R05"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R06",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R06 source-to-production parity",
+      "v5_tasks": [
+        "REF-R06"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R07",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R07 source-to-production parity",
+      "v5_tasks": [
+        "REF-R07"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R08",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R08 source-to-production parity",
+      "v5_tasks": [
+        "REF-R08"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R09",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R09 source-to-production parity",
+      "v5_tasks": [
+        "REF-R09"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/delete-motion-final/delete-motion.json",
+        "human-review.json"
+      ],
+      "remaining": [
+        "Human motion approval unverified."
+      ]
+    },
+    {
+      "v4_id": "R10",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R10 source-to-production parity",
+      "v5_tasks": [
+        "REF-R10"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "R11",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Exact reference R11 source-to-production parity",
+      "v5_tasks": [
+        "REF-R11"
+      ],
+      "original_evidence": [
+        "reference-record.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Matched actual production viewport/state captures, remaining geometry/material differences and uninterrupted candidate motion where applicable; no human approval inferred."
+      ]
+    },
+    {
+      "v4_id": "V01",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Pointer-follow buddy movement, reversal, drag cancellation, keyboard and lifecycle",
+      "v5_tasks": [
+        "UI-04",
+        "ACC-01"
+      ],
+      "original_evidence": [
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/production-unedited-motion.mp4",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Actual hidden-tab/device lifecycle and system reduced-motion completeness remain unverified; subjective continuous-motion approval is not inferred from frame sheets."
+      ]
+    },
+    {
+      "v4_id": "V02",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Compact composer, full rail/colors, stable popovers, responsive/forced colors/reduced motion",
+      "v5_tasks": [
+        "UI-01",
+        "UI-02",
+        "ACC-01"
+      ],
+      "original_evidence": [
+        "visual/visual.json",
+        "visual/native-final-motion/visual.json",
+        "visual/native-final-motion/motion-inspection.json"
+      ],
+      "remaining": [
+        "Final per-reference visual parity/human review remains separate; populated project rail and the full requested transition matrix are incomplete."
+      ]
+    },
+    {
+      "v4_id": "V03",
+      "v4_status": "PASS",
+      "v4_requirement": "Accepted click identity/cue count preserved",
+      "v5_tasks": [
+        "UI-04"
+      ],
+      "original_evidence": [
+        "accepted-audio-preservation.json",
+        "visual/native-final-motion/visual.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "M01",
+      "v4_status": "PARTIAL",
+      "v4_requirement": "Browser microphone grant/denial/stop/cancel/device loss/track release and playback",
+      "v5_tasks": [
+        "VOICE-01",
+        "PHYSICAL-01"
+      ],
+      "original_evidence": [
+        "microphone/microphone.json"
+      ],
+      "remaining": [
+        "Physical listening/speech intelligibility and device unplug recovery unverified. Native permission-prompt clicking was not exercised; origin-scoped CDP settings were used."
+      ]
+    },
+    {
+      "v4_id": "D01",
+      "v4_status": "PASS",
+      "v4_requirement": "Verified source publication to existing repository",
+      "v5_tasks": [
+        "SOURCE-01"
+      ],
+      "original_evidence": [
+        "publication.json",
+        "source-export.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "D02",
+      "v4_status": "PASS",
+      "v4_requirement": "One sanitized complete-review ZIP, full manifest and clean-extraction rebuild/tests",
+      "v5_tasks": [
+        "ZIP-01"
+      ],
+      "original_evidence": [
+        "clean-extraction.json",
+        "publication.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "D03",
+      "v4_status": "PASS",
+      "v4_requirement": "Private rollback instructions preserve current conversations and configs",
+      "v5_tasks": [
+        "ZIP-01"
+      ],
+      "original_evidence": [
+        "ROLLBACK.md",
+        "native-installation.json",
+        "selective-cleanup.json",
+        "probe-attachment-cleanup.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "N01",
+      "v4_status": "BLOCKED",
+      "v4_requirement": "Five actual current-boot watchdog scenarios",
+      "v5_tasks": [
+        "VM-01",
+        "VM-02"
+      ],
+      "original_evidence": [
+        "history/qualification-cold-boot-failure.json",
+        "history/qualification-second-cold-boot-failure.json",
+        "watchdog-standalone-deadline.json"
+      ],
+      "remaining": [
+        "Identify the aggregate/standalone readiness discrepancy with one targeted instrumentation change if needed; prove all five original watchdog criteria without bypassing admission or altering budgets."
+      ]
+    },
+    {
+      "v4_id": "N02",
+      "v4_status": "PASS",
+      "v4_requirement": "Protected no-agent boot diagnostic only",
+      "v5_tasks": [
+        "VM-01"
+      ],
+      "original_evidence": [
+        "guest-boot-20261015T093823Z-77655d45.json"
+      ],
+      "remaining": []
+    },
+    {
+      "v4_id": "N03",
+      "v4_status": "PASS",
+      "v4_requirement": "Copied model/backend artifact byte provenance",
+      "v5_tasks": [
+        "NATIVE-01",
+        "CHAT-02"
+      ],
+      "original_evidence": [
+        "history/qualification-cold-boot-failure.json",
+        "production-chat/abliterated.json"
+      ],
+      "remaining": []
+    }
+  ]
+}

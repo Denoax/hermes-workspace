@@ -1,0 +1,56 @@
+{
+  "purpose": "Acquire exact original components for integration into the Hermes application; do not redistribute them as a standalone component collection.",
+  "repository": "https://github.com/swamimalode07/rare-ui",
+  "revision": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+  "license": "MIT + Commons Clause License Condition v1.0 + Attribution; retain notices and credit Rare UI visibly.",
+  "files": [
+    {
+      "path": "components/ui/ai-status.tsx",
+      "git_blob_sha1": "828ed9d11ae7437c9ffe0cd472777b48b1bd9988",
+      "bytes": 16396,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/ai-status.tsx"
+    },
+    {
+      "path": "components/ui/web-search.tsx",
+      "git_blob_sha1": "a463b2243f83dc880c608ac71c1de5cf02973b70",
+      "bytes": 30873,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/web-search.tsx"
+    },
+    {
+      "path": "components/ui/folder-component.tsx",
+      "git_blob_sha1": "f6ffb0131a4e7d6456e38819035d43dd034d20fd",
+      "bytes": 14971,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/folder-component.tsx"
+    },
+    {
+      "path": "components/ui/voice-note.tsx",
+      "git_blob_sha1": "83e59d792352b1a1064f3750abddabbf82e78842",
+      "bytes": 21395,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/voice-note.tsx"
+    },
+    {
+      "path": "components/ui/task-list.tsx",
+      "git_blob_sha1": "68ab0d0fa8796d0eef8495b82f5e229524e9ff5f",
+      "bytes": 10157,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/task-list.tsx"
+    },
+    {
+      "path": "components/ui/delete-button.tsx",
+      "git_blob_sha1": "f85192e7a895ba413281ff64deb6d93769d1b9c6",
+      "bytes": 8449,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/components/ui/delete-button.tsx"
+    },
+    {
+      "path": "lib/utils.ts",
+      "git_blob_sha1": "ebe7f41412e0d4de419b5d26d6231a32b16d8a5b",
+      "bytes": 258,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/lib/utils.ts"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "229ddb9074165b502a1db7f0f5852c6053acc5db",
+      "bytes": 1646,
+      "url": "https://raw.githubusercontent.com/swamimalode07/rare-ui/9633fcfa81c212a0ba48507e9c56be4869d61928/LICENSE"
+    }
+  ]
+}

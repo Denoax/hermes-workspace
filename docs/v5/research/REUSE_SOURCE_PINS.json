@@ -1,0 +1,56 @@
+[
+  {
+    "repository": "paper-design/shaders",
+    "commit": "43cd68db79fa0b1759f72ffc941b3238e2a3954c",
+    "license_files": [
+      {
+        "path": "LICENSE",
+        "blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "local_path": "licenses/paper-design__shaders__LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "path": "NOTICE",
+        "blob": "6bb1b73ec7aef447ad4777c70d9e6609bace6f6c",
+        "local_path": "licenses/paper-design__shaders__NOTICE",
+        "sha256": "c3155d6a359d9841d63f7feb4938d2c99bb4ef681fa20be1eb4bfa71307f746b"
+      }
+    ]
+  },
+  {
+    "repository": "ibelick/motion-primitives",
+    "commit": "120f64f6ca60348e251f929e9c81f11ccbe45eda",
+    "license_files": [
+      {
+        "path": "LICENCE.md",
+        "blob": "1a911b3bb726a0ceb00a6270853fdab52dff598d",
+        "local_path": "licenses/ibelick__motion-primitives__LICENCE.md",
+        "sha256": "f668f5ef3635eb906f10b1eea9a32e449eb6e1a183ab6879ef6d56c0980dd2f3"
+      }
+    ]
+  },
+  {
+    "repository": "magicuidesign/magicui",
+    "commit": "85f97fd27b053339af74ba9dd4ca428ee25989fb",
+    "license_files": [
+      {
+        "path": "LICENSE.md",
+        "blob": "30efc351ba9c469535dc012930ba6ee30c23f957",
+        "local_path": "licenses/magicuidesign__magicui__LICENSE.md",
+        "sha256": "0147b84235ed916b8b4e89c1f80655351c5afe7d211b629be61f553a227b34ba"
+      }
+    ]
+  },
+  {
+    "repository": "uiverse-io/galaxy",
+    "commit": "adbd2adde0a299a3956ea288fb444ec01891ca41",
+    "license_files": [
+      {
+        "path": "LICENSE",
+        "blob": "f6c794ca60b0f6f02588f6ed8138972f2215b35a",
+        "local_path": "licenses/uiverse-io__galaxy__LICENSE",
+        "sha256": "7feadcd7a611d37a4546c99f63a162bdf65656137828ebcba92e57dccfa368a4"
+      }
+    ]
+  }
+]

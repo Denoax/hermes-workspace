@@ -115,9 +115,9 @@ export function Brain({ on }: { on: boolean }) {
           y2="36"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#ffc8df" />
-          <stop offset=".52" stopColor="#f398c7" />
-          <stop offset="1" stopColor="#d96ca8" />
+          <stop stopColor={on ? "#e5b7ff" : "#ffc8df"} />
+          <stop offset=".52" stopColor={on ? "#bd7ae7" : "#f398c7"} />
+          <stop offset="1" stopColor={on ? "#8a51b8" : "#d96ca8"} />
         </linearGradient>
       </defs>
       <g
@@ -134,19 +134,23 @@ export function Brain({ on }: { on: boolean }) {
           fill="none"
         />
       </g>
-      <g className="brain-pixels" fill="#e5a8ef">
-        <rect x="6" y="5" width="5" height="5" />
-        <rect x="14" y="3" width="5" height="5" />
-        <rect x="22" y="5" width="5" height="5" />
-        <rect x="29" y="11" width="5" height="5" />
-        <rect x="5" y="14" width="5" height="5" />
-        <rect x="13" y="12" width="5" height="5" />
-        <rect x="21" y="14" width="5" height="5" />
-        <rect x="29" y="21" width="5" height="5" />
-        <rect x="8" y="23" width="5" height="5" />
-        <rect x="16" y="22" width="5" height="5" />
-        <rect x="21" y="30" width="5" height="5" />
-        <rect x="13" y="31" width="4" height="4" />
+      <g className="brain-pixels" fill="#fff0ff">
+        <rect x="9" y="11" width="2" height="2" />
+        <rect x="14" y="6" width="1.5" height="1.5" />
+        <rect x="24" y="10" width="2" height="2" />
+        <rect x="29" y="16" width="1.5" height="1.5" />
+        <rect x="10" y="23" width="2" height="2" />
+        <rect x="16" y="28" width="1.5" height="1.5" />
+        <rect x="25" y="25" width="2" height="2" />
+      </g>
+      <g
+        className="brain-rays"
+        fill="none"
+        stroke="#d9b2f4"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      >
+        <path d="M20 0V-3M7 4 5 1M33 4l2-3M2 16l-3-1M38 16l3-1M3 29l-3 1M37 29l3 1M12 36l-1 3M28 36l1 3" />
       </g>
     </svg>
   );
@@ -195,6 +199,23 @@ export function Effort({
           aria-valuetext={value === "on" ? "Thinking on" : "Thinking off"}
         />
         <div className="effort-fill" />
+        <svg
+          className="effort-field"
+          viewBox="0 0 290 30"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {Array.from({ length: 84 }, (_, index) => (
+            <rect
+              key={index}
+              x={32 + (index % 28) * 9}
+              y={5 + Math.floor(index / 28) * 8}
+              width={index % 4 === 0 ? 3 : 2}
+              height={index % 4 === 0 ? 3 : 2}
+              fill={index % 3 === 0 ? "#ffe9ff" : "#c98fea"}
+            />
+          ))}
+        </svg>
         <span className="effort-tick tick-left" />
         <span className="effort-tick tick-right" />
         <span className="brain-thumb">
@@ -237,8 +258,17 @@ export function MetalButton({
 export function WorkingIndicator({ state }: { state: string }) {
   return (
     <span className="working-pixels" data-state={state} aria-hidden="true">
-      {Array.from({ length: 9 }, (_, index) => (
-        <i key={index} style={{ "--pixel": index } as CSSProperties} />
+      {Array.from({ length: 4 }, (_, index) => (
+        <i
+          key={index}
+          style={
+            {
+              "--pixel": index,
+              "--pixel-x": [0, 4, 8, 4][index],
+              "--pixel-y": [4, 0, 4, 8][index],
+            } as CSSProperties
+          }
+        />
       ))}
     </span>
   );

@@ -1,0 +1,25 @@
+{
+  "repositories": [
+    {
+      "repository": "ibelick/motion-primitives",
+      "url": "https://github.com/ibelick/motion-primitives",
+      "stars": 6657,
+      "retrieved_date": "2026-10-15",
+      "meaning": "Public adoption snapshot, not a quality/accessibility/performance review"
+    },
+    {
+      "repository": "magicuidesign/magicui",
+      "url": "https://github.com/magicuidesign/magicui",
+      "stars": 22672,
+      "retrieved_date": "2026-10-15",
+      "meaning": "Public adoption snapshot, not a quality/accessibility/performance review"
+    },
+    {
+      "repository": "uiverse-io/galaxy",
+      "url": "https://github.com/uiverse-io/galaxy",
+      "stars": 13523,
+      "retrieved_date": "2026-10-15",
+      "meaning": "Public adoption snapshot, not a quality/accessibility/performance review"
+    }
+  ]
+}

@@ -9,7 +9,9 @@ import {
 } from "react";
 import { createRoot } from "react-dom/client";
 import { AnimatePresence, MotionConfig } from "motion/react";
-import Markdown from "react-markdown";
+import { MessageMarkdown } from "./MessageMarkdown";
+import { applyCancellationResult, applyRetryResult } from "./lib/run-receipts";
+import { RecordingSession } from "./recording-session";
 import AiStatus from "./components/ai-status";
 import WebSearch from "./components/web-search";
 import FolderImport from "./components/folder-component";
@@ -33,7 +35,19 @@ import {
 import { Buddy } from "./Buddy";
 import { ReducedMotionContext } from "./lib/reduced-motion";
 import { Recorder, waveform } from "./recording";
-import { sourceCitations } from "./lib/citations";
+import { activityStatus } from "./lib/activity-status";
+import { folderTree } from "./lib/folder-tree";
+import {
+  useDraftAttachments,
+  type AttachmentToken,
+} from "./lib/use-draft-attachments";
+import {
+  readSelection,
+  sameSelection,
+  samePrompt,
+  type DraftSelection,
+} from "./lib/draft-selection";
+import { turnCitationSources } from "./lib/citations";
 import {
   bootstrap,
   rpc,
@@ -99,7 +113,6 @@ function App() {
   const [model, setModel] = useState("normal"),
     [effort, setEffort] = useState("off"),
     [text, setText] = useState(""),
-    [attachments, setAttachments] = useState<Attachment[]>([]),
     [search, setSearch] = useState<Search | null>(null),
     [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [panel, setPanel] = useState<string | null>(null),
@@ -130,9 +143,11 @@ function App() {
     Record<string, Attachment[]>
   >({});
   const [draftReady, setDraftReady] = useState(false);
+  const [draftRetry, setDraftRetry] = useState(0);
   const [readiness, setReadiness] = useState<Readiness | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [notchWidth, setNotchWidth] = useState(210);
+  const [dismissedFailure, setDismissedFailure] = useState<string | null>(null);
   const notchContext = useRef<HTMLDivElement>(null);
   const notchLabel = useRef<HTMLElement>(null);
   const [recordLevels, setRecordLevels] = useState<number[]>([]);
@@ -156,6 +171,7 @@ function App() {
     currentSession = useRef(session),
     nextCursor = useRef(0),
     messageEnd = useRef<HTMLDivElement>(null);
+  const recordingSession = useRef(new RecordingSession(recorder.current));
   currentSession.current = session;
   const active = !!run && !terminal(run.state);
   const selectedModel = models.find((m) => m.id === model);
@@ -166,7 +182,85 @@ function App() {
     (e: unknown) => setError(e instanceof Error ? e.message : String(e)),
     [],
   );
+  const draftAttachments = useDraftAttachments(session, connected);
+  const attachments = draftAttachments.items;
+  // Scoped versions own unsent edits; React text is the current view. This also
+  // preserves a newer follow-up while an earlier submit acknowledgement arrives.
+  const promptDrafts = useRef(
+    new Map<string, { text: string; revision: number }>(),
+  );
+  const promptWrites = useRef(new Map<string, Promise<boolean>>());
+  const draftTransfer = useRef<{
+    id: string;
+    from: DraftSelection;
+    to: DraftSelection;
+  } | null>(null);
+  const mounted = useRef(true);
+  const scopeKey = (scope: string | null) => scope ?? "new";
+  function editText(
+    next: string | ((previous: string) => string),
+    owner = currentSession.current,
+  ) {
+    if (!mounted.current || currentSession.current !== owner) return;
+    const key = scopeKey(owner),
+      before = promptDrafts.current.get(key) ?? { text, revision: 0 };
+    const value = typeof next === "function" ? next(before.text) : next;
+    promptDrafts.current.set(key, {
+      text: value,
+      revision: before.revision + 1,
+    });
+    setText(value);
+  }
+  function persistPrompt(
+    owner: string | null,
+    expected: { text: string; revision: number },
+    replacement = expected.text,
+  ) {
+    const key = scopeKey(owner);
+    const perform = async () => {
+      const latest = promptDrafts.current.get(key);
+      if (!samePrompt(latest, expected)) return false;
+      if (owner)
+        await rpc("draft.write", {
+          session_id: owner,
+          text: replacement,
+          mode: "chat",
+        });
+      else localStorage.setItem("hermes:new-draft", replacement);
+      return true;
+    };
+    const previous = promptWrites.current.get(key);
+    const pending = previous ? previous.then(perform, perform) : perform();
+    promptWrites.current.set(key, pending);
+    return pending;
+  }
+  function addAttachment(item: Attachment, token: AttachmentToken) {
+    const result = draftAttachments.add(item, token);
+    if (!result)
+      throw Error(
+        "The attachment draft changed while the upload finished. Attach the file again in the intended conversation.",
+      );
+    if (result.background && mounted.current)
+      setError(
+        "Attachment saved to the previous conversation's draft. Return there to review it.",
+      );
+    return result;
+  }
   const permissions = usePermissions(session, ensureSession, report);
+  useEffect(() => {
+    const reason = recordingSession.current.reconcile(
+      session,
+      permissions.policy?.capabilities.microphone,
+    );
+    if (reason) {
+      setRecording(false);
+      setError(
+        reason === "permission"
+          ? "Recording stopped because microphone permission was revoked."
+          : "Recording cancelled when the conversation changed.",
+      );
+    }
+  }, [session, permissions.policy?.capabilities.microphone]);
   const refreshReadiness = useCallback(async () => {
     const next = await rpc<Readiness>("readiness.read");
     setReadiness(next);
@@ -229,7 +323,12 @@ function App() {
         setConnected(true);
       })
       .catch(report);
-    return () => recorder.current.cancel();
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      recordingSession.current.cancel();
+      uploadController.current?.abort();
+    };
   }, []);
   useEffect(() => {
     if (!connected) return;
@@ -271,10 +370,7 @@ function App() {
     let timer: ReturnType<typeof setTimeout>;
     const update = async () => {
       try {
-        const result = await rpc<{ actions: Action[]; pending: Action[] }>(
-          "permissions.read",
-          { session_id: session },
-        );
+        const result = await permissions.refreshPolicy(session);
         if (alive) setActionRows(result.actions ?? result.pending ?? []);
       } catch (error) {
         if (alive) report(error);
@@ -311,27 +407,37 @@ function App() {
     if (!connected) return;
     setDraftReady(false);
     let alive = true;
+    const owner = session,
+      key = scopeKey(owner);
+    const restorePrompt = (fallback: string) => {
+      if (!alive || currentSession.current !== owner) return;
+      const draft = promptDrafts.current.get(key) ?? {
+        text: fallback,
+        revision: 0,
+      };
+      promptDrafts.current.set(key, draft);
+      setText(draft.text);
+      setDraftReady(true);
+    };
     if (!session) {
       setMessages([]);
       setRun(null);
       setEvents([]);
-      setText(localStorage.getItem("hermes:new-draft") ?? "");
-      setDraftReady(true);
-      return;
+      restorePrompt(localStorage.getItem("hermes:new-draft") ?? "");
+    } else {
+      load(session)
+        .then(() =>
+          rpc<{ text: string }>("draft.read", { session_id: session }),
+        )
+        .then((draft) => restorePrompt(draft.text))
+        .catch(report);
     }
-    load(session)
-      .then(() => rpc<{ text: string }>("draft.read", { session_id: session }))
-      .then((d) => {
-        if (alive) {
-          setText(d.text);
-          setDraftReady(true);
-        }
-      })
-      .catch(report);
     return () => {
       alive = false;
+      const draft = promptDrafts.current.get(key);
+      if (draft) persistPrompt(owner, draft).catch(report);
     };
-  }, [session, connected]);
+  }, [session, connected, draftRetry]);
   useEffect(() => {
     setSelectedFile(null);
     setEditingText("");
@@ -339,12 +445,10 @@ function App() {
   }, [folder]);
   useEffect(() => {
     if (!connected || !draftReady) return;
+    const draft = promptDrafts.current.get(scopeKey(session));
+    if (!draft) return;
     const id = setTimeout(() => {
-      if (session)
-        rpc("draft.write", { session_id: session, text, mode: "chat" }).catch(
-          report,
-        );
-      else localStorage.setItem("hermes:new-draft", text);
+      persistPrompt(session, draft).catch(report);
     }, 400);
     return () => clearTimeout(id);
   }, [text, session, draftReady, connected]);
@@ -462,23 +566,17 @@ function App() {
         ),
       1000,
     );
-    const hidden = () => {
-      if (document.hidden) {
-        recorder.current.cancel();
-        setRecording(false);
-        setError("Recording cancelled when the app became hidden.");
-      }
-    };
-    document.addEventListener("visibilitychange", hidden);
-    return () => {
-      clearInterval(tick);
-      document.removeEventListener("visibilitychange", hidden);
-    };
+    return () => clearInterval(tick);
   }, [recording]);
   useEffect(() => {
     const pause = () => {
-      if (document.hidden)
+      if (document.hidden) {
         document.querySelectorAll("audio").forEach((a) => a.pause());
+        if (recordingSession.current.cancel()) {
+          setRecording(false);
+          setError("Recording cancelled when the app became hidden.");
+        }
+      }
       document.documentElement.dataset.visibility = document.hidden
         ? "hidden"
         : "visible";
@@ -493,10 +591,16 @@ function App() {
     [voice],
   );
   async function newConversation() {
+    draftAttachments.resetNew();
+    const old = promptDrafts.current.get("new");
+    promptDrafts.current.set("new", {
+      text: "",
+      revision: (old?.revision ?? 0) + 1,
+    });
+    localStorage.removeItem("hermes:new-draft");
     setSession(null);
     setMessages([]);
     setRun(null);
-    setAttachments([]);
     setSearch(null);
     setMobile(false);
     setText("");
@@ -504,186 +608,331 @@ function App() {
   }
   async function ensureSession(): Promise<string> {
     if (currentSession.current) return currentSession.current;
-    if (!sessionCreation.current)
+    if (!sessionCreation.current) {
+      const origin = draftAttachments.capture();
       sessionCreation.current = (async () => {
         const created = await rpc<Session>("session.create", {
           project_id: folder,
           arm: model,
         });
+        if (!draftAttachments.owns(origin))
+          throw Error(
+            "Conversation changed during creation. Return to the intended draft before continuing.",
+          );
+        const copied = promptDrafts.current.get("new") ?? { text, revision: 0 };
         await rpc("draft.write", {
           session_id: created.id,
-          text,
+          text: copied.text,
           mode: "chat",
         });
+        if (!draftAttachments.owns(origin))
+          throw Error(
+            "Conversation changed during creation. The new empty conversation was retained.",
+          );
+        const transfer = draftAttachments.migrateNew(created.id);
+        draftTransfer.current = { id: created.id, ...transfer };
+        // Preserve edits made while the create/write requests were in flight.
+        const latest = promptDrafts.current.get("new") ?? copied;
+        promptDrafts.current.set(created.id, latest);
+        promptDrafts.current.set("new", {
+          text: "",
+          revision: latest.revision + 1,
+        });
+        localStorage.removeItem("hermes:new-draft");
         currentSession.current = created.id;
         setSession(created.id);
         return created.id;
       })().finally(() => {
         sessionCreation.current = null;
       });
+    }
     return sessionCreation.current;
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (sending.current || busy || active || !text.trim() || !selectedModel)
+    if (
+      sending.current ||
+      busy ||
+      active ||
+      !draftReady ||
+      !draftAttachments.ready ||
+      draftAttachments.issues.length ||
+      !text.trim() ||
+      !selectedModel
+    )
       return;
     sending.current = true;
     setBusy(true);
     setError("");
     try {
+      const selection = draftAttachments.capture();
+      const prompt = text,
+        selected = model,
+        reasoning = effort,
+        query = searchQuery;
+      const promptVersion = promptDrafts.current.get(
+        scopeKey(selection.scope),
+      ) ?? { text: prompt, revision: 0 };
+      await draftAttachments.verify(selection.selection.ids);
       const ready = await refreshReadiness();
-      if (ready.state !== "ready" || ready.models?.[model]?.available === false)
+      if (
+        ready.state !== "ready" ||
+        ready.models?.[selected]?.available === false
+      )
         throw Error(
-          ready.models?.[model]?.detail ||
+          ready.models?.[selected]?.detail ||
             ready.detail ||
             "Local model connection needs repair. Your draft is preserved.",
         );
-      const id = await ensureSession();
+      if (selection.scope === null && !draftAttachments.owns(selection))
+        throw Error(
+          "Conversation changed before Send. Your draft is preserved; send again in the intended conversation.",
+        );
+      const id = selection.scope ?? (await ensureSession());
+      let submittedSelection = selection;
+      if (selection.scope === null) {
+        const transfer = draftTransfer.current;
+        submittedSelection = {
+          ...selection,
+          scope: id,
+          selection:
+            transfer?.id === id &&
+            sameSelection(transfer.from, selection.selection)
+              ? transfer.to
+              : { ...selection.selection, revision: "" },
+        };
+      }
       const pendingKey = "hermes:pending:" + id;
       let pending: Record<string, unknown> | null = null;
       try {
         pending = JSON.parse(localStorage.getItem(pendingKey) || "null");
-      } catch {}
+      } catch {
+        /* An invalid local request is never reused. */
+      }
       if (
         pending &&
-        (pending.prompt !== text ||
-          pending.model_id !== model ||
-          pending.reasoning !== effort ||
+        (pending.prompt !== prompt ||
+          pending.model_id !== selected ||
+          pending.reasoning !== reasoning ||
           JSON.stringify(pending.attachments) !==
-            JSON.stringify(attachments.map((a) => a.id)) ||
-          pending.search_query !== searchQuery)
+            JSON.stringify(selection.selection.ids) ||
+          pending.search_query !== query)
       )
         pending = null;
       const fields = pending ?? {
         session_id: id,
         request_id: crypto.randomUUID().replaceAll("-", ""),
-        model_id: model,
-        prompt: text,
-        reasoning: effort,
-        attachments: attachments.map((a) => a.id),
-        search_query: searchQuery,
+        model_id: selected,
+        prompt,
+        reasoning,
+        attachments: selection.selection.ids,
+        search_query: query,
       };
       localStorage.setItem(pendingKey, JSON.stringify(fields));
       await rpc<Run>("chat.submit", fields);
       localStorage.removeItem(pendingKey);
-      await rpc("draft.write", { session_id: id, text: "", mode: "chat" });
-      if (currentSession.current === id) {
-        localStorage.removeItem("hermes:new-draft");
-        setText("");
-        setAttachments([]);
-        setSearch(null);
-        setSearchQuery(null);
+      const latest = promptDrafts.current.get(id);
+      if (latest && samePrompt(latest, promptVersion)) {
+        const clearedSelection =
+          draftAttachments.clearAccepted(submittedSelection);
+        if (clearedSelection) {
+          const clearedPrompt = await persistPrompt(id, latest, "");
+          const after = promptDrafts.current.get(id);
+          if (
+            clearedPrompt &&
+            samePrompt(after, latest) &&
+            sameSelection(readSelection(localStorage, id), clearedSelection)
+          ) {
+            promptDrafts.current.set(id, {
+              text: "",
+              revision: latest.revision + 1,
+            });
+            if (currentSession.current === id) {
+              setText("");
+              setSearch(null);
+              setSearchQuery(null);
+            }
+          } else if (after) await persistPrompt(id, after);
+        }
       }
       await load(id);
       await refresh();
-    } catch (e) {
-      report(e);
+    } catch (error) {
+      if (mounted.current) report(error);
     } finally {
       sending.current = false;
-      setBusy(false);
+      if (mounted.current) setBusy(false);
+    }
+  }
+  async function cancelResponse() {
+    const requested = run;
+    if (!requested || terminal(requested.state)) return;
+    try {
+      const receipt = await rpc<Run>("chat.cancel", { run_id: requested.id });
+      setRun((current) => applyCancellationResult(current, requested, receipt));
+    } catch (error) {
+      report(error);
     }
   }
   async function addFiles(files: FileList | null) {
-    if (!files) return;
+    if (!files || uploadController.current || busy) return;
+    const controller = new AbortController();
     setMenu(null);
     setBusy(true);
     setError("");
-    uploadController.current = new AbortController();
+    uploadController.current = controller;
     try {
-      if (attachments.length + files.length > 8)
+      let token = draftAttachments.capture();
+      if (token.selection.ids.length + files.length > 8)
         throw Error("At most eight attachments per turn.");
       for (const file of Array.from(files)) {
-        if (attachments.length >= 8)
-          throw Error("At most eight attachments per turn.");
         let item = await upload(
           /\.(py|cpp|c|h|md|json|txt)$/i.test(file.name)
             ? new Blob([file], { type: "text/plain" })
             : file,
           file.name,
-          uploadController.current.signal,
+          controller.signal,
         );
         if (item.mime.startsWith("audio/")) {
           if (!caps?.transcription)
             throw Error(
-              "Audio stored, but local transcription is unavailable.",
+              "Audio stored, but local transcription is unavailable. Attach it again when transcription is available.",
             );
           item = await rpc<Attachment>("attachment.transcribe", {
             id: item.id,
           });
-          setText(
-            (t) => (t ? t + "\n" : "") + (item.metadata.transcript ?? ""),
-          );
         }
-        setAttachments((a) => [...a, item]);
+        const added = addAttachment(item, token);
+        token = added.token;
+        if (!added.background && item.metadata.transcript)
+          editText(
+            (previous) =>
+              (previous ? previous + "\n" : "") + item.metadata.transcript,
+            token.scope,
+          );
       }
-    } catch (e) {
-      report(e);
+    } catch (error) {
+      if (mounted.current) report(error);
     } finally {
-      setBusy(false);
-      uploadController.current = null;
+      if (uploadController.current === controller)
+        uploadController.current = null;
+      if (mounted.current) setBusy(false);
       if (fileInput.current) fileInput.current.value = "";
     }
   }
   async function startRecording() {
     setMenu(null);
     setError("");
+    let owner: string | null = null,
+      authorized = false;
     try {
-      const id = await ensureSession();
-      try {
-        await rpc("recording.authorize", { session_id: id });
-      } catch (error) {
-        setPanel("Settings");
-        throw error;
-      }
-      await recorder.current.start(
-        () => {
-          setRecording(false);
-          setError(
-            "Recording stopped at the two-minute limit; microphone released.",
-          );
+      owner = await ensureSession();
+      const id = owner;
+      await recordingSession.current.start(
+        id,
+        async () => {
+          await rpc("recording.authorize", { session_id: id });
+          authorized = true;
         },
-        setRecordLevels,
-        () => {
-          setRecording(false);
-          setError(
-            "Microphone disconnected or recording failed; capture released. Reconnect the device and start again.",
-          );
-        },
+        () =>
+          mounted.current && !document.hidden && currentSession.current === id,
+        [
+          () => {
+            recordingSession.current.cancel();
+            setRecording(false);
+            setError(
+              "Recording stopped at the two-minute limit; microphone released.",
+            );
+          },
+          setRecordLevels,
+          () => {
+            recordingSession.current.cancel();
+            setRecording(false);
+            setError(
+              "Microphone disconnected or recording failed; capture released. Reconnect the device and start again.",
+            );
+          },
+        ],
       );
       setRecording(true);
       setRecordSeconds(0);
       setRecordLevels([]);
-    } catch (e) {
-      recorder.current.cancel();
-      report(e);
+    } catch (error) {
+      if (
+        !mounted.current ||
+        (error instanceof DOMException && error.name === "AbortError")
+      )
+        return;
+      if (!authorized && owner && currentSession.current === owner) {
+        setPanel("Settings");
+        if (
+          error instanceof Error &&
+          error.message === "permission_required_microphone"
+        ) {
+          report(
+            new Error(
+              "Microphone is off for this conversation. Enable it in Settings before recording.",
+              { cause: error },
+            ),
+          );
+          return;
+        }
+      }
+      report(error);
     }
   }
   async function stopRecording() {
     try {
-      const blob = await recorder.current.stop();
-      setRecording(false);
-      const measured = await waveform(blob);
+      const { blob, measured } = await recordingSession.current.stop(
+        async (blob) => {
+          setRecording(false);
+          return { blob, measured: await waveform(blob) };
+        },
+      );
       setVoice({ blob, ...measured, url: URL.createObjectURL(blob) });
-    } catch (e) {
+    } catch (error) {
+      if (
+        !mounted.current ||
+        (error instanceof DOMException && error.name === "AbortError")
+      )
+        return;
       setRecording(false);
-      report(e);
+      report(error);
     }
   }
   async function useVoice() {
-    if (!voice) return;
+    if (!voice || busy || uploadController.current) return;
+    const captured = voice,
+      controller = new AbortController();
+    uploadController.current = controller;
     setBusy(true);
     try {
-      const item = await upload(voice.blob, "Voice note.webm");
+      const token = draftAttachments.capture();
+      if (token.selection.ids.length >= 8)
+        throw Error("At most eight attachments per turn.");
+      const item = await upload(
+        captured.blob,
+        "Voice note.webm",
+        controller.signal,
+      );
       const transcribed = await rpc<Attachment>("attachment.transcribe", {
         id: item.id,
       });
-      setAttachments((a) => [...a, transcribed]);
-      setText(transcribed.metadata.transcript ?? "");
-      setVoice(null);
-    } catch (e) {
-      report(e);
+      const added = addAttachment(transcribed, token);
+      if (!added.background && transcribed.metadata.transcript)
+        editText(
+          (previous) =>
+            (previous ? previous + "\n" : "") + transcribed.metadata.transcript,
+          token.scope,
+        );
+      if (mounted.current)
+        setVoice((current) => (current === captured ? null : current));
+    } catch (error) {
+      if (mounted.current) report(error);
     } finally {
-      setBusy(false);
+      if (uploadController.current === controller)
+        uploadController.current = null;
+      if (mounted.current) setBusy(false);
     }
   }
   async function newFolder() {
@@ -772,16 +1021,27 @@ function App() {
     await requestAction({ type: "workspace.read", path });
   }
   async function attachLibrary() {
-    if (!selectedFile) return;
+    if (!selectedFile || busy || uploadController.current) return;
+    const controller = new AbortController();
+    uploadController.current = controller;
+    setBusy(true);
     try {
+      const token = draftAttachments.capture();
+      if (token.selection.ids.length >= 8)
+        throw Error("At most eight attachments per turn.");
       const item = await upload(
         new Blob([selectedFile.text], { type: "text/plain" }),
         selectedFile.path.split("/").at(-1)!,
+        controller.signal,
       );
-      setAttachments((a) => [...a, item]);
-      setPanel(null);
-    } catch (e) {
-      report(e);
+      const added = addAttachment(item, token);
+      if (!added.background) setPanel(null);
+    } catch (error) {
+      if (mounted.current) report(error);
+    } finally {
+      if (uploadController.current === controller)
+        uploadController.current = null;
+      if (mounted.current) setBusy(false);
     }
   }
   async function searchWeb() {
@@ -848,11 +1108,12 @@ function App() {
         const result = row.result as Search;
         setSearch(result);
         setSearchQuery(null);
-        if (result.attachment)
-          setAttachments((old) =>
-            old.some((item) => item.id === result.attachment!.id)
-              ? old
-              : [...old, result.attachment!],
+        if (
+          result.attachment &&
+          !draftAttachments.addForScope(result.attachment, owner)
+        )
+          throw Error(
+            "Search finished in a different conversation. Open its search result there to attach it.",
           );
       }
       return row;
@@ -895,9 +1156,10 @@ function App() {
     if (folder && !current.folders.some((f) => f.id === folder))
       setFolder(null);
   }
+  const filteredFolders = folderTree(folders, query);
   function folderRow(row: Folder, depth = 0): React.ReactNode {
-    const open = expanded.has(row.id),
-      children = folders.filter((f) => f.parent === row.id);
+    const open = !!query.trim() || expanded.has(row.id),
+      children = filteredFolders.children.get(row.id) ?? [];
     return (
       <div
         key={row.id}
@@ -916,7 +1178,17 @@ function App() {
         >
           <button
             className="branch-toggle"
-            aria-label={(open ? "Collapse " : "Expand ") + row.label}
+            disabled={!!query.trim()}
+            title={
+              query.trim()
+                ? "Matching branches stay expanded while filtering."
+                : undefined
+            }
+            aria-label={
+              query.trim()
+                ? "Filtered branch: " + row.label
+                : (open ? "Collapse " : "Expand ") + row.label
+            }
             onClick={() =>
               setExpanded((s) => {
                 const n = new Set(s);
@@ -939,6 +1211,7 @@ function App() {
           </button>
           <button
             className="folder-select"
+            title={row.label}
             onClick={() => {
               setFolder(row.id);
               setSession(null);
@@ -973,17 +1246,25 @@ function App() {
       (query || folder === null ? true : s.project === folder) &&
       s.title.toLowerCase().includes(query.toLowerCase()),
   );
-  const lastEvent = events.filter((e) => e.type !== "delta").at(-1);
-  const label =
-    events.filter((e) => e.type === "state").at(-1)?.label ??
-    run?.state ??
-    "Working";
+  const activity = activityStatus(
+    run,
+    events,
+    actionRows,
+    models.find((item) => item.id === run?.model)?.label ??
+      selectedModel?.label ??
+      "Local model",
+    elapsed,
+  );
+  const label = activity.runLabel;
+  const showActivity =
+    activity.visible &&
+    !(activity.state === "failed" && dismissedFailure === run?.id);
   useLayoutEffect(() => {
-    if (!active) return;
+    if (!showActivity) return;
     const context = notchContext.current?.scrollWidth ?? 0;
     const status = (notchLabel.current?.scrollWidth ?? 0) + 19;
     setNotchWidth(Math.max(210, Math.min(340, Math.max(context, status) + 47)));
-  }, [active, label, lastEvent?.name, selectedModel?.label, elapsed]);
+  }, [showActivity, activity.label, activity.context]);
   const tasks = events
     .filter((e) => e.type === "file" || e.type === "search")
     .map((e) => ({
@@ -1057,12 +1338,7 @@ function App() {
                 >
                   All conversations
                 </button>
-                {(query
-                  ? folders.filter((f) =>
-                      f.label.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : folders.filter((f) => !f.parent)
-                ).map((f) => folderRow(f))}
+                {filteredFolders.roots.map((f) => folderRow(f))}
               </div>
               <div className="rail-heading">
                 <h2>Conversations</h2>
@@ -1077,6 +1353,7 @@ function App() {
                     }
                   >
                     <button
+                      title={s.title}
                       onClick={() => {
                         setSession(s.id);
                         setFolder(s.project);
@@ -1182,37 +1459,35 @@ function App() {
                   </button>
                 </div>
               </header>
-              {active && (
+              {showActivity && (
                 <div
                   className="activity-notch"
+                  data-state={activity.state}
                   role="status"
                   style={{ width: notchWidth }}
                 >
                   <div className="notch-meta" ref={notchContext}>
-                    {lastEvent?.type === "file"
-                      ? lastEvent.name + " · " + lastEvent.lines + " lines"
-                      : (selectedModel?.label ?? "Local model")}
+                    {activity.context}
                   </div>
                   <div className="notch-working">
-                    <WorkingIndicator state={run?.state ?? "queued"} />
-                    <strong ref={notchLabel}>
-                      {label}
-                      {run?.state === "admitting" && model === "abliterated"
-                        ? ` · ${elapsed}s`
-                        : ""}
-                    </strong>
+                    <WorkingIndicator state={activity.state} />
+                    <strong ref={notchLabel}>{activity.label}</strong>
                   </div>
-                  <button
-                    aria-label="Cancel current response"
-                    onClick={() =>
-                      run &&
-                      rpc("chat.cancel", { run_id: run.id })
-                        .then(() => setRun({ ...run, state: "cancelling" }))
-                        .catch(report)
-                    }
-                  >
-                    ×
-                  </button>
+                  {activity.cancellable ? (
+                    <button
+                      aria-label="Cancel current response"
+                      onClick={cancelResponse}
+                    >
+                      ×
+                    </button>
+                  ) : activity.state === "failed" ? (
+                    <button
+                      aria-label="Dismiss response status"
+                      onClick={() => setDismissedFailure(run?.id ?? null)}
+                    >
+                      ×
+                    </button>
+                  ) : null}
                 </div>
               )}
               <main className="conversation" aria-label="Conversation">
@@ -1274,12 +1549,7 @@ function App() {
                   )}
                   {!messages.length && !folder && (
                     <div className="empty-state">
-                      <span className="empty-mark">H</span>
-                      <h1>
-                        {folder
-                          ? folders.find((f) => f.id === folder)?.label
-                          : "What are we working on?"}
-                      </h1>
+                      <h1>New conversation</h1>
                     </div>
                   )}
                   {messages.map((m, i) => (
@@ -1302,26 +1572,18 @@ function App() {
                         />
                       )}
                       <div className="message-text">
-                        <Markdown
-                          skipHtml
-                          remarkPlugins={[
-                            sourceCitations(
-                              m.role === "assistant"
-                                ? ((m.job
-                                    ? historyAttachments[m.job]?.find(
-                                        (a) => a.metadata.search,
-                                      )?.metadata.search?.sources
-                                    : undefined) ??
-                                    (m.job === run?.id
-                                      ? search?.sources
-                                      : undefined) ??
-                                    [])
-                                : [],
-                            ),
-                          ]}
-                        >
-                          {m.text}
-                        </Markdown>
+                        <MessageMarkdown
+                          text={m.text}
+                          sources={
+                            m.role === "assistant"
+                              ? turnCitationSources(
+                                  m.job ? historyAttachments[m.job] : undefined,
+                                  events,
+                                  m.job,
+                                )
+                              : []
+                          }
+                        />
                       </div>
                       {m.role === "user" &&
                         m.job &&
@@ -1370,7 +1632,10 @@ function App() {
                               const retried = await rpc<Run>("chat.retry", {
                                 run_id: run.id,
                               });
-                              setRun(retried);
+                              if (currentSession.current === run.session)
+                                setRun((current) =>
+                                  applyRetryResult(current, run, retried),
+                                );
                               await load(run.session);
                             } catch (error) {
                               report(error);
@@ -1474,6 +1739,37 @@ function App() {
                     defaultOpen={false}
                   />
                 )}
+                {connected && !draftReady && (
+                  <div className="readiness-banner" role="status">
+                    <span>Restoring this conversation's draft…</span>
+                    <button
+                      type="button"
+                      onClick={() => setDraftRetry((value) => value + 1)}
+                    >
+                      Retry draft lookup
+                    </button>
+                  </div>
+                )}
+                {draftAttachments.issues.length > 0 && (
+                  <div className="attachment-issues" role="alert">
+                    {draftAttachments.issues.map((issue) => (
+                      <div key={issue.id ?? "invalid"}>
+                        <span>{issue.message}</span>
+                        <button
+                          type="button"
+                          onClick={() => draftAttachments.remove(issue.id)}
+                        >
+                          {issue.id
+                            ? "Remove unavailable attachment"
+                            : "Clear saved selection"}
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={draftAttachments.retry}>
+                      Retry attachment lookup
+                    </button>
+                  </div>
+                )}
                 <form className="composer" id="composer" onSubmit={submit}>
                   {searchQuery && (
                     <div className="search-intent">
@@ -1507,11 +1803,7 @@ function App() {
                           <button
                             type="button"
                             aria-label={"Remove " + a.name}
-                            onClick={() =>
-                              setAttachments((old) =>
-                                old.filter((x) => x.id !== a.id),
-                              )
-                            }
+                            onClick={() => draftAttachments.remove(a.id)}
                           >
                             ×
                           </button>
@@ -1534,7 +1826,8 @@ function App() {
                     maxLength={12000}
                     value={text}
                     placeholder="Message Hermes…"
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => editText(e.target.value)}
+                    disabled={!connected || !draftReady}
                     onKeyDown={(e) => {
                       if (
                         e.key === "Enter" &&
@@ -1611,6 +1904,12 @@ function App() {
                       </label>
                       <select
                         id="model-picker"
+                        title={
+                          selectedModel
+                            ? `${selectedModel.label} · ${selectedModel.state.replaceAll("_", " ")}`
+                            : "No verified local models"
+                        }
+                        aria-describedby="model-readiness"
                         value={selectedModel ? model : ""}
                         onChange={(e) => setModel(e.target.value)}
                         disabled={active}
@@ -1625,10 +1924,19 @@ function App() {
                         )}
                         {models.map((m) => (
                           <option key={m.id} value={m.id}>
-                            {m.label} · {m.state.replaceAll("_", " ")}
+                            {m.label}
                           </option>
                         ))}
                       </select>
+                      <span
+                        id="model-readiness"
+                        className="sr-only"
+                        aria-live="polite"
+                      >
+                        {selectedModel
+                          ? selectedModel.state.replaceAll("_", " ")
+                          : "No verified local models"}
+                      </span>
                       <div data-menu className="menu-anchor">
                         <button
                           type="button"
@@ -1669,7 +1977,10 @@ function App() {
                         disabled={busy || active || !caps?.recording}
                         onClick={startRecording}
                       >
-                        ♩
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <rect x="9" y="3" width="6" height="12" rx="3" />
+                          <path d="M6 11v1a6 6 0 0 0 12 0v-1M12 18v3M9 21h6" />
+                        </svg>
                       </button>
                       {active ? (
                         <button
@@ -1678,13 +1989,7 @@ function App() {
                           id="cancel-response"
                           aria-label="Cancel response"
                           disabled={run.state === "cancelling"}
-                          onClick={() =>
-                            rpc("chat.cancel", { run_id: run.id })
-                              .then(() =>
-                                setRun({ ...run, state: "cancelling" }),
-                              )
-                              .catch(report)
-                          }
+                          onClick={cancelResponse}
                         >
                           ■
                         </button>
@@ -1696,6 +2001,9 @@ function App() {
                           aria-label="Send message"
                           disabled={
                             !connected ||
+                            !draftReady ||
+                            !draftAttachments.ready ||
+                            draftAttachments.issues.length > 0 ||
                             busy ||
                             !text.trim() ||
                             !selectedModel ||
@@ -1718,32 +2026,37 @@ function App() {
                 <Panel key={panel} title={panel} close={() => setPanel(null)}>
                   {panel === "Settings" ? (
                     <>
-                      <label className="setting-line">
-                        Less motion
-                        <input
-                          type="checkbox"
-                          checked={reduced}
-                          onChange={(e) => setReduced(e.target.checked)}
-                        />
-                      </label>
-                      <label className="setting-line">
-                        Click volume <output>{volume}%</output>
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          value={volume}
-                          onChange={(e) => {
-                            const v = +e.target.value;
-                            setVolume(v);
-                            localStorage.setItem(
-                              "hermes-ui:interface-volume",
-                              String(v),
-                            );
-                            audio.current?.setVolume(v / 100);
-                          }}
-                        />
-                      </label>
+                      <section
+                        className="settings-section"
+                        aria-label="Interface preferences"
+                      >
+                        <label className="setting-line">
+                          Less motion
+                          <input
+                            type="checkbox"
+                            checked={reduced}
+                            onChange={(e) => setReduced(e.target.checked)}
+                          />
+                        </label>
+                        <label className="setting-line">
+                          Click volume <output>{volume}%</output>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={volume}
+                            onChange={(e) => {
+                              const v = +e.target.value;
+                              setVolume(v);
+                              localStorage.setItem(
+                                "hermes-ui:interface-volume",
+                                String(v),
+                              );
+                              audio.current?.setVolume(v / 100);
+                            }}
+                          />
+                        </label>
+                      </section>
                       <PermissionSettings
                         controller={permissions}
                         workspace={
@@ -1751,30 +2064,33 @@ function App() {
                           "No project selected"
                         }
                       />
-                      <h3>Local models</h3>
-                      {models.map((m) => (
-                        <p key={m.id}>
-                          <strong>{m.label}</strong>
-                          <br />
-                          <small>
-                            {m.state.replaceAll("_", " ")} ·{" "}
-                            {m.sha256.slice(0, 16)}…
-                          </small>
+                      <details className="settings-disclosure">
+                        <summary>Local models</summary>
+                        {models.map((m) => (
+                          <p key={m.id}>
+                            <strong>{m.label}</strong>
+                            <br />
+                            <small>
+                              {m.state.replaceAll("_", " ")} ·{" "}
+                              {m.sha256.slice(0, 16)}…
+                            </small>
+                          </p>
+                        ))}
+                        {readiness && readiness.state !== "ready" && (
+                          <p className="run-error">{readiness.detail}</p>
+                        )}
+                      </details>
+                      <details className="settings-disclosure">
+                        <summary>Capabilities</summary>
+                        <p>
+                          Text conversations. Images are preview-only. Voice
+                          transcription:{" "}
+                          {caps?.transcription ? "local CPU" : "not installed"}.
+                          Search: Wikipedia.
                         </p>
-                      ))}
-                      {readiness && readiness.state !== "ready" && (
-                        <p className="run-error">{readiness.detail}</p>
-                      )}
-                      <h3>Capabilities</h3>
-                      <p>
-                        Text conversations. Images are preview-only. Voice
-                        transcription:{" "}
-                        {caps?.transcription ? "local CPU" : "not installed"}.
-                        Search: Wikipedia.
-                      </p>
-                      <h3>About</h3>
-                      <p>Hermes × your local model.</p>
+                      </details>
                       <a
+                        className="settings-credit"
                         href="https://www.rareui.com"
                         target="_blank"
                         rel="noreferrer"
@@ -1791,7 +2107,7 @@ function App() {
                           value={formValue}
                           onChange={(event) => setFormValue(event.target.value)}
                           required
-                          maxLength={120}
+                          maxLength={80}
                         />
                       </label>
                       <button className="primary-button" type="submit">
@@ -1804,7 +2120,7 @@ function App() {
                       onSubmit={(event) => {
                         event.preventDefault();
                         if (!formValue.trim()) return;
-                        if (!text.trim()) setText(formValue.trim());
+                        if (!text.trim()) editText(formValue.trim());
                         setPanel(null);
                         requestAction({
                           type: "search.wikipedia",
@@ -2070,7 +2386,7 @@ function App() {
                           <input
                             value={formValue}
                             required
-                            maxLength={120}
+                            maxLength={80}
                             onChange={(event) =>
                               setFormValue(event.target.value)
                             }
@@ -2205,7 +2521,7 @@ function App() {
               <Panel
                 title={recording ? "Recording" : "Voice note"}
                 close={() => {
-                  recorder.current.cancel();
+                  recordingSession.current.cancel();
                   setRecording(false);
                   setVoice(null);
                 }}
@@ -2238,7 +2554,7 @@ function App() {
                     <button onClick={stopRecording}>Stop recording</button>
                     <button
                       onClick={() => {
-                        recorder.current.cancel();
+                        recordingSession.current.cancel();
                         setRecording(false);
                       }}
                     >

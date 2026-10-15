@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.production_pin import ProductionPin
 from workspace.capture import Recording, NativeWindowRecording
 from workspace import launcher
+from scripts.settled_overlay import settled_overlay
 
 TOOLBAR = (('#files-toggle', 'Files'), ('#diagnostics', 'Details'), ('#settings-toggle', 'Settings'))
 VIEWPORTS = ((1280, 800), (1440, 900), (1920, 1080), (390, 844))
@@ -199,9 +200,10 @@ def shot(browser, output, name, records, selector=None):
         clip['scale'] = 1
     # A rest-state still waits only the finite overlay entry animation. Motion
     # elsewhere continues; this never freezes or fabricates a component state.
-    browser.evaluate("Promise.all([...document.querySelectorAll('dialog[open]')].flatMap(dialog=>dialog.getAnimations().filter(animation=>Number.isFinite(animation.effect?.getComputedTiming().endTime)).map(animation=>animation.finished.catch(()=>null))))")
+    settled = settled_overlay(browser)
+    check(settled['status'] in ('settled', 'no_overlay'), 'capture_overlay_not_observably_settled')
     browser.capture(path, clip)
-    records.append({'file': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+    records.append({'file': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'overlay_guard': settled,
                     'surface': selector or 'full browser viewport', 'theme': current_theme(browser),
                     'viewport': browser.evaluate('({width:innerWidth,height:innerHeight,dpr:devicePixelRatio,zoom:visualViewport.scale})')})
 
@@ -472,21 +474,20 @@ def main():
             check(bool(re.fullmatch(r'[0-9a-f]{32}', args.test_session_id)), 'invalid_test_session_id')
             sessions = rpc(browser, 'session.list')
             selected = next(row for row in sessions if row['id'] == args.test_session_id)
-            check(selected['title'].startswith(args.test_prefix), 'capture_session_not_marked_as_test')
+            check(args.test_prefix in selected['title'], 'capture_session_not_marked_as_test')
             folders = rpc(browser, 'workspace.list')
             if selected['project']:
-                check(next(row for row in folders if row['id'] == selected['project'])['label'].startswith(args.test_prefix), 'capture_project_not_marked_as_test')
+                check(args.test_prefix in next(row for row in folders if row['id'] == selected['project'])['label'], 'capture_project_not_marked_as_test')
             view = {**initial_view, 'session_id': selected['id'], 'project_id': selected['project'], 'arm': selected['arm']}
             rpc(browser, 'view.write', {'state': view})
-            browser.call('Page.reload')
-            browser.wait("document.getElementById('connection')?.textContent==='Connected'")
+            browser.reload_ready()
             prepare(browser)
         else:
             browser.click('.all-conversations')
             browser.click('#new-session')
             browser.wait("!document.querySelector('.message')&&document.querySelector('#prompt').value===''")
         input_text(browser, '.rail-search input', args.test_prefix)
-        browser.wait("[...document.querySelectorAll('.session-row>button:first-child,.folder-select>span')].every(e=>e.textContent.startsWith(" + json.dumps(args.test_prefix) + "))", timeout=3)
+        browser.wait("[...document.querySelectorAll('.session-row>button:first-child,.folder-select>span')].every(e=>e.textContent.includes(" + json.dumps(args.test_prefix) + "))", timeout=3)
         report['gaps'].append('Live inference/status/search/voice/task states are not manufactured by this visual-only probe; see separate production action/model evidence.')
         if not browser.evaluate("!!document.querySelector('.folder-row')"):
             report['gaps'].append('Populated folder-rail comparison is not covered by this empty/test-filter state.')

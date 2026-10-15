@@ -1,0 +1,26 @@
+{
+  "sources": [
+    {
+      "repository": "https://github.com/Denoax/portfolio",
+      "path": "src/app/ThemeToggle.tsx",
+      "git_blob_sha1": "87c77286eb94076fe088bebc4bfd20931db244a4",
+      "sha256": "a1670e4c6594d30ba1d312529ae40575e4bfdfadac091db74e60146af0f318cc",
+      "bytes": 6721
+    },
+    {
+      "repository": "https://github.com/Denoax/portfolio",
+      "path": "src/styles/v18.css",
+      "git_blob_sha1": "219ea6918f2d828935a7604bc21e944c82927a23",
+      "sha256": "0ace7c4203a967481a0ce08c5370de40f2cc8c4748462d1ca88d852d64c46489",
+      "bytes": 8138
+    },
+    {
+      "repository": "https://github.com/Denoax/portfolio",
+      "path": "src/styles/theme.css",
+      "git_blob_sha1": "4680b937101dbefe4e999229b9d3b3b127265fe1",
+      "sha256": "d5022b6fb417e83206cf000936f42a353e2256c55c2b6b553c0aa013e1676780",
+      "bytes": 16982
+    }
+  ],
+  "candidate_scope": "Theme buddy only; not native chat or permissions implementation"
+}

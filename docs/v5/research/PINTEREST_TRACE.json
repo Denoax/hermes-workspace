@@ -1,0 +1,44 @@
+{
+  "scope": "Pinterest discovery traced to original sources; login limits and unresolved identity retained",
+  "pins": [
+    {
+      "id": "P01",
+      "url": "https://www.pinterest.com/pin/284430532710452399/",
+      "original_url": "https://dribbble.com/shots/18147616-Sidebar-navigation-Untitled-UI",
+      "creator": "Jordan Hughes",
+      "status": "PUBLIC_PIN_PARTIAL_LOGIN_OVERLAY_ORIGINAL_IMAGE_INSPECTED"
+    },
+    {
+      "id": "P02",
+      "url": "https://www.pinterest.com/pin/1111192908063344824/",
+      "original_url": "https://dribbble.com/shots/21673507-Task-Management-Dashboard",
+      "creator": "Awsmd",
+      "status": "SEARCH_LEAD_ORIGINAL_EXACT_SHOT_INSPECTED",
+      "note": "Same title and creator are a lead, not a verified image-equality assertion for this pin."
+    },
+    {
+      "id": "P03",
+      "url": "https://in.pinterest.com/pin/dashboard-navigation-design--218706125652214893/",
+      "original_url": "https://dribbble.com/shots/20959849-Sidebar-Navigation-for-Brainwave-AI-UI-Kit",
+      "creator": "Tran Mau Tri Tam for UI8",
+      "status": "SEARCH_LEAD_ORIGINAL_INSPECTED",
+      "note": "The older user-supplied R10 pin remains separately locked; do not assert these pins are identical."
+    },
+    {
+      "id": "P04",
+      "url": "https://www.pinterest.com/pin/542613455123519448/",
+      "original_url": "https://dribbble.com/shots/21305840-Setting-Modals-for-Brainwave-AI-UI-Kit",
+      "creator": "Tran Mau Tri Tam for UI8",
+      "status": "SEARCH_LEAD_ORIGINAL_TEXT_READ",
+      "note": "No fresh complete visual inspection of the settings-modal shot."
+    },
+    {
+      "id": "P05",
+      "url": "https://ca.pinterest.com/pin/chatting-dashboard-ui-kit--951033646302988345/",
+      "original_url": null,
+      "creator": null,
+      "status": "UNRESOLVED_DISCOVERY_ONLY",
+      "note": "Not approved as a reference or asset source."
+    }
+  ]
+}

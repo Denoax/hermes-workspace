@@ -97,7 +97,50 @@ class ProductionPin(Browser):
             self.close()
             raise
 
+    def reload_ready(self, timeout=20):
+        """Wait for a new document and hydrated input, rather than the old DOM."""
+        before = self.evaluate('performance.timeOrigin')
+        self.call('Page.reload')
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            try:
+                ready = self.evaluate('performance.timeOrigin!==' + json.dumps(before) +
+                    '&&document.getElementById("connection")?.textContent==="Connected"'
+                    '&&!!document.querySelector("#prompt")&&!document.querySelector("#prompt").disabled')
+            except RuntimeError as error:
+                # Navigation can retire the evaluation context between request
+                # and response. Other application/evaluation errors stay fatal.
+                if str(error) != 'browser_protocol_error':
+                    raise
+            else:
+                if ready:
+                    return
+            time.sleep(.025)
+        raise TimeoutError('fresh_production_document_not_hydrated')
+
+    def detach_preserving_document(self):
+        """Release observation without closing a document containing user input."""
+        self.detached = True
+        try:
+            if self.pipe:
+                self.pipe.call('Target.detachFromTarget', {'sessionId': self.session})
+        finally:
+            if self.pipe:
+                for fd in (self.pipe.read, self.pipe.write):
+                    try: os.close(fd)
+                    except OSError: pass
+                self.pipe = None
+            if self.paused:
+                try: signal.pidfd_send_signal(self.owner, signal.SIGCONT)
+                except ProcessLookupError: pass
+                self.paused = False
+            if self.owner is not None:
+                os.close(self.owner)
+                self.owner = None
+
     def close(self):
+        if getattr(self, 'detached', False):
+            return
         if self.pipe:
             try: self.pipe.call('Browser.close')
             except (OSError, RuntimeError, TimeoutError): pass

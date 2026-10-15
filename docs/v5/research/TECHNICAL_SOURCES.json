@@ -1,0 +1,121 @@
+{
+  "sources": [
+    {
+      "id": "T01",
+      "title": "Codex long-horizon tasks",
+      "url": "https://developers.openai.com/blog/run-long-horizon-tasks-with-codex",
+      "note": "Plans, milestones, validation and a living status log support long work.",
+      "source_ref": "turn84view0",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T02",
+      "title": "Using PLANS.md",
+      "url": "https://developers.openai.com/cookbook/articles/codex_exec_plans",
+      "note": "Archived recipe: useful planning convention; do not adopt its old model/API recommendations.",
+      "source_ref": "turn84view1",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T03",
+      "title": "Codex non-interactive mode",
+      "url": "https://learn.chatgpt.com/docs/non-interactive-mode",
+      "note": "JSONL events and explicit session resume are documented. Verify the installed CLI before optional automation.",
+      "source_ref": "turn84view2",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T04",
+      "title": "Prompt caching",
+      "url": "https://developers.openai.com/api/docs/guides/prompt-caching",
+      "note": "Caching is an efficiency mechanism; it is not durable task memory.",
+      "source_ref": "turn98view0",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T05",
+      "title": "Compaction",
+      "url": "https://developers.openai.com/api/docs/guides/compaction",
+      "note": "Compaction carries state into fewer tokens; finite context and recovery concerns remain.",
+      "source_ref": "turn98view1",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T06",
+      "title": "Effective harnesses for long-running agents",
+      "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+      "note": "Incremental features, progress artifacts and end-to-end verification address premature completion.",
+      "source_ref": "turn93view0",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T07",
+      "title": "Harness design for long-running application development",
+      "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+      "note": "2026 follow-up discusses reset handoffs and optimistic self-evaluation. Results are from its own setup.",
+      "source_ref": "turn93view1",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T08",
+      "title": "Ralph Wiggum",
+      "url": "https://ghuntley.com/ralph/",
+      "note": "Original loop technique. A literal endless retry loop is not our proposed controller.",
+      "source_ref": "turn93view2",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T09",
+      "title": "High-performance CSS animations",
+      "url": "https://web.dev/articles/animations-guide",
+      "note": "Use rendering-aware properties and measure actual work; no blanket FPS guarantee.",
+      "source_ref": "turn98view2",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T10",
+      "title": "Animation from interactions",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html",
+      "note": "WCAG 2.3.3 is Level AAA. Reduced-motion support remains an explicit Hermes requirement.",
+      "source_ref": "turn98view3",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T11",
+      "title": "Modal dialog pattern",
+      "url": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "note": "Review focus, keyboard dismissal and focus return; use the correct semantics for the actual control.",
+      "source_ref": "turn98view4",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T12",
+      "title": "Radix popover",
+      "url": "https://www.radix-ui.com/primitives/docs/components/popover",
+      "note": "Reference for accessible popover behavior and positioning; validate integration and dependency fit.",
+      "source_ref": "turn99view2",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    },
+    {
+      "id": "T13",
+      "title": "React Aria modal",
+      "url": "https://react-aria.adobe.com/Modal",
+      "note": "Primary semantic reference. Reuse the existing project stack before adding another component engine.",
+      "source_ref": "turn99view1",
+      "inspection": "PRIMARY_TEXT_READ",
+      "reviewed_date": "2026-10-15"
+    }
+  ]
+}

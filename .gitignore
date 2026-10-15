@@ -12,3 +12,12 @@ secret.json
 workspace/evidence/
 showcase/github/README-preview.html
 showcase/github/readme-portrait-gallery-*
+.agent/hermes-loop/runtime/
+# V5 local continuation state and private review artifacts
+node_modules/
+private-state/
+review/
+.agent/hermes-loop/state.json
+.agent/hermes-loop/PLAN.md
+.agent/hermes-loop/RESUME.md
+.agent/hermes-loop/evidence/

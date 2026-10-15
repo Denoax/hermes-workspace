@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "research_date": "2026-10-15",
+  "scope": "Selected source assessment; not an exhaustive internet census",
+  "references": [
+    {
+      "id": "S01",
+      "title": "Task Management Dashboard",
+      "creator": "Awsmd",
+      "url": "https://dribbble.com/shots/21673507-Task-Management-Dashboard",
+      "role": "Existing R11 shell authority",
+      "inspection": "VISUAL_STILL_IN_BROWSER",
+      "observed": "Frosted neutral-gray outer shell; white rounded inset rail; dark selected row; restrained circular header actions. The published shot is a static dashboard concept.",
+      "recognition": "Creator verified on original Dribbble page. No independent award or representative user score established for this shot.",
+      "reuse": "Reference geometry in original code; no license to copy the background image, branding or illustration established.",
+      "hermes": "Retain this exact shell reference. Adapt actual chat content inside it; keep new Linear advice subordinate to its visual identity.",
+      "source_refs": [
+        "turn93view5",
+        "turn92search0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S02",
+      "title": "A calmer interface for a product in motion",
+      "creator": "Charlie Aufmann and Maxime Heckel / Linear",
+      "url": "https://linear.app/now/behind-the-latest-design-refresh",
+      "role": "Hierarchy and density",
+      "inspection": "PRIMARY_TEXT_AND_PUBLISHED_BEFORE_AFTER_IN_BROWSER",
+      "observed": "Before/after examples reduce sidebar prominence, simplify icon treatment and soften separators. The article describes a consistent header system.",
+      "recognition": "Design-team primary case study; independent Reddit discussion includes praise and workflow criticism. Neither establishes universal usability.",
+      "recognition_url": "https://www.reddit.com/r/Linear/comments/1ipn0pt/i_love_the_linear_ui_in_every_way/",
+      "reuse": "Study the hierarchy and comparison method in original Hermes code; do not copy Linear branding or private app source.",
+      "hermes": "Keep conversation dominant, supporting navigation quieter and actions in stable locations.",
+      "source_refs": [
+        "turn87view6",
+        "turn109view0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S03",
+      "title": "Sidebar navigation — Untitled UI",
+      "creator": "Jordan Hughes",
+      "url": "https://dribbble.com/shots/18147616-Sidebar-navigation-Untitled-UI",
+      "role": "Navigation structure",
+      "inspection": "VISUAL_STILL_IN_BROWSER",
+      "observed": "Expanded and split sidebar examples use consistent icon/text columns, section grouping and clearly selected rows. The Pinterest pin was traced to this original.",
+      "recognition": "Named original designer verified. Likes, followers and reposts are not treated as independent quality ratings.",
+      "discovery_url": "https://www.pinterest.com/pin/284430532710452399/",
+      "reuse": "Visual study only unless a separate asset/component license is verified.",
+      "hermes": "Use as a check on hierarchy and readable collapsed/expanded states while preserving the user's R10 folder design.",
+      "source_refs": [
+        "turn93view4",
+        "turn90search1"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S04",
+      "title": "Sidebar Navigation for Brainwave",
+      "creator": "Tran Mau Tri Tam for UI8",
+      "url": "https://dribbble.com/shots/20959849-Sidebar-Navigation-for-Brainwave-AI-UI-Kit",
+      "role": "Creator-traced chat navigation",
+      "inspection": "VISUAL_STILL_IN_BROWSER",
+      "observed": "The original first slide shows full and collapsed dark chat navigation with colored outline icons, a selected row and an external tooltip.",
+      "recognition": "Original creator and UI8 attribution verified. No independent quality score established.",
+      "discovery_url": "https://in.pinterest.com/pin/dashboard-navigation-design--218706125652214893/",
+      "reuse": "Reference anatomy in original code; commercial kit/assets require their actual license. Do not copy marketing labels or unsupported features.",
+      "hermes": "Useful lineage for chat navigation. This does not resolve the exact identity of the older R10 Pinterest pin.",
+      "source_refs": [
+        "turn107view0",
+        "turn92search2"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S05",
+      "title": "Craft / Exclusion Tabs",
+      "creator": "Rauno Freiberg",
+      "url": "https://rauno.me/craft",
+      "detail_url": "https://rauno.me/craft/exclusion-tabs",
+      "role": "Interaction craft",
+      "inspection": "VISUAL_STATES_AND_TAB_INTERACTIONS_EXERCISED",
+      "observed": "The public craft index contains authored interaction studies. The tab prototype was opened and two selections exercised; no continuous timing capture was made.",
+      "recognition": "Devouring Details has an Awwwards Honorable Mention listing. That is a separate work, not an award for every prototype.",
+      "recognition_url": "https://www.awwwards.com/sites/devouring-details",
+      "reuse": "Study behavior; verify any source license before copying code. Do not reuse artwork without permission.",
+      "hermes": "Use interruption, selection continuity and bounded state changes as review criteria rather than adding every showcased effect.",
+      "source_refs": [
+        "turn88search0",
+        "turn107view5",
+        "turn102view2"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S06",
+      "title": "Train Your Judgement",
+      "creator": "Emil Kowalski",
+      "url": "https://emilkowal.ski/ui/train-your-judgement",
+      "role": "Motion review method",
+      "inspection": "PRIMARY_TEXT_AND_PAIRED_POPOVERS_EXERCISED",
+      "observed": "The page presents paired examples for popovers, interruptions, frequency of use and other choices. Both popover variants were opened in this research.",
+      "recognition": "Named practitioner's authored tutorial; no independent aggregate review score established.",
+      "reuse": "Apply the demonstrated evaluation method and independently authored implementation; do not redistribute the lesson.",
+      "hermes": "Review rapid reversal, press scale, transform origin and frequently used controls at normal speed. Do not require motion where instant feedback is better.",
+      "source_refs": [
+        "turn107view3"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S07",
+      "title": "Lusion Labs, 2023 published reference",
+      "creator": "Lusion",
+      "url": "https://labs.lusion.co/",
+      "published_image_url": "https://assets.awwwards.com/awards/sites_of_the_day/2023/05/lusion-labs-1.jpg",
+      "role": "Composition and restrained chrome",
+      "inspection": "ARCHIVAL_PUBLISHED_IMAGE_INSPECTED_LIVE_PAGE_BLANK",
+      "observed": "The archival frame uses a minimal top bar, small grid/list switch, strong typographic scale and large experiment previews. The current Labs page remained blank after one reload here.",
+      "recognition": "Awwwards Site of the Day listing and Lusion's award profile identify Labs. The live page's present motion was not verified.",
+      "recognition_url": "https://www.awwwards.com/sites/lusion-labs",
+      "reuse": "Study composition; no Lusion footage, textures, artwork or logo copied into Hermes.",
+      "hermes": "Keep supporting chrome sparse and let useful content carry visual weight. Do not import the landing-page headline scale or full-screen 3D background.",
+      "source_refs": [
+        "turn101image0",
+        "turn85search8",
+        "turn87view0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S08",
+      "title": "Lusion v3",
+      "creator": "Lusion",
+      "url": "https://www.cssdesignawards.com/woty/lusion-v3/44311/",
+      "role": "Externally reviewed craft benchmark",
+      "inspection": "PRIMARY_AWARD_RECORD_READ_CURRENT_LIVE_SITE_LOADER_STALLED",
+      "observed": "CSS Design Awards records Website of the Year 2023 and a final judge score of 9.27 for Lusion v3.",
+      "recognition": "Verified dated jury award. This is not a score for the different current 2026 homepage.",
+      "reuse": "Use as an external benchmark, not an assertion that its proprietary internals were inspected.",
+      "hermes": "A high bar for integrated craft; actual Hermes motion and GPU cost still need their own measurements.",
+      "source_refs": [
+        "turn89view1"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S09",
+      "title": "Things 3",
+      "creator": "Cultured Code",
+      "url": "https://culturedcode.com/things/",
+      "role": "Task and project clarity",
+      "inspection": "PRIMARY_PRODUCT_PAGE_AND_PARTIAL_PUBLISHED_APP_IMAGE",
+      "observed": "The product page's app imagery shows a clear task hierarchy and purposeful category icons; this research did not operate the native app.",
+      "recognition": "Things 3 appears in Apple's 2017 Design Award winners. The vendor also curates testimonials, which are not independent fresh reviews.",
+      "recognition_url": "https://www.apple.com/newsroom/2017/06/apple-design-awards-celebrate-the-best-in-innovation-and-creativity/",
+      "reuse": "Study information hierarchy; no icon pack or screenshots licensed for use in Hermes.",
+      "hermes": "Use readable task names, stable task state and uncluttered project grouping inside the required Rare UI task list.",
+      "source_refs": [
+        "turn91view4",
+        "turn105view0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S10",
+      "title": "Behind the Design: Flighty",
+      "creator": "Flighty / Ryan Jones; Apple editorial",
+      "url": "https://developer.apple.com/news/?id=970ncww4",
+      "role": "Persistent useful status",
+      "inspection": "PRIMARY_CASE_STUDY_AND_PUBLISHED_ACTIVITY_IMAGE",
+      "observed": "Apple's case study illustrates compact, always-available travel state and describes adapting the display when connectivity changes. The native app was not operated.",
+      "recognition": "Apple Design Award winner for Interaction, 2023.",
+      "recognition_url": "https://developer.apple.com/design/awards/2023/",
+      "reuse": "Study state prioritization; no app artwork or flight data reused.",
+      "hermes": "Keep truthful loading, approval, running, cancelling and error states understandable in compact status surfaces.",
+      "source_refs": [
+        "turn93view3",
+        "turn88search5"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S11",
+      "title": "Raycast navigation",
+      "creator": "Raycast",
+      "url": "https://manual.raycast.com/navigation",
+      "role": "Action discovery and keyboard behavior",
+      "inspection": "PRIMARY_DOCUMENTATION_AND_PRODUCT_PAGE_TEXT",
+      "observed": "The navigation manual documents keyboard-oriented search and action access. No installed Raycast app was operated.",
+      "recognition": "The product homepage lists curated endorsements. No representative independent score was verified in this study.",
+      "reuse": "Apply interaction conventions in original code; do not copy branding or product illustrations.",
+      "hermes": "One compact plus/action menu with searchable supported commands, keyboard hints, explicit disabled reasons and predictable focus return.",
+      "source_refs": [
+        "turn109view1",
+        "turn91view1"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S12",
+      "title": "Paper Shaders: Liquid Metal",
+      "creator": "Paper Design",
+      "url": "https://shaders.paper.design/liquid-metal",
+      "role": "Possible implementation aid for R02",
+      "inspection": "PRIMARY_API_AND_LICENSE_READ_DEMO_CONTROLS_VISIBLE_CANVAS_BLANK",
+      "observed": "The documented effect supports contour, distortion, dispersion and bounded pixel processing. The canvas did not render here, so live material motion is unverified.",
+      "recognition": "Source availability and a named maintainer are established; visual quality and GPU performance on Mani's PC are not.",
+      "reuse": "Pinned upstream Apache-2.0 source and NOTICE are recorded. Older forks show different licensing; do not mix them.",
+      "hermes": "Prototype only a small upload surface, compare to the exact Inspora clip, and measure cost during local inference. It is not proof of the original clip's technique.",
+      "source_refs": [
+        "turn102view1",
+        "turn103search0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S13",
+      "title": "Native macOS AI Chat App Concept",
+      "creator": "Tran Mau Tri Tam",
+      "url": "https://dribbble.com/shots/27197996-Native-macOS-AI-Chat-App-Concept",
+      "role": "Rejected as a whole-app direction",
+      "inspection": "VISUAL_STILL_IN_BROWSER",
+      "observed": "Rounded translucent chat panels include decorative model/provider imagery and a fictional 3D-render workflow.",
+      "recognition": "Creator-attributed concept. Neither production behavior nor aggregate quality was established.",
+      "reuse": "No copying of embedded character art, logos or generated-output imagery; provenance and rights are unverified.",
+      "hermes": "Do not adopt this as a replacement design. Its decorative provider branding and unsupported output workflow conflict with the user's brief.",
+      "source_refs": [
+        "turn107view2"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S14",
+      "title": "Motion Primitives",
+      "creator": "ibelick",
+      "url": "https://motion-primitives.com/docs/morphing-popover",
+      "role": "Selective source study",
+      "inspection": "DOCUMENTATION_SEARCH_AND_PINNED_LICENSE_REVIEW_LIVE_FETCH_LIMITED",
+      "observed": "The documented morphing popover transitions between trigger and content. Direct page retrieval was limited; no production accessibility claim is made.",
+      "recognition": "GitHub adoption snapshot recorded separately; stars are not reviews of a particular component.",
+      "reuse": "Pinned MIT license; inspect the actual component and current issues before any reuse.",
+      "hermes": "Optional bounded morph behavior where appropriate. Files/Details/Settings must retain stable hit targets and semantic popover behavior.",
+      "source_refs": [
+        "turn106search0",
+        "turn106search5"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S15",
+      "title": "Magic UI",
+      "creator": "Magic UI contributors",
+      "url": "https://magicui.design/",
+      "role": "Selective component discovery",
+      "inspection": "GALLERY_TEXT_AND_PINNED_LICENSE_REVIEW",
+      "observed": "The site distinguishes open-source animated components from Pro products.",
+      "recognition": "GitHub adoption snapshot, not a human-review guarantee.",
+      "reuse": "The pinned repository is MIT; this does not cover paid templates, unrelated assets or every third-party dependency.",
+      "hermes": "Reuse an applicable implementation only after source review. Do not turn the chat app into a collection of landing-page effects.",
+      "source_refs": [
+        "turn94view1"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S16",
+      "title": "Uiverse",
+      "creator": "Uiverse community",
+      "url": "https://uiverse.io/",
+      "role": "Named component-creator discovery",
+      "inspection": "GALLERY_TEXT_AND_PINNED_GALAXY_LICENSE_REVIEW",
+      "observed": "Community component listings link to their creators and code.",
+      "recognition": "Repository adoption is recorded; no blanket quality, provenance or performance endorsement.",
+      "reuse": "Pinned Galaxy repository MIT license verified. Check the exact selected item and external assets separately.",
+      "hermes": "Inspect individual creator submissions only when a real component gap remains.",
+      "source_refs": [
+        "turn94view3"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S17",
+      "title": "Responsive pinned sidebar with popover",
+      "creator": "Jhey (jh3y), via FreeFrontend",
+      "url": "https://codepen.io/jh3y/pen/KwVvXPo",
+      "discovery_url": "https://freefrontend.com/javascript-menus/",
+      "role": "Original technical demonstration",
+      "inspection": "PRIMARY_CODEPEN_TEXT_OPENED_FROM_CURATOR_LINK",
+      "observed": "FreeFrontend's sidebar example resolves to Jhey's original pen; the source is a technical demonstration, not a user-tested Hermes solution.",
+      "recognition": "Creator trace verified; no independent review score established.",
+      "reuse": "Verify pen license before copying; an independent implementation can study the interaction.",
+      "hermes": "Useful for responsive popover mechanics; browser support and stable geometry require actual tests.",
+      "source_refs": [
+        "turn105view3",
+        "turn104view0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S18",
+      "title": "Geist Design System",
+      "creator": "Vercel",
+      "url": "https://vercel.com/geist/introduction",
+      "role": "Design-system consistency",
+      "inspection": "PRIMARY_DESIGN_SYSTEM_TEXT",
+      "observed": "Official design-system references cover colors, icons and components for consistent interfaces.",
+      "recognition": "Primary product-system documentation; no external usability score asserted.",
+      "reuse": "Consult applicable asset/component licensing before reuse.",
+      "hermes": "Use consistent semantic tokens and icon treatment; preserve the user's specific visual direction.",
+      "source_refs": [
+        "turn99view0"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    },
+    {
+      "id": "S19",
+      "title": "Zed tool permissions",
+      "creator": "Zed",
+      "url": "https://zed.dev/docs/ai/tool-permissions",
+      "role": "Permission behavior reference",
+      "inspection": "PRIMARY_DOCUMENTATION_READ",
+      "observed": "The documentation separates automatic tool execution from confirmation rules and documents current configuration changes.",
+      "recognition": "Functional primary documentation, not a visual-quality rating.",
+      "reuse": "Apply the behavioral distinction; do not import Zed settings or imply Hermes has its enforcement.",
+      "hermes": "Make action approval scope visible and enforce it in the actual Hermes server/dispatcher. The v4 policy remains authoritative.",
+      "source_refs": [
+        "turn105view1"
+      ],
+      "retrieved_utc": "2026-10-15T10:02:31.538Z",
+      "continuous_motion_verified": false,
+      "production_hermes_tested": false
+    }
+  ]
+}
