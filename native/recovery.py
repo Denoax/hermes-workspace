@@ -9,7 +9,11 @@ import json
 import urllib.request
 from contextlib import contextmanager
 
-SYSTEM_UNITS=('mani-vmlab-inference-window.service','mani-vmlab-backend.service','mani-vmlab-supervisor.service')
+SYSTEM_UNITS=('hermes-workspace-runtime.socket','hermes-workspace-runtime.service',
+    'mani-vmlab-inference-window.service','mani-vmlab-backend.service',
+    'mani-vmlab-supervisor.socket','mani-vmlab-supervisor.service')
+PRODUCTION_ENABLE=Path('/etc/systemd/system/sockets.target.wants/hermes-workspace-runtime.socket')
+PRODUCTION_SETUP=Path('/usr/local/lib/mani-vmlab-setup/production_setup.py')
 USER_UNIT='hermes-workspace.service'
 USER_FILES={Path('/home/mani/.local/bin/hermes-workspace'),Path('/home/mani/.local/bin/hermes-lab-worker'),
     Path('/home/mani/.local/bin/hermes-worker'),Path('/home/mani/.local/share/applications/hermes-workspace.desktop'),
@@ -21,7 +25,7 @@ ROOTS=(Path('/usr/local/lib/mani-vmlab'),Path('/etc/mani-vmlab'),Path('/home/man
 def permitted(path):
     p=Path(path)
     if not p.is_absolute() or '..' in p.parts:return False
-    return p in USER_FILES or any(p.is_relative_to(root) for root in ROOTS) or p in {
+    return p == PRODUCTION_SETUP or p in USER_FILES or any(p.is_relative_to(root) for root in ROOTS) or p in {
         *(Path('/etc/systemd/system')/unit for unit in SYSTEM_UNITS),
         Path('/run/systemd/system/mani-vmlab-backend.service')}
 
@@ -131,7 +135,10 @@ class Recovery:
             if (account['name'],account['uid']) not in [('mani-vmlab-model',958),('mani-vmlab-vm',959)]:
                 raise ValueError('only_recorded_lab_identities_may_retire')
         for item in register.get('namespaces',[]):
-            if not any(Path(item['path']).is_relative_to(root) for root in ROOTS) or item['kind'] not in ('directory','symlink'):
+            if Path(item['path'])==PRODUCTION_ENABLE:
+                if item['kind']!='symlink' or item.get('target')!='/etc/systemd/system/hermes-workspace-runtime.socket':
+                    raise ValueError('only_exact_production_socket_enable_link_may_retire')
+            elif not any(Path(item['path']).is_relative_to(root) for root in ROOTS) or item['kind'] not in ('directory','symlink'):
                 raise ValueError('only_exact_lab_runtime_namespaces_may_retire')
 
     def physical(self,path):return self.root/str(path).lstrip('/')
@@ -171,7 +178,7 @@ class Recovery:
                     if actual['sha256']!=item['before_sha256']:changed.append(item['backup'])
                 except (OSError,ValueError):changed.append(item['backup'])
         return {'ready':not changed,'preserve_changed':changed,
-            'ordering':['close_window_verify_normal','stop_user_UI','stop_backend','stop_supervisor',
+            'ordering':['close_window_verify_normal','stop_user_UI','stop_runtime_socket_before_service','stop_backend','stop_supervisor_socket_before_service',
                         'retire_window_and_service_hooks','reload_managers','remove_verified_runtime_files',
                         'restore_unchanged_desktop_and_router','retire_exact_created_lab_accounts'],
             'retained':self.register['retained']}
@@ -183,9 +190,17 @@ class Recovery:
         self.services.stop(USER_UNIT,user=True)
         self.services.close_workspace_browser()
         for unit in SYSTEM_UNITS:self.services.stop(unit)
+        removed=[];restored=[]
+        # Remove the verified activation hook before retiring its unit and reload.
+        enable_hooks=[item for item in self.register.get('namespaces',[]) if Path(item['path'])==PRODUCTION_ENABLE]
+        for item in enable_hooks:
+            p=self.physical(item['path'])
+            if not p.exists() and not p.is_symlink():continue
+            if namespace_record(p)!={**item,'path':str(p)}:raise RuntimeError('production_enable_link_changed')
+            with parent_fd(p) as (parent,name):os.unlink(name,dir_fd=parent)
+            removed.append(item['path'])
         hooks=[item for item in self.register['files'] if Path(item['path']).name in (*SYSTEM_UNITS,USER_UNIT)]
         ordinary=[item for item in self.register['files'] if item not in hooks]
-        removed=[];restored=[]
         for item in hooks:
             if not self.unchanged(item):raise RuntimeError('hook_changed_during_removal')
             self.unlink_registered(item);removed.append(item['path'])
@@ -211,7 +226,7 @@ class Recovery:
                     restored.append(item['path'])
             else:self.unlink_registered(item);removed.append(item['path'])
         for item in self.register['accounts']:self.services.retire_account(item)
-        for item in sorted(self.register.get('namespaces',[]),key=lambda x:len(Path(x['path']).parts),reverse=True):
+        for item in sorted([item for item in self.register.get('namespaces',[]) if item not in enable_hooks],key=lambda x:len(Path(x['path']).parts),reverse=True):
             p=self.physical(item['path'])
             if not p.exists() and not p.is_symlink():continue
             if namespace_record(p)!={**item,'path':str(p)}:raise RuntimeError('registered_namespace_changed_during_removal')

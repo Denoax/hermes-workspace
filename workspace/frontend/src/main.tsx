@@ -1,13 +1,14 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   useCallback,
   type FormEvent,
   type CSSProperties,
 } from "react";
 import { createRoot } from "react-dom/client";
-import { MotionConfig } from "motion/react";
+import { AnimatePresence, MotionConfig } from "motion/react";
 import Markdown from "react-markdown";
 import AiStatus from "./components/ai-status";
 import WebSearch from "./components/web-search";
@@ -15,7 +16,20 @@ import FolderImport from "./components/folder-component";
 import { VoiceNote, VoiceNoteGroup } from "./components/voice-note";
 import TaskList from "./components/task-list";
 import DeleteButton from "./components/delete-button";
-import { Panel, Brain, Effort } from "./controls";
+import {
+  Panel,
+  Brain,
+  Effort,
+  MetalButton,
+  WorkingIndicator,
+} from "./controls";
+import {
+  PermissionMode,
+  PermissionSettings,
+  ApprovalCards,
+  usePermissions,
+  type Action,
+} from "./permissions";
 import { Buddy } from "./Buddy";
 import { ReducedMotionContext } from "./lib/reduced-motion";
 import { Recorder, waveform } from "./recording";
@@ -39,6 +53,14 @@ import {
 import { installInterfaceAudio } from "/interface-audio.mjs";
 
 type Message = { role: string; text: string; job?: string };
+type Readiness = {
+  state: "ready" | "busy" | "repair_required" | "unavailable";
+  control: { trusted: boolean; code: string };
+  admission: { available: boolean; code: string };
+  models?: Record<string, { available: boolean; code: string; detail: string }>;
+  detail: string;
+  retryable: boolean;
+};
 type Caps = {
   attachments: boolean;
   folder_import: boolean;
@@ -47,6 +69,7 @@ type Caps = {
   transcription: boolean;
   search: { provider: string; configured: boolean };
   text_admission: boolean;
+  text_readiness?: Readiness;
   integrations: string[];
 };
 type Snapshot = {
@@ -107,6 +130,23 @@ function App() {
     Record<string, Attachment[]>
   >({});
   const [draftReady, setDraftReady] = useState(false);
+  const [readiness, setReadiness] = useState<Readiness | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [notchWidth, setNotchWidth] = useState(210);
+  const notchContext = useRef<HTMLDivElement>(null);
+  const notchLabel = useRef<HTMLElement>(null);
+  const [recordLevels, setRecordLevels] = useState<number[]>([]);
+  const [formValue, setFormValue] = useState("");
+  const [importPreview, setImportPreview] = useState<{
+    ticket: string;
+    files: string[];
+    bytes: number;
+  } | null>(null);
+  const [actionRows, setActionRows] = useState<Action[]>([]);
+  const [editingText, setEditingText] = useState("");
+  const [actionPrompt, setActionPrompt] = useState("");
+  const [taskKind, setTaskKind] = useState("python");
+  const sessionCreation = useRef<Promise<string> | null>(null);
   const sending = useRef(false),
     audio = useRef<ReturnType<typeof installInterfaceAudio> | null>(null),
     recorder = useRef(new Recorder()),
@@ -119,10 +159,19 @@ function App() {
   currentSession.current = session;
   const active = !!run && !terminal(run.state);
   const selectedModel = models.find((m) => m.id === model);
+  const selectedReadiness = readiness?.models?.[model];
+  const modelReady =
+    readiness?.state === "ready" && selectedReadiness?.available !== false;
   const report = useCallback(
     (e: unknown) => setError(e instanceof Error ? e.message : String(e)),
     [],
   );
+  const permissions = usePermissions(session, ensureSession, report);
+  const refreshReadiness = useCallback(async () => {
+    const next = await rpc<Readiness>("readiness.read");
+    setReadiness(next);
+    return next;
+  }, []);
   const refresh = useCallback(async () => {
     const [f, s, m, c] = await Promise.all([
       rpc<Folder[]>("workspace.list"),
@@ -134,6 +183,7 @@ function App() {
     setSessions(s);
     setModels(m);
     setCaps(c);
+    if (c.text_readiness) setReadiness(c.text_readiness);
     return { folders: f, sessions: s };
   }, []);
   const load = useCallback(async (id: string) => {
@@ -182,6 +232,63 @@ function App() {
     return () => recorder.current.cancel();
   }, []);
   useEffect(() => {
+    if (!connected) return;
+    let stopped = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const poll = async () => {
+      try {
+        const next = await rpc<Readiness>("readiness.read");
+        if (!stopped) setReadiness(next);
+      } catch (error) {
+        if (!stopped) report(error);
+      } finally {
+        if (!stopped) timer = setTimeout(poll, active ? 4000 : 10000);
+      }
+    };
+    void poll();
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+    };
+  }, [connected, active]);
+  useEffect(() => {
+    if (!active || !run) {
+      setElapsed(0);
+      return;
+    }
+    const tick = () =>
+      setElapsed(Math.max(0, Math.floor(Date.now() / 1000 - run.created)));
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [active, run?.id]);
+  useEffect(() => {
+    if (!session) {
+      setActionRows([]);
+      return;
+    }
+    let alive = true;
+    let timer: ReturnType<typeof setTimeout>;
+    const update = async () => {
+      try {
+        const result = await rpc<{ actions: Action[]; pending: Action[] }>(
+          "permissions.read",
+          { session_id: session },
+        );
+        if (alive) setActionRows(result.actions ?? result.pending ?? []);
+      } catch (error) {
+        if (alive) report(error);
+      } finally {
+        if (alive) timer = setTimeout(update, 3500);
+      }
+    };
+    void update();
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
+  }, [session]);
+  useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.dataset.motion = reduced ? "reduced" : "system";
@@ -225,6 +332,11 @@ function App() {
       alive = false;
     };
   }, [session, connected]);
+  useEffect(() => {
+    setSelectedFile(null);
+    setEditingText("");
+    setFileNames([]);
+  }, [folder]);
   useEffect(() => {
     if (!connected || !draftReady) return;
     const id = setTimeout(() => {
@@ -322,7 +434,7 @@ function App() {
   }, [run?.id, session, cursor]);
   useEffect(() => {
     messageEnd.current?.scrollIntoView({ block: "end", behavior: "instant" });
-  }, [messages.length]);
+  }, [messages.length, actionRows.length]);
   useEffect(() => {
     if (!menu) return;
     const close = (event: PointerEvent) => {
@@ -390,6 +502,27 @@ function App() {
     setText("");
     setTimeout(() => input.current?.focus(), 0);
   }
+  async function ensureSession(): Promise<string> {
+    if (currentSession.current) return currentSession.current;
+    if (!sessionCreation.current)
+      sessionCreation.current = (async () => {
+        const created = await rpc<Session>("session.create", {
+          project_id: folder,
+          arm: model,
+        });
+        await rpc("draft.write", {
+          session_id: created.id,
+          text,
+          mode: "chat",
+        });
+        currentSession.current = created.id;
+        setSession(created.id);
+        return created.id;
+      })().finally(() => {
+        sessionCreation.current = null;
+      });
+    return sessionCreation.current;
+  }
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (sending.current || busy || active || !text.trim() || !selectedModel)
@@ -398,21 +531,29 @@ function App() {
     setBusy(true);
     setError("");
     try {
-      let id = session;
-      if (!id) {
-        const created = await rpc<Session>("session.create", {
-          project_id: folder,
-          arm: model,
-        });
-        id = created.id;
-        currentSession.current = id;
-        setSession(id);
-      }
+      const ready = await refreshReadiness();
+      if (ready.state !== "ready" || ready.models?.[model]?.available === false)
+        throw Error(
+          ready.models?.[model]?.detail ||
+            ready.detail ||
+            "Local model connection needs repair. Your draft is preserved.",
+        );
+      const id = await ensureSession();
       const pendingKey = "hermes:pending:" + id;
       let pending: Record<string, unknown> | null = null;
       try {
         pending = JSON.parse(localStorage.getItem(pendingKey) || "null");
       } catch {}
+      if (
+        pending &&
+        (pending.prompt !== text ||
+          pending.model_id !== model ||
+          pending.reasoning !== effort ||
+          JSON.stringify(pending.attachments) !==
+            JSON.stringify(attachments.map((a) => a.id)) ||
+          pending.search_query !== searchQuery)
+      )
+        pending = null;
       const fields = pending ?? {
         session_id: id,
         request_id: crypto.randomUUID().replaceAll("-", ""),
@@ -426,11 +567,13 @@ function App() {
       await rpc<Run>("chat.submit", fields);
       localStorage.removeItem(pendingKey);
       await rpc("draft.write", { session_id: id, text: "", mode: "chat" });
-      localStorage.removeItem("hermes:new-draft");
-      setText("");
-      setAttachments([]);
-      setSearch(null);
-      setSearchQuery(null);
+      if (currentSession.current === id) {
+        localStorage.removeItem("hermes:new-draft");
+        setText("");
+        setAttachments([]);
+        setSearch(null);
+        setSearchQuery(null);
+      }
       await load(id);
       await refresh();
     } catch (e) {
@@ -485,14 +628,31 @@ function App() {
     setMenu(null);
     setError("");
     try {
-      await recorder.current.start(() => {
-        setRecording(false);
-        setError(
-          "Recording stopped at the two-minute limit; microphone released.",
-        );
-      });
+      const id = await ensureSession();
+      try {
+        await rpc("recording.authorize", { session_id: id });
+      } catch (error) {
+        setPanel("Settings");
+        throw error;
+      }
+      await recorder.current.start(
+        () => {
+          setRecording(false);
+          setError(
+            "Recording stopped at the two-minute limit; microphone released.",
+          );
+        },
+        setRecordLevels,
+        () => {
+          setRecording(false);
+          setError(
+            "Microphone disconnected or recording failed; capture released. Reconnect the device and start again.",
+          );
+        },
+      );
       setRecording(true);
       setRecordSeconds(0);
+      setRecordLevels([]);
     } catch (e) {
       recorder.current.cancel();
       report(e);
@@ -527,54 +687,67 @@ function App() {
     }
   }
   async function newFolder() {
-    const label = prompt("Folder name");
-    if (!label?.trim()) return;
+    setFormValue("");
+    setPanel("New folder");
+  }
+  async function createFolder(event: FormEvent) {
+    event.preventDefault();
+    if (!formValue.trim()) return;
     try {
-      const f = await rpc<Folder>("workspace.create", { label });
+      const f = await rpc<Folder>("workspace.create", {
+        label: formValue.trim(),
+      });
       await rpc("folder.update", {
         project_id: f.id,
         label: f.label,
         parent: folder,
         color: "blue",
       });
-      if (folder) setExpanded((s) => new Set([...s, folder]));
+      if (folder) setExpanded((old) => new Set([...old, folder]));
       setFolder(f.id);
+      setPanel(null);
       await refresh();
-    } catch (e) {
-      report(e);
+    } catch (error) {
+      report(error);
     }
   }
   async function importFolder() {
     setMenu(null);
+    setImportPreview(null);
+    setPanel("Import folder");
+  }
+  async function chooseImportFolder() {
     if (!folder) {
-      setError("Create or select a folder before importing a workspace copy.");
+      setError("Create or select a project before importing a workspace copy.");
       return;
     }
+    setBusy(true);
     try {
-      setBusy(true);
       const preview = await rpc<{
         cancelled?: boolean;
         ticket: string;
         files: string[];
         bytes: number;
       }>("workspace.import.request", { project_id: folder });
-      if (preview.cancelled) return;
-      if (
-        confirm(
-          "Copy " +
-            preview.files.length +
-            " reviewed files (" +
-            preview.bytes +
-            " bytes) into this app folder? Originals stay unchanged.",
-        )
-      )
-        await rpc("workspace.import.commit", {
-          project_id: folder,
-          ticket: preview.ticket,
-        });
+      if (!preview.cancelled) setImportPreview(preview);
+    } catch (error) {
+      report(error);
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function commitImport() {
+    if (!importPreview || !folder) return;
+    setBusy(true);
+    try {
+      await rpc("workspace.import.commit", {
+        project_id: folder,
+        ticket: importPreview.ticket,
+      });
+      setImportPreview(null);
       await showFiles();
-    } catch (e) {
-      report(e);
+    } catch (error) {
+      report(error);
     } finally {
       setBusy(false);
     }
@@ -596,15 +769,7 @@ function App() {
     }
   }
   async function readFile(path: string) {
-    try {
-      const f = await rpc<{ text: string; sha256: string }>(
-        "workspace.file.read",
-        { project_id: folder, relative_path: path },
-      );
-      setSelectedFile({ path, ...f });
-    } catch (e) {
-      report(e);
-    }
+    await requestAction({ type: "workspace.read", path });
   }
   async function attachLibrary() {
     if (!selectedFile) return;
@@ -621,15 +786,99 @@ function App() {
   }
   async function searchWeb() {
     setMenu(null);
-    const q = prompt("Search Wikipedia for");
-    if (!q) return;
-    if (q.length > 200) {
-      setError("Search queries must be at most 200 characters.");
-      return;
+    setFormValue(searchQuery ?? "");
+    setPanel("Search Wikipedia");
+  }
+  async function requestAction(action: Record<string, unknown>) {
+    try {
+      const id = await ensureSession();
+      const row = await rpc<Action>("permissions.request", {
+        session_id: id,
+        run_id: run?.id ?? null,
+        request_id: crypto.randomUUID().replaceAll("-", ""),
+        action,
+      });
+      if (currentSession.current !== id) return row;
+      setActionRows((old) => [
+        ...old.filter((item) => item.id !== row.id),
+        row,
+      ]);
+      await permissions.refreshPolicy(id);
+      if (row.state === "pending") setPanel(null);
+      if (row.state === "allowed") return await executeAction(row, id);
+      return row;
+    } catch (error) {
+      report(error);
+      return null;
     }
-    setSearchQuery(q);
-    if (!text.trim()) setText(q);
-    input.current?.focus();
+  }
+  async function executeAction(action: Action, owner = session) {
+    if (!owner) return;
+    try {
+      const row = await rpc<Action>("actions.execute", {
+        session_id: owner,
+        action_id: action.id,
+      });
+      if (currentSession.current !== owner) return row;
+      setActionRows((old) => [
+        ...old.filter((item) => item.id !== row.id),
+        row,
+      ]);
+      await permissions.refreshPolicy(owner);
+      if (row.state === "completed" && action.type === "workspace.read") {
+        const file = row.result as {
+          path: string;
+          text: string;
+          sha256: string;
+        };
+        setSelectedFile(file);
+        setEditingText(file.text);
+        setPanel("Files");
+      }
+      if (row.state === "completed" && action.type === "workspace.write") {
+        const result = row.result as { path: string; sha256: string };
+        setSelectedFile({
+          path: result.path,
+          text: String(action.action.text),
+          sha256: result.sha256,
+        });
+        await showFiles();
+      }
+      if (row.state === "completed" && action.type === "search.wikipedia") {
+        const result = row.result as Search;
+        setSearch(result);
+        setSearchQuery(null);
+        if (result.attachment)
+          setAttachments((old) =>
+            old.some((item) => item.id === result.attachment!.id)
+              ? old
+              : [...old, result.attachment!],
+          );
+      }
+      return row;
+    } catch (error) {
+      report(error);
+      return null;
+    }
+  }
+  async function decideAction(action: Action, decision: string) {
+    if (!session) return;
+    try {
+      const row = await rpc<Action>("permissions.decide", {
+        session_id: session,
+        ticket_id: action.ticket_id || action.id,
+        decision,
+      });
+      if (currentSession.current !== session) return;
+      setActionRows((old) => [
+        ...old.filter((item) => item.id !== row.id),
+        row,
+      ]);
+      await permissions.refreshPolicy();
+      if (row.state === "allowed") await executeAction(row);
+    } catch (error) {
+      report(error);
+    }
   }
   async function deleteRecord(kind: string, id: string) {
     await rpc("content.delete", { kind, id });
@@ -729,6 +978,12 @@ function App() {
     events.filter((e) => e.type === "state").at(-1)?.label ??
     run?.state ??
     "Working";
+  useLayoutEffect(() => {
+    if (!active) return;
+    const context = notchContext.current?.scrollWidth ?? 0;
+    const status = (notchLabel.current?.scrollWidth ?? 0) + 19;
+    setNotchWidth(Math.max(210, Math.min(340, Math.max(context, status) + 47)));
+  }, [active, label, lastEvent?.name, selectedModel?.label, elapsed]);
   const tasks = events
     .filter((e) => e.type === "file" || e.type === "search")
     .map((e) => ({
@@ -837,6 +1092,7 @@ function App() {
                       onClick={() => {
                         setSession(s.id);
                         setFolder(s.project);
+                        setFormValue(s.title);
                         setPanel("Conversation");
                       }}
                     >
@@ -853,12 +1109,6 @@ function App() {
                 )}
               </nav>
               <footer className="rail-footer">
-                <Buddy
-                  dark={theme === "dark"}
-                  toggle={() =>
-                    setTheme((t) => (t === "dark" ? "light" : "dark"))
-                  }
-                />
                 <span>{theme === "dark" ? "Dark" : "Light"} workspace</span>
                 <button
                   id="sound-toggle"
@@ -870,6 +1120,14 @@ function App() {
                 </button>
               </footer>
             </aside>
+            <div className="buddy-dock">
+              <Buddy
+                dark={theme === "dark"}
+                toggle={() =>
+                  setTheme((value) => (value === "dark" ? "light" : "dark"))
+                }
+              />
+            </div>
             <section className="workspace-body">
               <header className="toolbar">
                 <button
@@ -879,10 +1137,20 @@ function App() {
                 >
                   ☰
                 </button>
-                <span className="conversation-title">
-                  {sessions.find((s) => s.id === session)?.title ??
-                    folders.find((f) => f.id === folder)?.label ??
-                    "Local workspace"}
+                <span
+                  className="conversation-title"
+                  title={
+                    folders.find((item) => item.id === folder)?.label ??
+                    "No project selected"
+                  }
+                >
+                  <span className="workspace-location">
+                    {folders.find((item) => item.id === folder)?.label ??
+                      "No project"}
+                  </span>
+                  <span aria-hidden="true"> / </span>
+                  {sessions.find((item) => item.id === session)?.title ??
+                    "New conversation"}
                 </span>
                 <div className="toolbar-actions">
                   <button
@@ -915,16 +1183,25 @@ function App() {
                 </div>
               </header>
               {active && (
-                <div className="activity-notch" role="status">
-                  <div className="notch-meta">
+                <div
+                  className="activity-notch"
+                  role="status"
+                  style={{ width: notchWidth }}
+                >
+                  <div className="notch-meta" ref={notchContext}>
                     {lastEvent?.type === "file"
                       ? lastEvent.name + " · " + lastEvent.lines + " lines"
                       : (selectedModel?.label ?? "Local model")}
                   </div>
-                  <span className="notch-glyph" aria-hidden="true">
-                    ✧
-                  </span>
-                  <strong>{label}</strong>
+                  <div className="notch-working">
+                    <WorkingIndicator state={run?.state ?? "queued"} />
+                    <strong ref={notchLabel}>
+                      {label}
+                      {run?.state === "admitting" && model === "abliterated"
+                        ? ` · ${elapsed}s`
+                        : ""}
+                    </strong>
+                  </div>
                   <button
                     aria-label="Cancel current response"
                     onClick={() =>
@@ -942,7 +1219,6 @@ function App() {
                 <div className="message-column">
                   {!messages.length && folder && (
                     <div className="project-dashboard">
-                      <span className="dashboard-label">Project</span>
                       <h1>{folders.find((f) => f.id === folder)?.label}</h1>
                       <p>
                         {sessions.filter((s) => s.project === folder).length}{" "}
@@ -1004,11 +1280,6 @@ function App() {
                           ? folders.find((f) => f.id === folder)?.label
                           : "What are we working on?"}
                       </h1>
-                      <p>
-                        A conversation with your local model.
-                        <br />
-                        Start here, or organize your work in a project.
-                      </p>
                     </div>
                   )}
                   {messages.map((m, i) => (
@@ -1082,18 +1353,67 @@ function App() {
                     ) && (
                       <AiStatus state="thinking" label={label} timer={false} />
                     )}
-                  <div ref={messageEnd} />
                   {run?.error && (
-                    <p className="run-error" role="alert">
-                      {run.error}
-                    </p>
+                    <div className="run-error" role="alert">
+                      <p>
+                        {run.error === "protected_text_admission_not_installed"
+                          ? "Local model connection needs repair. Your conversation is preserved."
+                          : run.error}
+                      </p>
+                      {run.state === "failed" && (
+                        <button
+                          className="secondary-button"
+                          disabled={busy || !modelReady}
+                          onClick={async () => {
+                            setBusy(true);
+                            try {
+                              const retried = await rpc<Run>("chat.retry", {
+                                run_id: run.id,
+                              });
+                              setRun(retried);
+                              await load(run.session);
+                            } catch (error) {
+                              report(error);
+                            } finally {
+                              setBusy(false);
+                            }
+                          }}
+                        >
+                          Retry this turn
+                        </button>
+                      )}
+                    </div>
                   )}
-                  {tasks.length > 0 && (
+                  <ApprovalCards
+                    actions={actionRows}
+                    decide={decideAction}
+                    execute={executeAction}
+                    requestHost={(ticket) =>
+                      requestAction({
+                        type: "host.apply",
+                        review_ticket: ticket,
+                      })
+                    }
+                  />
+                  {(tasks.length > 0 || actionRows.length > 0) && (
                     <details className="run-tasks">
-                      <summary>Included in this request</summary>
-                      <TaskList tasks={tasks} size="sm" />
+                      <summary>Activity</summary>
+                      <TaskList
+                        tasks={[
+                          ...tasks,
+                          ...actionRows
+                            .filter((action) => action.type !== "guest.submit")
+                            .map((action) => ({
+                              id: action.id,
+                              label: `${action.summary || action.type} · ${action.state.replaceAll("_", " ")}`,
+                              done: action.state === "completed",
+                            })),
+                        ]}
+                        size="md"
+                      />
                     </details>
                   )}
+                  <div ref={messageEnd} />
                 </div>
               </main>
               <div className="composer-area">
@@ -1105,6 +1425,28 @@ function App() {
                       onClick={() => setError("")}
                     >
                       ×
+                    </button>
+                  </div>
+                )}
+                {readiness && !modelReady && !active && (
+                  <div className="readiness-banner" role="status">
+                    <span>
+                      <strong>
+                        {readiness.state === "repair_required"
+                          ? "Local model connection needs repair"
+                          : "Local model connection is unavailable"}
+                      </strong>
+                      <small>
+                        {selectedReadiness?.detail || readiness.detail} Your
+                        draft is preserved.
+                      </small>
+                    </span>
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={() => refreshReadiness().catch(report)}
+                    >
+                      Check connection
                     </button>
                   </div>
                 )}
@@ -1207,18 +1549,12 @@ function App() {
                   <div className="composer-toolbar">
                     <div className="composer-left">
                       <div data-menu className="menu-anchor">
-                        <button
-                          className="metal-button"
-                          id="plus-menu"
-                          type="button"
-                          aria-label="Add attachment or action"
-                          aria-expanded={menu === "plus"}
-                          onClick={() =>
+                        <MetalButton
+                          open={menu === "plus"}
+                          toggle={() =>
                             setMenu(menu === "plus" ? null : "plus")
                           }
-                        >
-                          ＋
-                        </button>
+                        />
                         {menu === "plus" && (
                           <div className="action-menu" role="menu">
                             <button
@@ -1233,13 +1569,7 @@ function App() {
                               role="menuitem"
                               onClick={importFolder}
                             >
-                              ▱ Import folder{" "}
-                              <span className="folder-import-mini">
-                                <FolderImport
-                                  size="sm"
-                                  color={theme === "dark" ? "black" : "white"}
-                                />
-                              </span>
+                              ▱ Import folder
                             </button>
                             <button
                               type="button"
@@ -1321,6 +1651,7 @@ function App() {
                           </div>
                         )}
                       </div>
+                      <PermissionMode {...permissions} />
                     </div>
                     <div className="composer-right">
                       {busy && uploadController.current && (
@@ -1364,7 +1695,11 @@ function App() {
                           id="send"
                           aria-label="Send message"
                           disabled={
-                            !connected || busy || !text.trim() || !selectedModel
+                            !connected ||
+                            busy ||
+                            !text.trim() ||
+                            !selectedModel ||
+                            !modelReady
                           }
                         >
                           ↑
@@ -1378,252 +1713,494 @@ function App() {
                 </span>
               </div>
             </section>
-            {panel && (
-              <Panel title={panel} close={() => setPanel(null)}>
-                {panel === "Settings" ? (
-                  <>
-                    <label className="setting-line">
-                      Less motion
-                      <input
-                        type="checkbox"
-                        checked={reduced}
-                        onChange={(e) => setReduced(e.target.checked)}
-                      />
-                    </label>
-                    <label className="setting-line">
-                      Click volume <output>{volume}%</output>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={volume}
-                        onChange={(e) => {
-                          const v = +e.target.value;
-                          setVolume(v);
-                          localStorage.setItem(
-                            "hermes-ui:interface-volume",
-                            String(v),
-                          );
-                          audio.current?.setVolume(v / 100);
-                        }}
-                      />
-                    </label>
-                    <h3>Local models</h3>
-                    {models.map((m) => (
-                      <p key={m.id}>
-                        <strong>{m.label}</strong>
-                        <br />
-                        <small>
-                          {m.state.replaceAll("_", " ")} ·{" "}
-                          {m.sha256.slice(0, 16)}…
-                        </small>
-                      </p>
-                    ))}
-                    {!caps?.text_admission && (
-                      <p className="run-error">
-                        The protected text-admission update needs native
-                        installation. No security gate has been bypassed.
-                      </p>
-                    )}
-                    <h3>Capabilities</h3>
-                    <p>
-                      Text conversations. Images are preview-only. Voice
-                      transcription:{" "}
-                      {caps?.transcription ? "local CPU" : "not installed"}.
-                      Search: Wikipedia.
-                    </p>
-                    <h3>About</h3>
-                    <p>Hermes × your local model.</p>
-                    <a
-                      href="https://www.rareui.com"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Six interface components by Rare UI
-                    </a>
-                    <p className="muted">
-                      No cloud model fallback. Models receive no host tools in
-                      text chat.
-                    </p>
-                  </>
-                ) : panel === "Details" ? (
-                  <>
-                    <p>{selectedModel?.label ?? "No verified model"}</p>
-                    <p>Run: {run?.state ?? "idle"}</p>
-                    <pre>{JSON.stringify(run?.identity ?? {}, null, 2)}</pre>
-                    <h3>Observed activity</h3>
-                    {events
-                      .filter((e) => e.type !== "delta")
-                      .map((e) => (
-                        <p key={e.seq}>
-                          {e.type}: {e.label ?? e.name ?? String(e.text ?? "")}
-                        </p>
-                      ))}
-                  </>
-                ) : panel === "Files" ? (
-                  <>
-                    <p className="muted">
-                      {folder
-                        ? "App-owned workspace copy"
-                        : "Select a project folder to browse its files."}
-                    </p>
-                    <button onClick={importFolder}>Import folder</button>
-                    <ul className="file-list">
-                      {fileNames.map((name) => (
-                        <li key={name}>
-                          <button onClick={() => readFile(name)}>{name}</button>
-                        </li>
-                      ))}
-                    </ul>
-                    {selectedFile && (
-                      <>
-                        <h3>{selectedFile.path}</h3>
-                        <pre>{selectedFile.text}</pre>
-                        <button onClick={attachLibrary}>
-                          Attach this file
-                        </button>
-                      </>
-                    )}
-                  </>
-                ) : panel === "Conversation" ? (
-                  <>
-                    <button
-                      onClick={async () => {
-                        const title = prompt("Conversation name");
-                        if (title && session) {
-                          try {
-                            await rpc("session.rename", {
-                              session_id: session,
-                              title,
-                            });
-                            await refresh();
-                            setPanel(null);
-                          } catch (e) {
-                            report(e);
-                          }
-                        }
-                      }}
-                    >
-                      Rename
-                    </button>
-                    <label className="setting-line">
-                      Move to folder
-                      <select
-                        value={folder ?? ""}
-                        onChange={async (e) => {
-                          if (!session) return;
-                          try {
-                            await rpc("session.move", {
-                              session_id: session,
-                              project_id: e.target.value || null,
-                            });
-                            setFolder(e.target.value || null);
-                            await refresh();
-                          } catch (e) {
-                            report(e);
-                          }
-                        }}
-                      >
-                        <option value="">No folder</option>
-                        {folders.map((f) => (
-                          <option key={f.id} value={f.id}>
-                            {f.label}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <p>
-                      Delete this conversation and its app-owned references.
-                    </p>
-                    {session && (
-                      <DeleteButton
-                        onConfirm={() => deleteRecord("conversation", session)}
-                      />
-                    )}
-                  </>
-                ) : (
-                  editingFolder && (
+            <AnimatePresence initial={false}>
+              {panel && (
+                <Panel key={panel} title={panel} close={() => setPanel(null)}>
+                  {panel === "Settings" ? (
                     <>
                       <label className="setting-line">
-                        Name
+                        Less motion
                         <input
-                          value={editingFolder.label}
-                          onChange={(e) =>
-                            setEditingFolder({
-                              ...editingFolder,
-                              label: e.target.value,
-                            })
-                          }
+                          type="checkbox"
+                          checked={reduced}
+                          onChange={(e) => setReduced(e.target.checked)}
                         />
                       </label>
                       <label className="setting-line">
-                        Parent
-                        <select
-                          value={editingFolder.parent ?? ""}
-                          onChange={(e) =>
-                            setEditingFolder({
-                              ...editingFolder,
-                              parent: e.target.value || null,
-                            })
-                          }
-                        >
-                          <option value="">Top level</option>
-                          {folders
-                            .filter((f) => f.id !== editingFolder.id)
-                            .map((f) => (
-                              <option key={f.id} value={f.id}>
-                                {f.label}
-                              </option>
-                            ))}
-                        </select>
+                        Click volume <output>{volume}%</output>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={volume}
+                          onChange={(e) => {
+                            const v = +e.target.value;
+                            setVolume(v);
+                            localStorage.setItem(
+                              "hermes-ui:interface-volume",
+                              String(v),
+                            );
+                            audio.current?.setVolume(v / 100);
+                          }}
+                        />
                       </label>
-                      <fieldset className="color-picker">
-                        <legend>Folder colour</legend>
-                        {palette.map((color) => (
-                          <button
-                            key={color}
-                            aria-label={color}
-                            aria-pressed={editingFolder.color === color}
-                            style={{ background: `var(--${color})` }}
-                            onClick={() =>
-                              setEditingFolder({ ...editingFolder, color })
-                            }
-                          />
-                        ))}
-                      </fieldset>
+                      <PermissionSettings
+                        controller={permissions}
+                        workspace={
+                          folders.find((item) => item.id === folder)?.label ??
+                          "No project selected"
+                        }
+                      />
+                      <h3>Local models</h3>
+                      {models.map((m) => (
+                        <p key={m.id}>
+                          <strong>{m.label}</strong>
+                          <br />
+                          <small>
+                            {m.state.replaceAll("_", " ")} ·{" "}
+                            {m.sha256.slice(0, 16)}…
+                          </small>
+                        </p>
+                      ))}
+                      {readiness && readiness.state !== "ready" && (
+                        <p className="run-error">{readiness.detail}</p>
+                      )}
+                      <h3>Capabilities</h3>
+                      <p>
+                        Text conversations. Images are preview-only. Voice
+                        transcription:{" "}
+                        {caps?.transcription ? "local CPU" : "not installed"}.
+                        Search: Wikipedia.
+                      </p>
+                      <h3>About</h3>
+                      <p>Hermes × your local model.</p>
+                      <a
+                        href="https://www.rareui.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Six interface components by Rare UI
+                      </a>
+                    </>
+                  ) : panel === "New folder" ? (
+                    <form className="app-form" onSubmit={createFolder}>
+                      <label>
+                        Folder name
+                        <input
+                          autoFocus
+                          value={formValue}
+                          onChange={(event) => setFormValue(event.target.value)}
+                          required
+                          maxLength={120}
+                        />
+                      </label>
+                      <button className="primary-button" type="submit">
+                        Create folder
+                      </button>
+                    </form>
+                  ) : panel === "Search Wikipedia" ? (
+                    <form
+                      className="app-form"
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        if (!formValue.trim()) return;
+                        if (!text.trim()) setText(formValue.trim());
+                        setPanel(null);
+                        requestAction({
+                          type: "search.wikipedia",
+                          query: formValue.trim(),
+                        });
+                        input.current?.focus();
+                      }}
+                    >
+                      <label>
+                        Search query
+                        <input
+                          autoFocus
+                          value={formValue}
+                          onChange={(event) => setFormValue(event.target.value)}
+                          required
+                          maxLength={200}
+                        />
+                      </label>
+                      <p className="muted">
+                        The server checks this conversation's permissions before
+                        searching. Approved results can be included with your
+                        next message.
+                      </p>
+                      <button className="primary-button" type="submit">
+                        Review search
+                      </button>
+                    </form>
+                  ) : panel === "Import folder" ? (
+                    <div className="folder-import-panel">
+                      <div className="folder-preview">
+                        <FolderImport
+                          size="md"
+                          color={theme === "dark" ? "black" : "white"}
+                        />
+                      </div>
+                      <p>
+                        Select a host folder, review the file list, then copy it
+                        into your selected project. Originals stay unchanged.
+                      </p>
+                      {!folder && (
+                        <p className="run-error">
+                          Select a project before importing.
+                        </p>
+                      )}
                       <button
-                        onClick={async () => {
+                        className="primary-button"
+                        disabled={busy || !folder}
+                        onClick={chooseImportFolder}
+                      >
+                        {busy ? "Waiting for folder picker…" : "Choose folder"}
+                      </button>
+                      {importPreview && (
+                        <section className="import-review">
+                          <h3>Review import</h3>
+                          <p>
+                            {importPreview.files.length} files ·{" "}
+                            {importPreview.bytes.toLocaleString()} bytes
+                          </p>
+                          <ul>
+                            {importPreview.files.map((path) => (
+                              <li key={path}>{path}</li>
+                            ))}
+                          </ul>
+                          <button
+                            className="primary-button"
+                            disabled={busy}
+                            onClick={commitImport}
+                          >
+                            Copy reviewed files
+                          </button>
+                          <button
+                            className="secondary-button"
+                            onClick={() => setImportPreview(null)}
+                          >
+                            Cancel import
+                          </button>
+                        </section>
+                      )}
+                    </div>
+                  ) : panel === "Details" ? (
+                    <>
+                      <p>{selectedModel?.label ?? "No verified model"}</p>
+                      <p>Run: {run?.state ?? "idle"}</p>
+                      <pre>{JSON.stringify(run?.identity ?? {}, null, 2)}</pre>
+                      <h3>Connection</h3>
+                      <pre>{JSON.stringify(readiness, null, 2)}</pre>
+                      <h3>Guest task</h3>
+                      <p className="muted">
+                        Guest model:{" "}
+                        {models.find(
+                          (item) =>
+                            item.id ===
+                            sessions.find((item) => item.id === session)?.arm,
+                        )?.label || "Choose a conversation"}
+                        . The guest uses this conversation’s assigned model.
+                      </p>
+                      <p className="muted">
+                        Fixed supported tasks run only in a qualified isolated
+                        guest. Host shell access is unavailable.
+                      </p>
+                      <form
+                        className="app-form"
+                        onSubmit={async (event) => {
+                          event.preventDefault();
                           try {
-                            await rpc("folder.update", {
-                              project_id: editingFolder.id,
-                              label: editingFolder.label,
-                              parent: editingFolder.parent,
-                              color: editingFolder.color,
+                            const snapshot = await rpc<{
+                              snapshot_sha256: string | null;
+                              job_eligibility_reason?: string;
+                            }>("workspace.files", { project_id: folder });
+                            if (!snapshot.snapshot_sha256)
+                              throw Error(
+                                snapshot.job_eligibility_reason ||
+                                  "A valid reviewed text workspace is required.",
+                              );
+                            await requestAction({
+                              type: "guest.submit",
+                              task_kind: taskKind,
+                              prompt: actionPrompt,
+                              snapshot_sha256: snapshot.snapshot_sha256,
                             });
-                            await refresh();
-                            setPanel(null);
-                          } catch (e) {
-                            report(e);
+                          } catch (error) {
+                            report(error);
                           }
                         }}
                       >
-                        Save folder
-                      </button>
-                      <p>
-                        Deleting this folder includes its child folders and
-                        conversations. Original host folders stay unchanged.
-                      </p>
-                      <DeleteButton
-                        onConfirm={async () => {
-                          await deleteRecord("project", editingFolder.id);
-                          setPanel(null);
-                        }}
-                      />
+                        <label>
+                          Task
+                          <select
+                            value={taskKind}
+                            onChange={(event) =>
+                              setTaskKind(event.target.value)
+                            }
+                          >
+                            <option value="python">
+                              Python · clamp JSON values to 0–100
+                            </option>
+                            <option value="cpp">
+                              C++ · square input integers
+                            </option>
+                            <option value="diagnostic">Diagnostic</option>
+                          </select>
+                        </label>
+                        <small>
+                          The Python and C++ checks use these fixed contracts.
+                          Diagnostic results require manual review.
+                        </small>
+                        <label>
+                          Task instructions
+                          <textarea
+                            value={actionPrompt}
+                            onChange={(event) =>
+                              setActionPrompt(event.target.value)
+                            }
+                            maxLength={12000}
+                          />
+                        </label>
+                        <button
+                          type="submit"
+                          className="primary-button"
+                          disabled={
+                            !folder ||
+                            !permissions.policy?.available.guest?.available ||
+                            !actionPrompt.trim()
+                          }
+                        >
+                          Review guest task
+                        </button>
+                        {!permissions.policy?.available.guest?.available && (
+                          <small>
+                            {permissions.policy?.available.guest?.reason ||
+                              "Guest is unavailable"}
+                          </small>
+                        )}
+                      </form>
+                      <h3>Observed activity</h3>
+                      {events
+                        .filter((e) => e.type !== "delta")
+                        .map((e) => (
+                          <p key={e.seq}>
+                            {e.type}:{" "}
+                            {e.label ?? e.name ?? String(e.text ?? "")}
+                          </p>
+                        ))}
                     </>
-                  )
-                )}
-              </Panel>
-            )}
+                  ) : panel === "Files" ? (
+                    <>
+                      <p className="muted">
+                        {folder
+                          ? "App-owned workspace copy"
+                          : "Select a project folder to browse its files."}
+                      </p>
+                      <button onClick={importFolder}>Import folder</button>
+                      <ul className="file-list">
+                        {fileNames.map((name) => (
+                          <li key={name}>
+                            <button onClick={() => readFile(name)}>
+                              {name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      {selectedFile && (
+                        <>
+                          <h3>{selectedFile.path}</h3>
+                          <pre>{selectedFile.text}</pre>
+                          <form
+                            className="app-form"
+                            onSubmit={(event) => {
+                              event.preventDefault();
+                              requestAction({
+                                type: "workspace.write",
+                                path: selectedFile.path,
+                                text: editingText,
+                                expected_sha256: selectedFile.sha256,
+                              });
+                            }}
+                          >
+                            <label>
+                              Edit workspace copy
+                              <textarea
+                                value={editingText}
+                                onChange={(event) =>
+                                  setEditingText(event.target.value)
+                                }
+                                maxLength={200000}
+                              />
+                            </label>
+                            <button
+                              className="primary-button"
+                              disabled={editingText === selectedFile.text}
+                              type="submit"
+                            >
+                              Review changes
+                            </button>
+                          </form>
+                          <button onClick={attachLibrary}>
+                            Attach this file
+                          </button>
+                        </>
+                      )}
+                    </>
+                  ) : panel === "Conversation" ? (
+                    <>
+                      <form
+                        className="app-form"
+                        onSubmit={async (event) => {
+                          event.preventDefault();
+                          if (!session || !formValue.trim()) return;
+                          try {
+                            await rpc("session.rename", {
+                              session_id: session,
+                              title: formValue.trim(),
+                            });
+                            await refresh();
+                            setPanel(null);
+                          } catch (error) {
+                            report(error);
+                          }
+                        }}
+                      >
+                        <label>
+                          Conversation name
+                          <input
+                            value={formValue}
+                            required
+                            maxLength={120}
+                            onChange={(event) =>
+                              setFormValue(event.target.value)
+                            }
+                          />
+                        </label>
+                        <button className="primary-button" type="submit">
+                          Save name
+                        </button>
+                      </form>
+                      <label className="setting-line">
+                        Move to folder
+                        <select
+                          value={folder ?? ""}
+                          onChange={async (e) => {
+                            if (!session) return;
+                            try {
+                              await rpc("session.move", {
+                                session_id: session,
+                                project_id: e.target.value || null,
+                              });
+                              setFolder(e.target.value || null);
+                              await refresh();
+                            } catch (e) {
+                              report(e);
+                            }
+                          }}
+                        >
+                          <option value="">No folder</option>
+                          {folders.map((f) => (
+                            <option key={f.id} value={f.id}>
+                              {f.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <p>
+                        Delete this conversation and its app-owned references.
+                      </p>
+                      {session && (
+                        <DeleteButton
+                          onConfirm={() =>
+                            deleteRecord("conversation", session)
+                          }
+                        />
+                      )}
+                    </>
+                  ) : (
+                    editingFolder && (
+                      <>
+                        <label className="setting-line">
+                          Name
+                          <input
+                            value={editingFolder.label}
+                            onChange={(e) =>
+                              setEditingFolder({
+                                ...editingFolder,
+                                label: e.target.value,
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="setting-line">
+                          Parent
+                          <select
+                            value={editingFolder.parent ?? ""}
+                            onChange={(e) =>
+                              setEditingFolder({
+                                ...editingFolder,
+                                parent: e.target.value || null,
+                              })
+                            }
+                          >
+                            <option value="">Top level</option>
+                            {folders
+                              .filter((f) => f.id !== editingFolder.id)
+                              .map((f) => (
+                                <option key={f.id} value={f.id}>
+                                  {f.label}
+                                </option>
+                              ))}
+                          </select>
+                        </label>
+                        <fieldset className="color-picker">
+                          <legend>Folder colour</legend>
+                          {palette.map((color) => (
+                            <button
+                              key={color}
+                              aria-label={color}
+                              aria-pressed={editingFolder.color === color}
+                              style={{ background: `var(--${color})` }}
+                              onClick={() =>
+                                setEditingFolder({ ...editingFolder, color })
+                              }
+                            />
+                          ))}
+                        </fieldset>
+                        <button
+                          onClick={async () => {
+                            try {
+                              await rpc("folder.update", {
+                                project_id: editingFolder.id,
+                                label: editingFolder.label,
+                                parent: editingFolder.parent,
+                                color: editingFolder.color,
+                              });
+                              await refresh();
+                              setPanel(null);
+                            } catch (e) {
+                              report(e);
+                            }
+                          }}
+                        >
+                          Save folder
+                        </button>
+                        <p>
+                          Deleting this folder includes its child folders and
+                          conversations. Original host folders stay unchanged.
+                        </p>
+                        <DeleteButton
+                          onConfirm={async () => {
+                            await deleteRecord("project", editingFolder.id);
+                            setPanel(null);
+                          }}
+                        />
+                      </>
+                    )
+                  )}
+                </Panel>
+              )}
+            </AnimatePresence>
             {(recording || voice) && (
               <Panel
                 title={recording ? "Recording" : "Voice note"}
@@ -1638,6 +2215,25 @@ function App() {
                     <div className="recording-indicator" role="status">
                       <span />
                       Recording · {recordSeconds}s
+                    </div>
+                    <div
+                      className="recording-levels"
+                      role="meter"
+                      aria-label="Microphone input level"
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={Math.round(
+                        Math.max(0, ...recordLevels) * 100,
+                      )}
+                    >
+                      {recordLevels.map((value, index) => (
+                        <i
+                          key={index}
+                          style={{
+                            height: `${Math.max(2, Math.min(100, value * 360))}%`,
+                          }}
+                        />
+                      ))}
                     </div>
                     <button onClick={stopRecording}>Stop recording</button>
                     <button

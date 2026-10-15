@@ -1,0 +1,86 @@
+/* Scoped port of Denoax/portfolio's source buddy geometry and expression styles.
+   Source: src/styles/v18.css + tooltip rules in src/styles/theme.css.
+   Intentionally defeats old app-wide hover transforms/face rules. */
+#theme-buddy.theme-buddy-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  min-height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+  filter: none;
+}
+#theme-buddy.theme-buddy-control .theme-buddy {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  overflow: visible;
+  transform-origin: 50% 70%;
+  pointer-events: none;
+  transition: none;
+}
+#theme-buddy .buddy-shadow {
+  position: absolute;
+  width: 38px;
+  height: 7px;
+  left: 13px;
+  bottom: 0;
+  background: #10182028;
+  filter: blur(3px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+#theme-buddy
+  .theme-buddy
+  :is(.buddy-open, .buddy-smile, .buddy-sleep, .buddy-cross) {
+  display: none;
+}
+#theme-buddy .theme-buddy:not([data-expression]) .buddy-open,
+#theme-buddy .theme-buddy[data-expression="awake"] .buddy-open,
+#theme-buddy .theme-buddy[data-expression="smile"] .buddy-smile,
+#theme-buddy .theme-buddy[data-expression="sleep"] .buddy-sleep,
+#theme-buddy .theme-buddy[data-expression="pressed"] .buddy-cross {
+  display: initial;
+}
+#theme-buddy .theme-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--paper);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+#theme-buddy:is(:hover, :focus-visible) .theme-tooltip {
+  opacity: 1;
+}
+#theme-buddy:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  #theme-buddy .theme-tooltip {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  #theme-buddy .theme-buddy {
+    --buddy-body: Canvas;
+    --buddy-rim: ButtonText;
+    --buddy-face: CanvasText;
+  }
+}

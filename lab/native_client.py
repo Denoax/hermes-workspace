@@ -114,10 +114,19 @@ class NativeClient:
                     if not part:break
                     raw.extend(part)
                     if len(raw)>65536:raise ValueError('native_text_reply_limit')
-                result=bounded_json(bytes(raw),max_bytes=65536)
+                if not raw:
+                    raise RuntimeError('Protected model admission closed without a receipt. Check the native service and normal Qwen recovery, then retry this turn.')
+                try:
+                    result=bounded_json(bytes(raw),max_bytes=65536)
+                except ValueError:
+                    raise RuntimeError('Protected model admission returned an invalid receipt. Check the native service log and normal Qwen recovery, then retry this turn.') from None
+                if type(result) is not dict or result.get('status') not in ('ok','blocked','failed'):
+                    raise RuntimeError('Protected model admission returned an invalid receipt. Check the native service log and normal Qwen recovery, then retry this turn.')
                 if result.get('status')!='ok' or len(descriptors)!=1:
                     raise RuntimeError(result.get('error','native_text_admission_denied'))
-                descriptor=descriptors.pop();connection=socket.socket(fileno=descriptor)
+                # Retain ownership until construction succeeds; a malformed
+                # receipt must not leak an admitted non-socket descriptor.
+                connection=socket.socket(fileno=descriptors[-1]);descriptors.pop()
                 return result,connection
         finally:
             for descriptor in descriptors:os.close(descriptor)

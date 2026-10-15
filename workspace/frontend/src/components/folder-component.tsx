@@ -70,6 +70,7 @@ const FolderComponent = ({
   className,
   ...props
 }: FolderComponentProps) => {
+  const reduced = useReducedMotion();
   const theme = themes[color] ?? themes.black;
   const scale = sizeScales[size];
   const [isHovered, setIsHovered] = useState(false);
@@ -96,6 +97,17 @@ const FolderComponent = ({
         onMouseLeave={() => {
           setIsHovered(false);
           setIsOpen(false);
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Preview folder contents"
+        aria-expanded={isOpen}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setIsOpen((open) => !open);
+          }
+          if (event.key === "Escape") setIsOpen(false);
         }}
         onClick={() => setIsOpen((o) => !o)}
       >
@@ -128,12 +140,16 @@ const FolderComponent = ({
                 x: isOpen ? 70 : 40,
                 rotate: isOpen ? 18 : isHovered ? 14 : 10,
               }}
-              transition={{
-                type: "spring",
-                stiffness: 120,
-                damping: 13,
-                delay: isOpen ? 0.1 : isHovered ? 0.12 : 0,
-              }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 13,
+                      delay: isOpen ? 0.1 : isHovered ? 0.12 : 0,
+                    }
+              }
             >
               <Card id={1} theme={theme} />
             </motion.div>
@@ -144,12 +160,16 @@ const FolderComponent = ({
                 x: isOpen ? 0 : 3,
                 rotate: isOpen ? -3 : isHovered ? -1 : 2,
               }}
-              transition={{
-                type: "spring",
-                stiffness: 120,
-                damping: 13,
-                delay: isOpen ? 0.05 : isHovered ? 0.06 : 0,
-              }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 13,
+                      delay: isOpen ? 0.05 : isHovered ? 0.06 : 0,
+                    }
+              }
             >
               <Card id={2} theme={theme} />
             </motion.div>
@@ -160,12 +180,16 @@ const FolderComponent = ({
                 x: isOpen ? -65 : -40,
                 rotate: isOpen ? -14 : isHovered ? -9 : -5,
               }}
-              transition={{
-                type: "spring",
-                stiffness: 120,
-                damping: 13,
-                delay: isOpen ? 0 : 0,
-              }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 13,
+                      delay: isOpen ? 0 : 0,
+                    }
+              }
             >
               <Card id={3} theme={theme} />
             </motion.div>
@@ -180,7 +204,11 @@ const FolderComponent = ({
               height: 241,
             }}
             animate={{ rotateX: isOpen ? -55 : isHovered ? -45 : -15 }}
-            transition={{ type: "spring", stiffness: 120, damping: 14 }}
+            transition={
+              reduced
+                ? { duration: 0 }
+                : { type: "spring", stiffness: 120, damping: 14 }
+            }
           >
             <div
               className="absolute inset-0"

@@ -89,7 +89,17 @@ class Application:
     def __init__(self,root):
         self.catalog=Catalog(root)
         from workspace.chat import Chat
-        self.chat=Chat(self.catalog)
+        from workspace.readiness import Readiness
+        from workspace.permissions import Permissions
+        from workspace.actions import Actions
+        from workspace.agent import Agent
+        self.readiness=Readiness(self.catalog)
+        self.permissions=Permissions(self.catalog)
+        self.actions=Actions(self.catalog,self.permissions)
+        self.agent=Agent(self.catalog,self.actions)
+        self.chat=Chat(self.catalog,readiness_check=self.readiness.require)
+        self.chat.permissions=self.permissions
+        self.chat.agent=self.agent
         self.csrf=secrets.token_urlsafe(32)
         self.sessions={}
         self.rate={}
@@ -112,8 +122,30 @@ class Application:
             'folder.update':{'project_id','label','parent','color'},'session.move':{'session_id','project_id'},
             'content.delete':{'kind','id'},'attachment.metadata':{'id'},'attachment.transcribe':{'id'},
             'search.run':{'query'}})
+        contracts.update({'readiness.read':set(),'chat.retry':{'run_id'},
+            'permissions.read':{'session_id'},
+            'permissions.update':{'session_id','expected_version','mode','capabilities'},
+            'permissions.request':{'session_id','run_id','request_id','action'},
+            'permissions.decide':{'session_id','ticket_id','decision'},
+            'permissions.revoke':{'session_id'},'actions.execute':{'session_id','action_id'},
+            'recording.authorize':{'session_id'}})
         if method not in contracts or set(fields)!=contracts[method]:raise ValueError('unknown_method_or_fields')
         c=self.catalog
+        if method=='readiness.read':return self.readiness.read(fresh=True)
+        if method=='permissions.read':return self.actions.read(fields['session_id'])
+        if method=='permissions.update':return self.actions.update(fields['session_id'],fields['expected_version'],fields['mode'],fields['capabilities'])
+        if method=='permissions.request':return self.actions.request(fields['session_id'],fields['run_id'],fields['request_id'],fields['action'])
+        if method=='permissions.decide':return self.permissions.decide(fields['session_id'],fields['ticket_id'],fields['decision'])
+        if method=='permissions.revoke':return self.actions.revoke(fields['session_id'])
+        if method=='actions.execute':return self.actions.execute(fields['session_id'],fields['action_id'])
+        if method=='recording.authorize':
+            self.permissions.require(fields['session_id'],'microphone')
+            return {'allowed':True,'maximum_seconds':120,'policy_version':self.permissions.read(fields['session_id'])['version'],'browser_permission_required':True}
+        # Legacy routes cannot bypass the same final action dispatcher used by
+        # models and approval cards. Listing names/import review remain explicit
+        # operator operations; these routes expose or mutate actual contents.
+        if method in ('workspace.file.read','workspace.file.write','search.run','job.submit','patch.apply'):
+            raise PermissionError('scoped_action_required')
         if method=='models.list':
             rows=self.chat.inventory.entries()
             from workspace.models import normal_identity
@@ -134,8 +166,12 @@ class Application:
             from lab.native_client import NativeClient
             return {'attachments':True,'folder_import':True,'project_library':True,'recording':True,
                     'transcription':available(),'search':{'provider':'Wikipedia','configured':True},
-                    'text_admission':NativeClient().available(),'integrations':[]}
-        if method=='chat.submit':return self.chat.submit(fields)
+                    'text_admission':self.readiness.read()['control']['trusted'],
+                    'text_readiness':self.readiness.read(),'integrations':[]}
+        if method=='chat.submit':
+            if fields['search_query']:self.permissions.require(fields['session_id'],'search')
+            return self.chat.submit(fields)
+        if method=='chat.retry':return self.chat.retry(fields['run_id'])
         if method=='chat.read':return self.chat.store.run(fields['run_id'])
         if method=='chat.cancel':return self.chat.cancel(fields['run_id'])
         if method=='chat.runs':return self.chat.store.session_runs(fields['session_id'])
@@ -171,7 +207,8 @@ class Application:
         if method=='status.read':return status()
         if method=='homebrew.open':
             if not status()['normal_model_available']:raise RuntimeError('Normal Qwen is paused; wait for verified recovery.')
-            subprocess.Popen(['/usr/bin/kitty','--title','Hermes Homebrew','/home/mani/.local/bin/hermes'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            from workspace.desktop import desktop_environment
+            subprocess.Popen(['/usr/bin/kitty','--title','Hermes Homebrew','/home/mani/.local/bin/hermes'],env=desktop_environment(),stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
             return {'opened':True,'context':'existing_normal_Hermes_profile'}
         if method=='workspace.list':return c.projects()
         if method=='workspace.create':return c.create(fields['label'])
@@ -188,13 +225,15 @@ class Application:
             finally:fs.close()
         if method=='workspace.import.request':
             c.files(fields['project_id']).close()
-            result=subprocess.run(['/usr/bin/kdialog','--getexistingdirectory',str(Path.home()),'Select files to copy into Hermes Lab'],capture_output=True,text=True,timeout=120)
+            from workspace.desktop import desktop_environment
+            result=subprocess.run(['/usr/bin/kdialog','--getexistingdirectory',str(Path.home()),'Select files to copy into Hermes Lab'],env=desktop_environment(),capture_output=True,text=True,timeout=120)
             if result.returncode:return {'cancelled':True}
             return c.import_preview(fields['project_id'],result.stdout.strip())
         if method=='workspace.import.commit':return c.import_commit(fields['project_id'],fields['ticket'])
         if method=='workspace.open':
             c.files(fields['project_id']).close()
-            subprocess.Popen(['/usr/bin/dolphin',str(c.root/'projects'/fields['project_id']/'workspace')],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+            from workspace.desktop import desktop_environment
+            subprocess.Popen(['/usr/bin/dolphin',str(c.root/'projects'/fields['project_id']/'workspace')],env=desktop_environment(),stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
             return {'opened':True}
         if method=='session.list':return c.sessions()
         if method=='session.create':return c.session(fields['project_id'],fields['arm'])
@@ -325,7 +364,13 @@ def handler(app,credential):
                     raise ValueError('unsupported_RPC_contract')
                 value=app.call(data['method'],data['fields']);self.reply(200,{'result':value})
             except (OSError,ValueError,RuntimeError,PermissionError,subprocess.SubprocessError,sqlite3.Error) as error:
+                from workspace.readiness import AdmissionUnavailable
+                if isinstance(error,AdmissionUnavailable):
+                    self.reply(409,{'error':str(error),'readiness':error.readiness});return
                 code=str(error) if isinstance(error,(ValueError,RuntimeError)) and len(str(error))<200 else type(error).__name__
+                if isinstance(error,PermissionError):
+                    reason=str(error)
+                    code=reason if reason.isidentifier() and reason.startswith(('permission_','action_','scoped_')) else 'permission_denied'
                 self.reply(409,{'error':code})
         def do_PUT(self):self.reply(405,{'error':'method_denied'})
         def do_DELETE(self):self.reply(405,{'error':'method_denied'})
@@ -344,7 +389,16 @@ def main():
         key.chmod(0o600)
     if key.is_symlink() or key.stat().st_uid!=os.getuid() or key.stat().st_mode&0o077:raise PermissionError('private_credential_required')
     app=Application(Path.home()/'HermesLab')
-    server=BoundedServer(('127.0.0.1',PORT),handler(app,credential))
+    activated=os.environ.get('LISTEN_PID')==str(os.getpid()) and os.environ.get('LISTEN_FDS')=='1'
+    if activated:
+        listener=socket.socket(fileno=3)
+        if listener.family!=socket.AF_INET or listener.getsockname()!=('127.0.0.1',PORT) or listener.getsockopt(socket.SOL_SOCKET,socket.SO_TYPE)!=socket.SOCK_STREAM:
+            raise RuntimeError('fixed_loopback_production_listener_required')
+        server=BoundedServer(('127.0.0.1',PORT),handler(app,credential),bind_and_activate=False)
+        server.socket.close();server.socket=listener
+        server.server_name='127.0.0.1';server.server_port=PORT
+    else:
+        server=BoundedServer(('127.0.0.1',PORT),handler(app,credential))
     (STATE/'endpoint.json').write_text(json.dumps({'origin':ORIGIN,'PID':os.getpid(),'version':1}))
     server.serve_forever(poll_interval=.25)
 

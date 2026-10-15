@@ -187,6 +187,7 @@ export function DeleteButton({
       data-state={open ? "open" : "closed"}
       data-status={status}
       className={cn("relative h-12 rounded-2xl", SURFACE, GLYPH, className)}
+      initial={{ width: TILE }}
       animate={{ width: open ? TILE + PANEL : TILE }}
       transition={timing(WIDTH)}
       onKeyDown={(event) => {

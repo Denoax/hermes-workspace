@@ -1,5 +1,8 @@
 # Source to implementation
 
+Historical pre-v4 record. Current implementation and evidence are described in
+[production v4](../docs/PRODUCTION_V4.md) and the [current source record](../docs/LOCAL_CHAT_SOURCES.md).
+
 Read/apply `$reference-led-design`. No generated media, copied showcase graphics, component packages or remote font dependencies were used.
 
 | Source inspected | Observation and adaptation |

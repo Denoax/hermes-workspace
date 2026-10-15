@@ -8,7 +8,7 @@ Read/apply `$reference-led-design` for visual continuation. Preserve the accepte
 
 `Inventory` accepts only explicit links with a verified full hash and unchanged file identity. Listing neither scans disks nor loads models. Normal identity also checks four configuration hashes, systemd MainPID, exact model/runner argv, runner hash, alias and context. Candidate bytes are independently checked in the protected native store.
 
-The supervisor admits only a fixed job ID and arm. SCM_RIGHTS transfers a connected backend socket; no prompt, model output, arbitrary URL/path or tool command enters the root protocol. Heartbeat loss, owner pidfd death and a 300-second request deadline revoke it. Candidate inference also uses the 30-minute guard. Cleanup sends its acknowledgement before daemon shutdown. The guard has no circular stop-order dependency and serializes recovery. The worker remains `restoring` until normal identity is verified again. Text chat has no executable tools; existing guest tools keep their separate gates.
+The supervisor admits only a fixed job ID and arm. SCM_RIGHTS transfers a connected backend socket; no prompt, model output, arbitrary URL/path or tool command enters the root protocol. Heartbeat loss, owner pidfd death and a 300-second request deadline revoke it. Candidate inference also uses the 30-minute guard. Cleanup sends its acknowledgement before daemon shutdown. The guard has no circular stop-order dependency and serializes recovery. The worker remains `restoring` until normal identity is verified again. Chat only has no tools; optional permissioned actions use the strict bounded schema described in [PRODUCTION_V4.md](PRODUCTION_V4.md). Guest execution keeps its separate native gates.
 
 ## Limits
 
@@ -44,6 +44,8 @@ Normal model/configuration files were not changed. Stop new requests and let the
 sudo /usr/bin/python3 -I /usr/local/lib/mani-vmlab-setup/inference_window.py restore
 ```
 
-The review includes the exact private backup locations and captured-ID reset receipt. Before any restore, stop `hermes-workspace.service`, preserve the current state and check for newer work. Restore only captured scope; do not overwrite later records. The reset backup was restore-tested in a disposable catalog. Production stays empty for delivery, so acceptance never restores it there.
+The v3 reset is historical and must not be repeated for v4. Current conversations and projects are preserved. The corrective review records private migration backups and exact test-only IDs; cleanup may delete only those positively identified new test records. Before data restoration, stop the production runtime through its bounded native recovery procedure, preserve current state and check for newer work. Never replace a later catalog with a stale snapshot.
 
 A visual rollback should retain the native stop-order/socket/receipt fixes. Do not reinstall the earlier guard deadlock. Use registered `workspace_recovery.py plan` before native removal; drift checks intentionally preserve unrelated changes. Production uninstall was not applied. GitHub source rollback is an ordinary reviewed revert preserving newer commits, never a reset or force-push.
+
+The v4 production launch-context repair and server permission contract are documented in [PRODUCTION_V4.md](PRODUCTION_V4.md). The old isolated-port trials above do not prove that the actual pin works; v4 production evidence must name port 18791 and the actual launcher/profile.

@@ -1,6 +1,8 @@
 import hashlib
 from pathlib import Path
 import tempfile
+import os
+from unittest.mock import patch
 import unittest
 from native.recovery import Recovery,fingerprint,SYSTEM_UNITS,USER_UNIT
 
@@ -48,6 +50,42 @@ class CompleteRecoveryTests(unittest.TestCase):
         self.assertEqual((self.root/'home/mani/.config/quickshell/kona/sidebar/shell.qml').read_text(),'original Steam pin')
         self.assertFalse((self.root/'usr/local/lib/mani-vmlab/window.py').exists())
         self.assertEqual(len(result['retained']),6)
+
+    def test_production_activation_hook_is_removed_before_reload_and_runtime_code(self):
+        from native.recovery import PRODUCTION_ENABLE
+        for name in ['/etc/systemd/system/hermes-workspace-runtime.socket',
+                     '/etc/systemd/system/hermes-workspace-runtime.service',
+                     '/etc/systemd/system/mani-vmlab-supervisor.socket',
+                     '/usr/local/lib/mani-vmlab-setup/production_setup.py']:
+            p=self.root/name.lstrip('/');p.parent.mkdir(parents=True,exist_ok=True);p.write_text('registered v4 fixture')
+            item=fingerprint(p);item['path']=name;self.register['files'].append(item)
+        p=self.root/str(PRODUCTION_ENABLE).lstrip('/');p.parent.mkdir(parents=True)
+        p.symlink_to('/etc/systemd/system/hermes-workspace-runtime.socket')
+        info=p.lstat()
+        link={'path':str(PRODUCTION_ENABLE),'kind':'symlink','device':info.st_dev,'inode':info.st_ino,'uid':info.st_uid,'target':os.readlink(p)}
+        self.register['namespaces']=[link]
+        original_reload=self.services.reload
+        def reload():
+            self.assertFalse(p.is_symlink())
+            self.assertTrue((self.root/'usr/local/lib/mani-vmlab-setup/production_setup.py').exists())
+            original_reload()
+        self.services.reload=reload
+        # File identity and root-only ownership checks are covered separately;
+        # this fixture normalizes only ownership for an unprivileged test run.
+        def namespace(path):
+            actual=Path(path).lstat()
+            return {'path':str(path),'kind':'symlink','device':actual.st_dev,'inode':actual.st_ino,'uid':actual.st_uid,'target':os.readlink(path)}
+        with patch('native.recovery.namespace_record',side_effect=namespace):
+            result=Recovery(self.register,self.services,self.root).remove()
+        self.assertIn(str(PRODUCTION_ENABLE),result['removed'])
+        self.assertLess(self.services.events.index('stop:hermes-workspace-runtime.socket'),self.services.events.index('stop:hermes-workspace-runtime.service'))
+        self.assertLess(self.services.events.index('stop:mani-vmlab-supervisor.socket'),self.services.events.index('stop:mani-vmlab-supervisor.service'))
+        self.assertFalse((self.root/'usr/local/lib/mani-vmlab-setup/production_setup.py').exists())
+
+    def test_production_enable_link_cannot_target_an_unrelated_unit(self):
+        self.register['namespaces']=[{'path':'/etc/systemd/system/sockets.target.wants/hermes-workspace-runtime.socket','kind':'symlink','target':'/etc/systemd/system/other.service'}]
+        with self.assertRaisesRegex(ValueError,'exact_production_socket_enable_link'):
+            Recovery(self.register,self.services,self.root)
 
     def test_drift_refuses_before_services_or_files_are_changed(self):
         p=self.root/'etc/systemd/system/mani-vmlab-inference-window.service';p.write_text('new user change')

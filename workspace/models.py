@@ -68,9 +68,8 @@ def normal_identity():
     linked=json.loads((ROOT/'configs/backend-artifacts.lock.json').read_text())
     expected=linked['models']['normal']['source']
     executable=Path(linked['backend_directory'])/'llama-server'
-    # PrivateTmp's user namespace correctly denies /proc/PID/exe inspection of
-    # the normal service. Retain it: prove the fixed service/exec script hashes,
-    # MainPID, exact exec argv and pinned executable bytes instead.
+    # Verify the fixed service and runner, rather than trusting an alias supplied
+    # by whichever server happens to answer the normal loopback port.
     if '--model' not in args or args[args.index('--model')+1]!=expected or args[0]!=str(executable):
         raise RuntimeError('normal_loaded_process_identity_changed')
     global _runner_pin

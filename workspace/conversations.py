@@ -105,6 +105,11 @@ class Conversations:
                 runs=[r[0] for r in self.c.db.execute('SELECT id FROM chat_runs WHERE session=?',(session,))]
                 for run in runs:
                     self.c.db.execute('DELETE FROM chat_events WHERE run=?',(run,));self.c.db.execute('DELETE FROM turn_attachments WHERE run=?',(run,))
+                tables={r[0] for r in self.c.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+                for table in ('permission_actions','permission_grants','permission_policies','permission_audit','agent_actions'):
+                    if table in tables:self.c.db.execute('DELETE FROM '+table+' WHERE session=?',(session,))
+                if 'chat_retry_audit' in tables:
+                    for run in runs:self.c.db.execute('DELETE FROM chat_retry_audit WHERE run=?',(run,))
                 for table,column in [('chat_runs','session'),('messages','session'),('jobs','session'),('session_titles','session'),('drafts','scope'),('sessions','id')]:
                     self.c.db.execute(f'DELETE FROM {table} WHERE {column}=?',(session,))
             for project in projects:

@@ -23,43 +23,69 @@ class Jobs:
         return session,json.loads(row[1])
 
     def read(self,job):
-        # Polls from reconnects and simultaneous tabs share one export cursor.
-        with self.catalog.lock:return self.read_locked(job)
-
-    def read_locked(self,job):
-        session,old=self.local(job);client=NativeClient(timeout=15)
-        record=old
+        session,_=self.local(job);client=NativeClient(timeout=15)
+        native=None
         try:
             if client.available():
-                native=client.call('workspace_read',version=1,job_id=job)
-                if native.get('status')=='ok':
-                    if native.get('project_id')!=session['project'] or native.get('session_id')!=session['id']:raise ValueError('native_scope_mismatch')
-                    record=native
+                reply=client.call('workspace_read',version=1,job_id=job)
+                if reply.get('status')=='ok':native=reply
         except (OSError,RuntimeError):pass
-        if record is old:
-            if record.get('state') not in ('review_ready','failed','cancelled','blocked'):
-                record={**record,'state':'recovery_pending','reason':'Native supervisor closed; awaiting protected final receipt.'}
+        # Provider waits cannot own the catalog: Stop and Revoke need it too.
+        # Re-read after I/O because another tab may have exported or deleted the
+        # job meanwhile. Scope and the export cursor move under this one lock.
+        with self.catalog.lock,self.catalog.db:
+            current,old=self.local(job)
+            if current!=session:raise ValueError('job_scope_changed_during_poll')
+            return self._merge_read(job,current,old,native)
+
+    def _merge_read(self,job,session,old,native):
+        """Caller holds the catalog lock and transaction; no native I/O here."""
+        previous=old.get('last_sequence',0)
+        record=old
+        if native is not None:
+            if native.get('project_id')!=session['project'] or native.get('session_id')!=session['id']:raise ValueError('native_scope_mismatch')
+            sequence=max((event['sequence'] for event in native.get('events',[])),default=0)
+            # Concurrent replies can arrive in reverse order. An old snapshot
+            # must not regress the durable cursor or erase an exported result.
+            terminal=('review_ready','failed','cancelled','blocked')
+            finalized=(old.get('status')=='ok' and old.get('state') in terminal and native.get('state') not in terminal)
+            loses_export=(old.get('exported') and native.get('evidence_kind')!='actual_guest_Hermes_workspace_job')
+            stale=sequence<previous or finalized or loses_export
+            if not stale:record=native
+        elif record.get('state') not in ('review_ready','failed','cancelled','blocked'):
+            record={**record,'state':'recovery_pending','reason':'Native supervisor closed; awaiting protected final receipt.'}
+        if record.get('project_id',session['project'])!=session['project'] or record.get('session_id',session['id'])!=session['id']:
+            raise ValueError('native_scope_mismatch')
         record['snapshot']=old.get('snapshot',[])
         if record.get('exported') is not True and old.get('exported') is True:record['exported']=True
+        messages=[]
         if record.get('evidence_kind')=='actual_guest_Hermes_workspace_job' and not old.get('exported'):
+            # Revalidate the project before creating any export directories.
+            self.catalog.files(session['project']).close()
             directory=self.catalog.root/'projects'/session['project']/'outputs'/job
             directory.mkdir(mode=0o700,exist_ok=True)
             output=Files(directory)
             try:
                 for item in record.get('files',[]):
-                    output.write(item['path'],item['text']);(directory/item['path']).chmod(0o400)
+                    try:existing=output.read(item['path'])
+                    except FileNotFoundError:output.write(item['path'],item['text'])
+                    else:
+                        if existing['sha256']!=item['sha256']:raise ValueError('artifact_drift')
+                    (directory/item['path']).chmod(0o400)
             finally:output.close()
             record['exported']=True
-            if record.get('answer'):self.catalog.message(session['id'],'assistant',record['answer'],job)
+            if record.get('answer'):messages.append(('assistant',record['answer']))
             for event in record.get('tool_events',[]):
                 text=event['tool']+' completed in '+format(event['wall_seconds'],'.3f')+' s.\n'+json.dumps(event['result'],ensure_ascii=False)
-                self.catalog.message(session['id'],'event',text[:16000],job)
-        previous=old.get('last_sequence',0)
+                messages.append(('event',text[:16000]))
         for event in record.get('events',[]):
-            if event['sequence']>previous:self.catalog.message(session['id'],'event',event['detail'],job)
-        record['last_sequence']=max((x['sequence'] for x in record.get('events',[])),default=previous)
-        with self.catalog.lock:
-            self.catalog.db.execute('UPDATE jobs SET state=?,record=? WHERE id=?',(record['state'],json.dumps(record),job));self.catalog.db.commit()
+            if event['sequence']>previous:messages.append(('event',event['detail']))
+        record['last_sequence']=max(previous,max((x['sequence'] for x in record.get('events',[])),default=previous))
+        for role,text in messages:
+            if type(text) is not str or len(text.encode())>32768:raise ValueError('invalid_message')
+            self.catalog.db.execute('INSERT INTO messages(session,role,text,job) VALUES (?,?,?,?)',(session['id'],role,text,job))
+        # The exported marker, event cursor and history share one commit.
+        self.catalog.db.execute('UPDATE jobs SET state=?,record=? WHERE id=?',(record['state'],json.dumps(record),job))
         safe={key:value for key,value in record.items() if key not in ('files','payload','tool_events','relay_events')}
         return safe
 

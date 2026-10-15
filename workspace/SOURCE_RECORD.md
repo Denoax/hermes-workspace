@@ -1,5 +1,8 @@
 # Source record
 
+Historical pre-v4 record. Current implementation and evidence are described in
+[production v4](../docs/PRODUCTION_V4.md) and the [current source record](../docs/LOCAL_CHAT_SOURCES.md).
+
 Principal visual reference: Mani's installed Paseo 0.11.2 desktop and owned Kona theme, inspected natively and in the installed SDK/source. The adaptation uses its restrained Noto typography, three-pane workspace/conversation/review arrangement, dark surfaces and blue selection color. Existing theme icons are reused. No new raster artwork or generated media is used.
 
 The installed `@getpaseo/plugin` 0.11.2 provider request/context exposes no trustworthy originating local/remote client identity at the Lab mutation boundary. Adding a Lab provider there could not enforce the requested local-only distinction while preserving normal Codex clients. The documented dedicated loopback fallback therefore implements the same bounded native broker interface; Paseo plugins/configuration/defaults remain unchanged.

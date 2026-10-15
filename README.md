@@ -7,9 +7,9 @@
 **Hermes × your local model.**<br>
 Local conversations, persistent projects and explicit boundaries.
 
-[Local use](#local-use) · [Capabilities](#capabilities) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
+[Local use](#local-use) · [Capabilities](#capabilities) · [Production repair and permissions](docs/PRODUCTION_V4.md) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
 
-<img src="showcase/local-chat/dark-1440.png" alt="Actual current Hermes interface, empty and ready for a conversation" width="100%">
+<img src="showcase/local-chat/dark-1440.png" alt="Actual current Hermes interface, ready for a conversation" width="100%">
 
 </div>
 
@@ -36,11 +36,14 @@ The banner retains the accepted repository artwork. The gallery shows the curren
 | Projects | Nested folders, persistent names/colours, cycle-safe moves and reviewed folder import |
 | Deletion | Confirm/cancel/Escape, cleanup acknowledgement and recoverable app-owned deletion |
 | Activity | Active-only notch, inline status and real attachment/search task results |
-| Preferences | Bottom-left theme buddy, persistent mute, accepted short clicks at 12% default and reduced motion |
+| Permissions | Server-held Chat only / Ask before actions / Workspace agent modes, exact approvals, revocation and final dispatch checks |
+| Preferences | Pointer-follow bottom-left theme buddy, persistent mute, accepted short clicks at 12% default and reduced motion |
 
 Normal chat preserves its existing service and 65,536 context. The candidate uses a separately confined 8,192-context backend under the bounded guard. Models execute sequentially. Each candidate reply currently unloads it and restores normal Qwen before the next Send; cold loading can take minutes. Replies have a 1,024-token limit with an explicit limit notice. History is checked against the actual template/tokenizer context and is not silently truncated.
 
 The candidate label identifies the pinned local artifact. Its upstream ablation lineage remains unproven; these checks establish working conversations, not a causal quality benchmark. Physical microphone, assistive technology, alternate browser, high-refresh and human motion/listening coverage remain separate limits.
+
+[v4 measured verification and remaining gaps](docs/V4_VERIFICATION.md): production chat works for both local models. Qualified guest execution remains unavailable while the complete current-boot watchdog gate is unresolved.
 
 ## Local use
 
@@ -61,8 +64,10 @@ python3 -m unittest discover -s tests -v
 
 Dependencies are pinned and self-hosted. `workspace/ui/dist/identities.json` identifies the build. Optional CPU transcription preparation is `python3 scripts/prepare_voice.py`; pinned source/model downloads remain outside Git. It requires cmake, a C++ compiler and ffmpeg and downloads no Qwen weights.
 
+Run workstation checks in the native host environment. The motion-encoder regression requires FFmpeg with `libx264`; the editor's Flatpak FFmpeg may omit that encoder.
+
 ## Boundaries and credits
 
-The UI remains unprivileged and loopback-only. Authentication, Host/Origin/CSRF checks, schemas and quotas remain enforced. A root-owned operator-only supervisor passes a connected backend descriptor to the unprivileged inference worker; it receives no chat prompt or model reply. Independent pidfd/heartbeat and deadlines own revocation. Text chat grants no executable tools. Existing guest controls remain separately qualified and bounded.
+The UI remains unprivileged and loopback-only. Authentication, Host/Origin/CSRF checks, schemas and quotas remain enforced. A root-owned operator-only supervisor passes a connected backend descriptor to the unprivileged inference worker; it receives no chat prompt or model reply. Independent pidfd/heartbeat and deadlines own revocation. Chat only grants no tools. Other modes expose a bounded action schema enforced by server policies and exact approvals; guest execution retains its separate native qualification. [Production launch context and contracts](docs/PRODUCTION_V4.md).
 
 Six components are by [Rare UI](https://www.rareui.com), pinned to `9633fcfa81c212a0ba48507e9c56be4869d61928`. Its MIT + Commons Clause and attribution terms are included in [the original license](workspace/ui/licenses/Rare-UI-integrated.txt); preserve them. [Source/adaptation record](docs/LOCAL_CHAT_SOURCES.md), [frontend notices](workspace/ui/licenses/Frontend-packages.txt), font licenses and Kenney CC0 sound provenance accompany the source. No generated visual media was added.

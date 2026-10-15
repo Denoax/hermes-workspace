@@ -18,10 +18,10 @@ Rare UI; preserve that attribution and review the terms for redistribution.
 
 Adaptations connect real state and accessible semantics: AiStatus receives
 actual run states; WebSearch receives actual Wikipedia results and no invented
-progress/favicons; FolderImport is a compact native-button child; VoiceNote
+progress/favicons; FolderImport presents the complete interactive folder surface in its import panel; VoiceNote
 requires a real media URL, uses the audio clock and measured waveform, pauses
 when hidden, and has no timer-only demo playback; TaskList receives actual
-attachment/search events and cannot invent completed tasks; DeleteButton awaits
+attachment/search/action receipts; queued guest dispatch is separate from completed execution; DeleteButton awaits
 the server acknowledgement and retains errors instead of animating fake success.
 All respect app and system reduced motion. Formatting and local utility imports
 are integration changes. Component appearance is an adaptation, not a claim of
@@ -58,3 +58,33 @@ are pinned in the lockfile. Tailwind, TypeScript and esbuild are build tools.
 Installed package license notices accompany the bundle. The accepted fonts,
 Hermes mark, theme buddy and CC0 Kenney-derived soft press/close samples are
 reused with their existing notices. No generated visual media was added.
+
+
+## Corrective v4 inspection
+
+The exact R01–R03 clips were reacquired and checked by SHA-256; their complete
+sequences and decoded frames informed the authored reasoning, reflective upload
+rim and active pixel notch. The R01 source has more effort positions than this
+backend supports: Hermes intentionally exposes only effective off/on. This is a
+semantic adaptation, not a claim of pixel-identical reproduction.
+
+The exact R11 [Awsmd dashboard](https://dribbble.com/shots/21673507-Task-Management-Dashboard)
+was reopened and inspected for its inset rail, tinted shell, proportions and
+spacing. The supplied Pinterest pin still has uncertain canonical identity and
+reuse provenance; Hermes independently implements its observed hierarchy rather
+than redistributing its artwork. Comparison-only third-party clips and frames
+stay outside the source and review archive.
+
+The bottom-left buddy ports the owned portfolio's `ThemeToggle.tsx` blob
+`87c77286eb94076fe088bebc4bfd20931db244a4` and scoped CSS from
+`219ea6918f2d828935a7604bc21e944c82927a23`. Its bounded face displacement, smoothing,
+body tilt/squash, sleep/pressed expressions and pointer cancellation are linked
+to real input. Pointer movement adds no audio cue. Accepted soft-press and
+soft-close bytes, mute and 12% default are preserved.
+
+The v4 complete review records each R01–R11 identity, implementation path,
+actual-pin capture, adaptation and unresolved comparison/device limit.
+The source-backed delete control now starts at its 48px tile width; this removes
+an observed full-width mount flash while preserving its confirmation transition.
+Continuous captured motion is technical evidence; human visual and listening
+approval remains separate. Frame intervals are not GPU timings.

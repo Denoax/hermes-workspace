@@ -22,6 +22,8 @@ const saved = Object.fromEntries(
     "AudioContext",
     "setTimeout",
     "clearTimeout",
+    "requestAnimationFrame",
+    "cancelAnimationFrame",
   ].map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]),
 );
 beforeEach(() => {
@@ -141,4 +143,96 @@ test("decode failure closes its AudioContext", async () => {
     /decode failure/,
   );
   assert.equal(closed, true);
+});
+
+test("live meter reads acquired samples and releases its graph on cancellation", async () => {
+  let measure,
+    cancelled = false,
+    closed = false,
+    disconnected = false,
+    levels;
+  globalThis.requestAnimationFrame = (callback) => {
+    measure = callback;
+    return 7;
+  };
+  globalThis.cancelAnimationFrame = (id) => {
+    cancelled = id === 7;
+  };
+  globalThis.AudioContext = class {
+    createMediaStreamSource() {
+      return {
+        connect() {},
+        disconnect() {
+          disconnected = true;
+        },
+      };
+    }
+    createAnalyser() {
+      return {
+        fftSize: 1024,
+        getFloatTimeDomainData(samples) {
+          samples.fill(0.25);
+        },
+      };
+    }
+    async close() {
+      closed = true;
+    }
+  };
+  const recorder = new Recorder();
+  await recorder.start(undefined, (values) => {
+    levels = values;
+  });
+  measure(100);
+  assert.deepEqual(levels, Array(32).fill(0.25));
+  recorder.cancel();
+  assert.equal(stopped, 1);
+  assert.equal(cancelled, true);
+  assert.equal(closed, true);
+  assert.equal(disconnected, true);
+});
+test("meter startup failure stops the recorder and acquired tracks", async () => {
+  globalThis.AudioContext = class {
+    constructor() {
+      throw Error("fixture meter failure");
+    }
+  };
+  const recorder = new Recorder();
+  await assert.rejects(
+    recorder.start(undefined, () => {}),
+    /meter failure/,
+  );
+  assert.equal(stopped, 1);
+  assert.equal(media.state, "inactive");
+  assert.equal(recorder.media, null);
+});
+test("cancel while browser permission is pending releases a late device grant", async () => {
+  let grant;
+  const pending = new Promise((resolve) => (grant = resolve));
+  navigator.mediaDevices.getUserMedia = () => pending;
+  const r = new Recorder();
+  const starting = r.start();
+  r.cancel();
+  grant({ getTracks: () => [{ stop: () => stopped++ }] });
+  await assert.rejects(starting, { name: "AbortError" });
+  assert.equal(stopped, 1);
+  assert.equal(r.tracks, null);
+  assert.equal(r.media, null);
+});
+test("device loss retires recording, callbacks and all acquired tracks", async () => {
+  const track = new EventTarget();
+  track.stop = () => stopped++;
+  navigator.mediaDevices.getUserMedia = async () => ({
+    getTracks: () => [track],
+  });
+  const r = new Recorder();
+  let lost = 0;
+  await r.start(undefined, undefined, () => lost++);
+  track.dispatchEvent(new Event("ended"));
+  assert.equal(lost, 1);
+  assert.equal(stopped, 1);
+  assert.equal(r.tracks, null);
+  assert.equal(r.media, null);
+  track.dispatchEvent(new Event("ended"));
+  assert.equal(lost, 1);
 });

@@ -1,6 +1,7 @@
 """Native single-instance app launcher; cookie bootstrap uses a private CDP pipe."""
 import fcntl
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -15,6 +16,37 @@ import urllib.request
 ORIGIN='http://127.0.0.1:18791'
 STATE=Path.home()/'.local/state/hermes-workspace'
 PROFILE=Path.home()/'.var/app/com.brave.Browser/config/hermes-workspace-browser'
+
+
+def prepare_control_directory(parent=None):
+    """Create the normal-user systemd control path required after login/reboot.
+
+    The protected window unit validates this same operator-owned directory. This
+    does not change native authority or fix a missing protected control socket.
+    A parent override is only for isolated filesystem contract tests.
+    """
+    if os.getuid() != 1000 or os.geteuid() != 1000:
+        raise RuntimeError('fixed_normal_user_control_directory_only')
+    path = Path('/run/user/1000/systemd') if parent is None else Path(parent)
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
+    descriptor = os.open(path, flags)
+    try:
+        facts = os.fstat(descriptor)
+        if facts.st_uid != 1000 or facts.st_mode & 0o022:
+            raise RuntimeError('untrusted_user_control_parent')
+        try:
+            os.mkdir('user.control', 0o700, dir_fd=descriptor)
+        except FileExistsError:
+            pass
+        child = os.open('user.control', flags, dir_fd=descriptor)
+        try:
+            facts = os.fstat(child)
+            if facts.st_uid != 1000 or facts.st_mode & 0o022:
+                raise RuntimeError('untrusted_user_control_directory')
+        finally:
+            os.close(child)
+    finally:
+        os.close(descriptor)
 
 
 def owns_browser(pid):
@@ -64,6 +96,78 @@ class Pipe:
                 self.buffer+=chunk
                 if len(self.buffer)>2*1024*1024:raise RuntimeError('browser_reply_limit')
         raise TimeoutError('browser_boot_timeout')
+
+
+def monitor_work_area(monitor):
+    """Return compositor logical coordinates, accounting for scale and reserved edges."""
+    scale = float(monitor.get('scale', 1))
+    width, height = float(monitor['width']), float(monitor['height'])
+    if not all(math.isfinite(value) and value > 0 for value in (scale, width, height)):
+        raise ValueError('invalid_monitor_geometry')
+    if int(monitor.get('transform', 0)) % 2:
+        width, height = height, width
+    width, height = width / scale, height / scale
+    reserved = monitor.get('reserved', [0, 0, 0, 0])
+    if len(reserved) != 4 or not all(isinstance(value, (int, float)) and math.isfinite(value) and value >= 0 for value in reserved):
+        raise ValueError('invalid_monitor_reserved_edges')
+    left, top, right, bottom = reserved
+    x, y = float(monitor['x']) + left, float(monitor['y']) + top
+    width, height = width - left - right, height - top - bottom
+    if width < 1 or height < 1 or not math.isfinite(x) or not math.isfinite(y):
+        raise ValueError('invalid_monitor_work_area')
+    return x, y, width, height
+
+
+def requested_window_size(monitor, width=1320, height=900):
+    _, _, available_width, available_height = monitor_work_area(monitor)
+    return max(1, min(width, int(available_width - 32))), max(1, min(height, int(available_height - 32)))
+
+
+def surface_inside_monitor(client, monitor):
+    x, y, width, height = monitor_work_area(monitor)
+    cx, cy = client['at']
+    cw, ch = client['size']
+    return cw > 0 and ch > 0 and cx >= x - 1 and cy >= y - 1 and cx + cw <= x + width + 1 and cy + ch <= y + height + 1
+
+
+def position_browser_window(pipe, target, client):
+    """Configure only this profile's window, then center AFTER Chromium's bounds."""
+    address = client.get('address', '')
+    if not re.fullmatch(r'0x[0-9a-f]+', address) or not owns_browser(client.get('pid')):
+        raise RuntimeError('invalid_window_identity')
+    monitors = json.loads(subprocess.check_output(['/usr/bin/hyprctl', 'monitors', '-j'], text=True))
+    monitor = next((row for row in monitors if row['id'] == client['monitor']), None)
+    if monitor is None:
+        raise RuntimeError('owned_window_monitor_missing')
+    width, height = requested_window_size(monitor)
+    window = 'address:' + address
+    def dispatch(command):
+        subprocess.run(['/usr/bin/hyprctl', 'dispatch', command], capture_output=True, check=True, timeout=3)
+    if client.get('fullscreen'):
+        mode = 'maximized' if client['fullscreen'] == 1 else 'fullscreen'
+        dispatch('hl.dsp.window.fullscreen({mode=' + json.dumps(mode) + ',action="toggle",window=' + json.dumps(window) + '})')
+    if not client.get('floating'):
+        dispatch('hl.dsp.window.float({action="toggle",window=' + json.dumps(window) + '})')
+    dispatch('hl.dsp.window.resize({x=' + str(width) + ',y=' + str(height) + ',relative=false,window=' + json.dumps(window) + '})')
+    window_id = pipe.call('Browser.getWindowForTarget', {'targetId': target})['windowId']
+    pipe.call('Browser.setWindowBounds', {'windowId': window_id, 'bounds': {'width': width, 'height': height}})
+    # On XWayland the Chromium configure can reset position after its reply.
+    # Final compositor placement and repeated readback must follow that request.
+    stable = 0
+    for attempt in range(20):
+        if attempt == 0 or stable == 0:
+            dispatch('hl.dsp.window.center({window=' + json.dumps(window) + '})')
+        time.sleep(.06)
+        rows = json.loads(subprocess.check_output(['/usr/bin/hyprctl', 'clients', '-j'], text=True))
+        current = next((row for row in rows if row.get('address') == address), None)
+        if current is None or not owns_browser(current.get('pid')):
+            raise RuntimeError('owned_window_identity_changed')
+        monitors = json.loads(subprocess.check_output(['/usr/bin/hyprctl', 'monitors', '-j'], text=True))
+        monitor = next((row for row in monitors if row['id'] == current['monitor']), None)
+        stable = stable + 1 if monitor and surface_inside_monitor(current, monitor) else 0
+        if stable >= 2:
+            return
+    raise RuntimeError('owned_window_remains_outside_monitor')
 
 
 def focus():
@@ -127,17 +231,7 @@ def browser(headless=False, audio_sink=None):
                     clients=json.loads(subprocess.check_output(['/usr/bin/hyprctl','clients','-j'],text=True))
                     matches=[x for x in clients if x.get('title')=='Hermes Workspace' and owns_browser(x.get('pid'))]
                     if matches:
-                        address=matches[0]['address']
-                        if re.fullmatch(r'0x[0-9a-f]+',address):
-                            if matches[0].get('fullscreen'):
-                                mode='maximized' if matches[0]['fullscreen']==1 else 'fullscreen'
-                                subprocess.run(['/usr/bin/hyprctl','dispatch','hl.dsp.window.fullscreen({mode="'+mode+'",action="toggle",window="address:'+address+'"})'],capture_output=True,check=True,timeout=3)
-                            if not matches[0].get('floating'):
-                                subprocess.run(['/usr/bin/hyprctl','dispatch','hl.dsp.window.float({action="toggle",window="address:'+address+'"})'],capture_output=True,check=True,timeout=3)
-                            subprocess.run(['/usr/bin/hyprctl','dispatch','hl.dsp.window.resize({x=1320,y=900,relative=false,window="address:'+address+'"})'],capture_output=True,check=True,timeout=3)
-                            subprocess.run(['/usr/bin/hyprctl','dispatch','hl.dsp.window.center({window="address:'+address+'"})'],capture_output=True,check=True,timeout=3)
-                            window_id=pipe.call('Browser.getWindowForTarget',{'targetId':target['targetId']})['windowId']
-                            pipe.call('Browser.setWindowBounds',{'windowId':window_id,'bounds':{'width':1320,'height':900}})
+                        position_browser_window(pipe, target['targetId'], matches[0])
                         break
                     time.sleep(.1)
         return pipe,process
@@ -154,6 +248,7 @@ def main():
     owned=None
     with (STATE/'launcher.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
+        prepare_control_directory()
         subprocess.run(['/usr/bin/systemctl','--user','start','hermes-workspace.service'],check=True,timeout=10)
         deadline=time.monotonic()+8
         while True:

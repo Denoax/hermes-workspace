@@ -58,12 +58,41 @@ export type Search = {
   attachment?: Attachment;
 };
 let csrf = "";
+let bootstrapping: Promise<{ csrf: string; version: number }> | null = null;
 export async function bootstrap() {
-  const r = await fetch("/hermes-workspace/api/bootstrap");
-  const d = await r.json();
-  if (!r.ok) throw Error(d.error);
-  csrf = d.csrf;
-  return d;
+  if (!bootstrapping)
+    bootstrapping = (async () => {
+      const r = await fetch("/hermes-workspace/api/bootstrap");
+      const d = await r.json();
+      if (!r.ok) throw Error(d.error);
+      csrf = d.csrf;
+      return d;
+    })().finally(() => {
+      bootstrapping = null;
+    });
+  return bootstrapping;
+}
+async function authorizedFetch(path: string, options: RequestInit) {
+  if (!csrf) await bootstrap();
+  for (let attempt = 0; ; attempt++) {
+    const token = csrf;
+    const response = await fetch(path, {
+      ...options,
+      headers: { ...options.headers, "X-Hermes-CSRF": token },
+    });
+    // The server rejects this specific refusal before dispatch. A service
+    // restart rotates CSRF; retrying the unchanged operation once is safe.
+    if (
+      response.status !== 403 ||
+      attempt ||
+      (await response.clone().json()).error !== "session_or_CSRF_denied"
+    )
+      return response;
+    if (csrf === token) {
+      csrf = "";
+      await bootstrap();
+    } else if (!csrf) await bootstrap();
+  }
 }
 export async function rpc<T = unknown>(
   method: string,
@@ -72,7 +101,7 @@ export async function rpc<T = unknown>(
   // The server rejects bursts before executing a method. Only that explicit
   // refusal is safe to retry; transport failures retain Send's idempotency ID.
   for (let attempt = 0; attempt < 3; attempt++) {
-    const r = await fetch("/hermes-workspace/api/rpc", {
+    const r = await authorizedFetch("/hermes-workspace/api/rpc", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Hermes-CSRF": csrf },
       body: JSON.stringify({ version: 1, method, fields }),
@@ -92,7 +121,7 @@ export async function upload(
   name: string,
   signal?: AbortSignal,
 ): Promise<Attachment> {
-  const r = await fetch("/hermes-workspace/api/upload", {
+  const r = await authorizedFetch("/hermes-workspace/api/upload", {
     method: "POST",
     headers: {
       "Content-Type": file.type || "text/plain",
@@ -112,7 +141,7 @@ export async function stream(
   onEvent: (e: Event) => void,
   signal: AbortSignal,
 ) {
-  const r = await fetch("/hermes-workspace/api/stream", {
+  const r = await authorizedFetch("/hermes-workspace/api/stream", {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Hermes-CSRF": csrf },
     body: JSON.stringify({ run_id: run, after }),

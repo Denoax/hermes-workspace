@@ -1,4 +1,7 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
+import { motion, useIsPresent } from "motion/react";
+import { useReducedMotion } from "./lib/reduced-motion";
 export function Panel({
   title,
   close,
@@ -9,19 +12,27 @@ export function Panel({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const present = useIsPresent();
+  const presentRef = useRef(present);
+  presentRef.current = present;
+  const reduced = useReducedMotion();
   useEffect(() => {
     const before = document.activeElement as HTMLElement;
+    const trigger =
+      document.getElementById(title.toLowerCase() + "-toggle") ?? before;
     const dialog = ref.current!;
     dialog.show();
     const resize = () => {
-      if (innerWidth < 500) dialog.style.maxHeight = "calc(100dvh - 80px)";
+      dialog.style.maxHeight = innerWidth < 500 ? "calc(100dvh - 80px)" : "";
     };
     const outside = (e: PointerEvent) => {
+      if (!presentRef.current) return;
       const target = e.target as HTMLElement;
       if (!dialog.contains(target) && !target.closest(".toolbar-actions"))
         close();
     };
     const escape = (e: KeyboardEvent) => {
+      if (!presentRef.current) return;
       if (e.key === "Escape") {
         e.preventDefault();
         close();
@@ -36,12 +47,23 @@ export function Panel({
       removeEventListener("resize", resize);
       removeEventListener("pointerdown", outside);
       removeEventListener("keydown", escape);
-      before?.focus();
+      if (!document.querySelector('dialog[open]:not([aria-hidden="true"])'))
+        trigger?.focus();
     };
-  }, []);
-  return (
-    <dialog
+  }, [title]);
+  return createPortal(
+    <motion.dialog
       ref={ref}
+      initial={{ opacity: 0, y: reduced ? 0 : -10, scale: reduced ? 1 : 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: reduced ? 0 : -8, scale: reduced ? 1 : 0.97 }}
+      transition={{ duration: reduced ? 0 : 0.23, ease: [0.2, 0.8, 0.2, 1] }}
+      style={{
+        transformOrigin: "top right",
+        pointerEvents: present ? "auto" : "none",
+      }}
+      aria-hidden={!present}
+      aria-label={title}
       className="panel"
       onCancel={(e) => {
         e.preventDefault();
@@ -72,26 +94,60 @@ export function Panel({
         </button>
       </header>
       {children}
-    </dialog>
+    </motion.dialog>,
+    document.body,
   );
 }
 export function Brain({ on }: { on: boolean }) {
   return (
     <svg
-      viewBox="0 0 32 32"
+      viewBox="0 0 40 40"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
       aria-hidden="true"
+      className={on ? "brain-icon brain-on" : "brain-icon"}
     >
-      <path d="M15 7c-1-5-8-4-8 1-5 0-6 7-3 9-3 5 1 10 6 9 2 5 5 2 5-1V7Zm2 0c1-5 8-4 8 1 5 0 6 7 3 9 3 5-1 10-6 9-2 5-5 2-5-1V7Z" />
-      <path
-        d={
-          on
-            ? "M7 8q1 6 5 3M4 17q4-3 7 1M7 25q-1-4 4-4M25 8q-1 6-5 3M28 17q-4-3-7 1M25 25q1-4-4-4"
-            : "M7 15h4m10 0h4"
-        }
-      />
+      <defs>
+        <linearGradient
+          id="brain-surface"
+          x1="8"
+          y1="4"
+          x2="32"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#ffc8df" />
+          <stop offset=".52" stopColor="#f398c7" />
+          <stop offset="1" stopColor="#d96ca8" />
+        </linearGradient>
+      </defs>
+      <g
+        className="brain-lobes"
+        fill="url(#brain-surface)"
+        stroke="#963962"
+        strokeWidth="1.1"
+        strokeLinejoin="round"
+      >
+        <path d="M18.8 8.7C17.8 4 11.4 4.6 10.6 8.8C6 8.1 3.5 12.7 5.7 16.3C1.6 19.2 3.6 25.4 7.5 26.1C6.9 31 11.8 34 15.4 31.9C17.2 35.1 20 32.6 19.2 29.8Z" />
+        <path d="M21.2 8.7C22.2 4 28.6 4.6 29.4 8.8C34 8.1 36.5 12.7 34.3 16.3C38.4 19.2 36.4 25.4 32.5 26.1C33.1 31 28.2 34 24.6 31.9C22.8 35.1 20 32.6 20.8 29.8Z" />
+        <path
+          d="M10.6 9q-.5 5 4 5m-9 3q4-2 7 2m-5 7q2-5 7-3m.5 9q-3-3 0-6m14-17q.5 5-4 5m9 3q-4-2-7 2m5 7q-2-5-7-3m-.5 9q3-3 0-6"
+          fill="none"
+        />
+      </g>
+      <g className="brain-pixels" fill="#e5a8ef">
+        <rect x="6" y="5" width="5" height="5" />
+        <rect x="14" y="3" width="5" height="5" />
+        <rect x="22" y="5" width="5" height="5" />
+        <rect x="29" y="11" width="5" height="5" />
+        <rect x="5" y="14" width="5" height="5" />
+        <rect x="13" y="12" width="5" height="5" />
+        <rect x="21" y="14" width="5" height="5" />
+        <rect x="29" y="21" width="5" height="5" />
+        <rect x="8" y="23" width="5" height="5" />
+        <rect x="16" y="22" width="5" height="5" />
+        <rect x="21" y="30" width="5" height="5" />
+        <rect x="13" y="31" width="4" height="4" />
+      </g>
     </svg>
   );
 }
@@ -111,13 +167,13 @@ export function Effort({
         <span>
           {supported ? (value === "on" ? "On" : "Off") : "Unavailable"}
         </span>
-        <button
-          type="button"
-          aria-label="About thinking effort"
-          title="This installed runtime supports a verified on/off template switch, not four native effort levels."
+        <span
+          className="effort-help"
+          title="The installed runtime supports thinking off/on. Four native effort levels are unavailable."
+          aria-label="Thinking supports off and on"
         >
           ?
-        </button>
+        </span>
       </div>
       <div className="effort-labels">
         <span>Faster</span>
@@ -133,21 +189,57 @@ export function Effort({
           step="1"
           value={value === "on" ? 1 : 0}
           disabled={!supported}
-          onChange={(e) => change(e.target.value === "1" ? "on" : "off")}
+          onChange={(event) =>
+            change(event.target.value === "1" ? "on" : "off")
+          }
           aria-valuetext={value === "on" ? "Thinking on" : "Thinking off"}
         />
         <div className="effort-fill" />
+        <span className="effort-tick tick-left" />
+        <span className="effort-tick tick-right" />
         <span className="brain-thumb">
           <Brain on={value === "on"} />
         </span>
-        <i />
-        <i />
       </div>
-      <p>
-        {supported
-          ? "Verified thinking on/off"
-          : "The installed model has no verified effort control."}
-      </p>
+      <p>Thinking {value === "on" ? "on" : "off"} · two supported states</p>
     </div>
+  );
+}
+export function MetalButton({
+  open,
+  toggle,
+}: {
+  open: boolean;
+  toggle: () => void;
+}) {
+  return (
+    <button
+      className="metal-button"
+      id="plus-menu"
+      type="button"
+      aria-label="Add attachment or action"
+      aria-expanded={open}
+      onClick={toggle}
+    >
+      <span className="metal-rim" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="metal-face" aria-hidden="true">
+        <svg viewBox="0 0 20 20">
+          <path d="M10 5v10M5 10h10" />
+        </svg>
+      </span>
+    </button>
+  );
+}
+export function WorkingIndicator({ state }: { state: string }) {
+  return (
+    <span className="working-pixels" data-state={state} aria-hidden="true">
+      {Array.from({ length: 9 }, (_, index) => (
+        <i key={index} style={{ "--pixel": index } as CSSProperties} />
+      ))}
+    </span>
   );
 }

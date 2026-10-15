@@ -21,6 +21,8 @@ def delete_content(app,kind,record_id):
         # page limit; older conversations must not survive detached by accident.
         with c.lock:sessions=[r[0] for project in projects for r in c.db.execute('SELECT id FROM sessions WHERE project=?',(project,))]
     with app.chat.lock:
+        if getattr(app,'actions',None):
+            for session in sessions:app.actions.revoke(session)
         with c.lock:
             owned_jobs=[r[0] for session in sessions for r in c.db.execute("SELECT id FROM jobs WHERE session=? AND state NOT IN ('review_ready','cancelled','failed','blocked')",(session,))]
         if owned_jobs:
