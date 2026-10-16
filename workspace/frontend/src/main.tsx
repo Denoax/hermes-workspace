@@ -8,6 +8,13 @@ import {
   type CSSProperties,
 } from "react";
 import { createRoot } from "react-dom/client";
+import { AnchoredPopover } from "./AnchoredPopover";
+import { UIIcon } from "./UIIcon";
+import { useReadingPosition } from "./lib/use-reading-position";
+import { saveManagedConversation } from "./lib/conversation-management";
+import { restoreComposingIntent, saveComposingIntent } from "./lib/composing-intent";
+import { ManagementError, managementFailureMessage, type ManagementFailure } from "./ManagementError";
+import { useFolderImport } from "./lib/use-folder-import";
 import { AnimatePresence, MotionConfig } from "motion/react";
 import { MessageMarkdown } from "./MessageMarkdown";
 import { applyCancellationResult, applyRetryResult } from "./lib/run-receipts";
@@ -119,6 +126,19 @@ function App() {
     [menu, setMenu] = useState<string | null>(null),
     [mobile, setMobile] = useState(false),
     [editingFolder, setEditingFolder] = useState<Folder | null>(null);
+  const [rowMenu, setRowMenu] = useState<
+    { kind: "folder"; value: Folder; anchor: HTMLElement } |
+    { kind: "conversation"; value: Session; anchor: HTMLElement } | null>(null);
+  const [managedSession, setManagedSession] = useState<Session | null>(null);
+  const [managedProject, setManagedProject] = useState<string | null>(null);
+  const [managementSaving, setManagementSaving] = useState(false);
+  const [managementFailure, setManagementFailure] = useState<ManagementFailure | null>(null);
+  const managementEpoch = useRef(0);
+  const managementPending = useRef<number | null>(null);
+  const [managementDelete, setManagementDelete] = useState(false);
+  const [startingConversation, setStartingConversation] = useState(false);
+  const reading = useReadingPosition(`${folder ?? ""}/${session ?? "new"}/${startingConversation}`, !folder || !!session || startingConversation);
+  const managementInvoker = useRef<HTMLElement | null>(null);
   const [theme, setTheme] = useState("dark"),
     [reduced, setReduced] = useState(false),
     [volume, setVolume] = useState(
@@ -152,11 +172,10 @@ function App() {
   const notchLabel = useRef<HTMLElement>(null);
   const [recordLevels, setRecordLevels] = useState<number[]>([]);
   const [formValue, setFormValue] = useState("");
-  const [importPreview, setImportPreview] = useState<{
-    ticket: string;
-    files: string[];
-    bytes: number;
-  } | null>(null);
+  const folderImport = useFolderImport(folder, panel === "Import folder", (files) => {
+    setFileNames(files);
+    setPanel("Files");
+  });
   const [actionRows, setActionRows] = useState<Action[]>([]);
   const [editingText, setEditingText] = useState("");
   const [actionPrompt, setActionPrompt] = useState("");
@@ -169,10 +188,11 @@ function App() {
     input = useRef<HTMLTextAreaElement>(null),
     fileInput = useRef<HTMLInputElement>(null),
     currentSession = useRef(session),
-    nextCursor = useRef(0),
-    messageEnd = useRef<HTMLDivElement>(null);
+    currentFolder = useRef(folder),
+    nextCursor = useRef(0);
   const recordingSession = useRef(new RecordingSession(recorder.current));
   currentSession.current = session;
+  currentFolder.current = folder;
   const active = !!run && !terminal(run.state);
   const selectedModel = models.find((m) => m.id === model);
   const selectedReadiness = readiness?.models?.[model];
@@ -311,6 +331,8 @@ function App() {
           project_id?: string | null;
           arm?: string;
         } | null>("view.read");
+        try { setStartingConversation(restoreComposingIntent(localStorage, old)); }
+        catch (error) { report(error); }
         if (old) {
           setTheme(old.theme ?? "dark");
           setReduced(old.motion === "reduced");
@@ -389,6 +411,8 @@ function App() {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.dataset.motion = reduced ? "reduced" : "system";
     if (!connected) return;
+    try { saveComposingIntent(localStorage, { project_id: folder, session_id: session }, startingConversation); }
+    catch (error) { report(error); }
     rpc("view.write", {
       state: {
         project_id: folder,
@@ -402,7 +426,7 @@ function App() {
         motion: reduced ? "reduced" : "system",
       },
     }).catch(report);
-  }, [theme, reduced, connected, folder, session, model]);
+  }, [theme, reduced, connected, folder, session, model, startingConversation]);
   useEffect(() => {
     if (!connected) return;
     setDraftReady(false);
@@ -536,27 +560,7 @@ function App() {
       controller.abort();
     };
   }, [run?.id, session, cursor]);
-  useEffect(() => {
-    messageEnd.current?.scrollIntoView({ block: "end", behavior: "instant" });
-  }, [messages.length, actionRows.length]);
-  useEffect(() => {
-    if (!menu) return;
-    const close = (event: PointerEvent) => {
-      if (!(event.target as HTMLElement).closest("[data-menu]")) setMenu(null);
-    };
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenu(null);
-        input.current?.focus();
-      }
-    };
-    addEventListener("pointerdown", close);
-    addEventListener("keydown", escape);
-    return () => {
-      removeEventListener("pointerdown", close);
-      removeEventListener("keydown", escape);
-    };
-  }, [menu]);
+  useEffect(() => { setRowMenu(null); setMenu(null); }, [session, folder]);
   useEffect(() => {
     if (!recording) return;
     const tick = setInterval(
@@ -591,6 +595,7 @@ function App() {
     [voice],
   );
   async function newConversation() {
+    setStartingConversation(true);
     draftAttachments.resetNew();
     const old = promptDrafts.current.get("new");
     promptDrafts.current.set("new", {
@@ -604,7 +609,7 @@ function App() {
     setSearch(null);
     setMobile(false);
     setText("");
-    setTimeout(() => input.current?.focus(), 0);
+    input.current?.focus({ preventScroll: true });
   }
   async function ensureSession(): Promise<string> {
     if (currentSession.current) return currentSession.current;
@@ -962,44 +967,8 @@ function App() {
   }
   async function importFolder() {
     setMenu(null);
-    setImportPreview(null);
+    folderImport.reset();
     setPanel("Import folder");
-  }
-  async function chooseImportFolder() {
-    if (!folder) {
-      setError("Create or select a project before importing a workspace copy.");
-      return;
-    }
-    setBusy(true);
-    try {
-      const preview = await rpc<{
-        cancelled?: boolean;
-        ticket: string;
-        files: string[];
-        bytes: number;
-      }>("workspace.import.request", { project_id: folder });
-      if (!preview.cancelled) setImportPreview(preview);
-    } catch (error) {
-      report(error);
-    } finally {
-      setBusy(false);
-    }
-  }
-  async function commitImport() {
-    if (!importPreview || !folder) return;
-    setBusy(true);
-    try {
-      await rpc("workspace.import.commit", {
-        project_id: folder,
-        ticket: importPreview.ticket,
-      });
-      setImportPreview(null);
-      await showFiles();
-    } catch (error) {
-      report(error);
-    } finally {
-      setBusy(false);
-    }
   }
   async function showFiles() {
     setPanel("Files");
@@ -1143,17 +1112,18 @@ function App() {
   }
   async function deleteRecord(kind: string, id: string) {
     await rpc("content.delete", { kind, id });
-    if (id === session || (kind === "project" && id === folder)) {
+    if (id === currentSession.current || (kind === "project" && id === currentFolder.current)) {
       currentSession.current = null;
       setSession(null);
       if (kind === "project") setFolder(null);
     }
+    const viewedSession = currentSession.current, viewedFolder = currentFolder.current;
     const current = await refresh();
-    if (session && !current.sessions.some((s) => s.id === session)) {
+    if (viewedSession && currentSession.current === viewedSession && !current.sessions.some((s) => s.id === viewedSession)) {
       currentSession.current = null;
       setSession(null);
     }
-    if (folder && !current.folders.some((f) => f.id === folder))
+    if (viewedFolder && currentFolder.current === viewedFolder && !current.folders.some((f) => f.id === viewedFolder))
       setFolder(null);
   }
   const filteredFolders = folderTree(folders, query);
@@ -1163,12 +1133,10 @@ function App() {
     return (
       <div
         key={row.id}
-        role="treeitem"
-        aria-expanded={children.length ? open : undefined}
-        aria-selected={folder === row.id}
+        className="folder-branch"
       >
         <div
-          className={"folder-row " + (folder === row.id ? "selected" : "")}
+          className={"folder-row " + (folder === row.id ? (session || startingConversation ? "context" : "selected") : "")}
           style={
             {
               "--depth": depth,
@@ -1178,7 +1146,10 @@ function App() {
         >
           <button
             className="branch-toggle"
-            disabled={!!query.trim()}
+            disabled={!children.length || !!query.trim()}
+            aria-hidden={!children.length}
+            aria-expanded={children.length ? open : undefined}
+            aria-controls={children.length && open ? "folder-children-" + row.id : undefined}
             title={
               query.trim()
                 ? "Matching branches stay expanded while filtering."
@@ -1211,8 +1182,10 @@ function App() {
           </button>
           <button
             className="folder-select"
+            aria-current={folder === row.id ? (session || startingConversation ? "location" : "page") : undefined}
             title={row.label}
             onClick={() => {
+              setStartingConversation(false);
               setFolder(row.id);
               setSession(null);
               setMobile(false);
@@ -1226,17 +1199,22 @@ function App() {
           </button>
           <button
             className="folder-options"
-            aria-label={"Edit " + row.label}
-            onClick={() => {
-              setEditingFolder(row);
-              setPanel("Folder");
+            id={"folder-options-" + row.id}
+            aria-label={"Actions for " + row.label}
+            title={"Actions for " + row.label}
+            aria-haspopup="menu"
+            aria-expanded={rowMenu?.kind === "folder" && rowMenu.value.id === row.id}
+            aria-controls={rowMenu?.kind === "folder" && rowMenu.value.id === row.id ? "row-actions" : undefined}
+            onClick={(event) => {
+              setMenu(null);
+              setRowMenu(rowMenu?.kind === "folder" && rowMenu.value.id === row.id ? null : { kind: "folder", value: row, anchor: event.currentTarget });
             }}
           >
-            ···
+            <UIIcon name="more" />
           </button>
         </div>
         {open && (
-          <div role="group">{children.map((f) => folderRow(f, depth + 1))}</div>
+          <div id={"folder-children-" + row.id}>{children.map((f) => folderRow(f, depth + 1))}</div>
         )}
       </div>
     );
@@ -1306,7 +1284,7 @@ function App() {
                 New conversation <span>＋</span>
               </button>
               <label className="rail-search">
-                <span aria-hidden="true">⌕</span>
+                <UIIcon name="search" />
                 <input
                   aria-label="Search folders and conversations"
                   value={query}
@@ -1324,14 +1302,14 @@ function App() {
                   ＋
                 </button>
               </div>
-              <div
+              <nav
                 className="folder-tree"
-                role="tree"
                 aria-label="Project folders"
               >
                 <button
-                  className={"all-conversations " + (!folder ? "selected" : "")}
+                  className={"all-conversations " + (!folder && !session && !startingConversation ? "selected" : "")}
                   onClick={() => {
+                    setStartingConversation(false);
                     setFolder(null);
                     setSession(null);
                   }}
@@ -1339,7 +1317,7 @@ function App() {
                   All conversations
                 </button>
                 {filteredFolders.roots.map((f) => folderRow(f))}
-              </div>
+              </nav>
               <div className="rail-heading">
                 <h2>Conversations</h2>
                 <span>{listed.length || ""}</span>
@@ -1354,7 +1332,9 @@ function App() {
                   >
                     <button
                       title={s.title}
+                      aria-current={session === s.id ? "page" : undefined}
                       onClick={() => {
+                        setStartingConversation(false);
                         setSession(s.id);
                         setFolder(s.project);
                         setModel(s.arm);
@@ -1365,15 +1345,18 @@ function App() {
                     </button>
                     <button
                       className="session-options"
-                      aria-label={"Manage " + s.title}
-                      onClick={() => {
-                        setSession(s.id);
-                        setFolder(s.project);
-                        setFormValue(s.title);
-                        setPanel("Conversation");
+                      id={"conversation-options-" + s.id}
+                      aria-label={"Actions for " + s.title}
+                      title={"Actions for " + s.title}
+                      aria-haspopup="menu"
+                      aria-expanded={rowMenu?.kind === "conversation" && rowMenu.value.id === s.id}
+                      aria-controls={rowMenu?.kind === "conversation" && rowMenu.value.id === s.id ? "row-actions" : undefined}
+                      onClick={(event) => {
+                        setMenu(null);
+                        setRowMenu(rowMenu?.kind === "conversation" && rowMenu.value.id === s.id ? null : { kind: "conversation", value: s, anchor: event.currentTarget });
                       }}
                     >
-                      ···
+                      <UIIcon name="more" />
                     </button>
                   </div>
                 ))}
@@ -1386,14 +1369,14 @@ function App() {
                 )}
               </nav>
               <footer className="rail-footer">
-                <span>{theme === "dark" ? "Dark" : "Light"} workspace</span>
+                <span className="sr-only">Interface preferences</span>
                 <button
                   id="sound-toggle"
                   className="icon-button"
                   aria-label="Mute interface sounds"
                   aria-pressed="true"
                 >
-                  ♫
+                  <UIIcon name="sound" />
                 </button>
               </footer>
             </aside>
@@ -1414,21 +1397,13 @@ function App() {
                 >
                   ☰
                 </button>
-                <span
-                  className="conversation-title"
-                  title={
-                    folders.find((item) => item.id === folder)?.label ??
-                    "No project selected"
-                  }
-                >
-                  <span className="workspace-location">
-                    {folders.find((item) => item.id === folder)?.label ??
-                      "No project"}
+                <nav className="conversation-title" aria-label="Current location">
+                  {folder && <><button className="workspace-location" title={folders.find(item => item.id === folder)?.label}
+                    onClick={() => { setStartingConversation(false); setSession(null); }}>{folders.find(item => item.id === folder)?.label}</button><span aria-hidden="true">/</span></>}
+                  <span aria-current="page" title={sessions.find(item => item.id === session)?.title}>
+                    {sessions.find(item => item.id === session)?.title ?? (!startingConversation && folder ? "Overview" : "New conversation")}
                   </span>
-                  <span aria-hidden="true"> / </span>
-                  {sessions.find((item) => item.id === session)?.title ??
-                    "New conversation"}
-                </span>
+                </nav>
                 <div className="toolbar-actions">
                   <button
                     id="files-toggle"
@@ -1490,16 +1465,16 @@ function App() {
                   ) : null}
                 </div>
               )}
-              <main className="conversation" aria-label="Conversation">
+              <main ref={reading.container} className="conversation" aria-label="Conversation">
                 <div className="message-column">
-                  {!messages.length && folder && (
+                  {!messages.length && folder && !session && !startingConversation && (
                     <div className="project-dashboard">
                       <h1>{folders.find((f) => f.id === folder)?.label}</h1>
                       <p>
                         {sessions.filter((s) => s.project === folder).length}{" "}
-                        conversations ·{" "}
+                        {sessions.filter((s) => s.project === folder).length === 1 ? "conversation" : "conversations"} ·{" "}
                         {folders.filter((f) => f.parent === folder).length}{" "}
-                        folders
+                        {folders.filter((f) => f.parent === folder).length === 1 ? "folder" : "folders"}
                       </p>
                       <div className="dashboard-actions">
                         <button onClick={newConversation}>
@@ -1507,7 +1482,12 @@ function App() {
                         </button>
                         <button onClick={importFolder}>Import folder</button>
                         <button
-                          onClick={() => {
+                          onClick={(event) => {
+                            managementEpoch.current++;
+                            setManagementSaving(false);
+                            setManagementFailure(null);
+                            managementInvoker.current = event.currentTarget;
+                            setManagementDelete(false);
                             setEditingFolder(
                               folders.find((f) => f.id === folder)!,
                             );
@@ -1523,7 +1503,7 @@ function App() {
                           <button
                             className="dashboard-folder"
                             key={f.id}
-                            onClick={() => setFolder(f.id)}
+                            onClick={() => { setStartingConversation(false); setFolder(f.id); }}
                           >
                             <span style={{ color: `var(--${f.color})` }}>
                               ▱
@@ -1547,7 +1527,7 @@ function App() {
                         ))}
                     </div>
                   )}
-                  {!messages.length && !folder && (
+                  {!messages.length && (!folder || !!session || startingConversation) && (
                     <div className="empty-state">
                       <h1>New conversation</h1>
                     </div>
@@ -1678,10 +1658,10 @@ function App() {
                       />
                     </details>
                   )}
-                  <div ref={messageEnd} />
                 </div>
               </main>
               <div className="composer-area">
+                {!reading.atEnd && <button type="button" className="jump-latest" onClick={reading.jump}>Jump to latest ↓</button>}
                 {error && (
                   <div className="error-banner" role="alert">
                     <span>{error}</span>
@@ -1849,27 +1829,28 @@ function App() {
                           }
                         />
                         {menu === "plus" && (
-                          <div className="action-menu" role="menu">
+                          <AnchoredPopover id="composer-actions" anchor={document.getElementById("plus-menu")!}
+                            close={() => setMenu(null)} placement="top-start" className="action-menu" menu label="Add to conversation">
                             <button
                               type="button"
                               role="menuitem"
-                              onClick={() => fileInput.current?.click()}
+                              onClick={() => { setMenu(null); fileInput.current?.click(); }}
                             >
-                              ↗ Photos and files
+                              <UIIcon name="file" /> Photos and files
                             </button>
                             <button
                               type="button"
                               role="menuitem"
                               onClick={importFolder}
                             >
-                              ▱ Import folder
+                              <UIIcon name="folder" /> Import folder
                             </button>
                             <button
                               type="button"
                               role="menuitem"
                               onClick={showFiles}
                             >
-                              ▤ Project library
+                              <UIIcon name="file" /> Project library
                             </button>
                             <button
                               type="button"
@@ -1877,7 +1858,7 @@ function App() {
                               disabled={!caps?.recording}
                               onClick={startRecording}
                             >
-                              ♩ Record voice note
+                              <UIIcon name="mic" /> Record voice note
                             </button>
                             {caps?.search.configured && (
                               <button
@@ -1885,10 +1866,10 @@ function App() {
                                 role="menuitem"
                                 onClick={searchWeb}
                               >
-                                ⌕ Search Wikipedia
+                                <UIIcon name="search" /> Search Wikipedia
                               </button>
                             )}
-                          </div>
+                          </AnchoredPopover>
                         )}
                       </div>
                       <input
@@ -1941,6 +1922,9 @@ function App() {
                         <button
                           type="button"
                           className="effort-button"
+                          id="effort-toggle"
+                          aria-haspopup="dialog"
+                          aria-controls={menu === "effort" ? "effort-options" : undefined}
                           aria-label="Reasoning effort"
                           aria-expanded={menu === "effort"}
                           onClick={() =>
@@ -1950,13 +1934,14 @@ function App() {
                           <Brain on={effort === "on"} />
                         </button>
                         {menu === "effort" && (
-                          <div className="effort-popover">
+                          <AnchoredPopover id="effort-options" anchor={document.getElementById("effort-toggle")!}
+                            close={() => setMenu(null)} placement="top-end" className="effort-popover" label="Reasoning effort">
                             <Effort
                               value={effort}
                               change={setEffort}
                               supported={!!selectedModel?.reasoning.length}
                             />
-                          </div>
+                          </AnchoredPopover>
                         )}
                       </div>
                       <PermissionMode {...permissions} />
@@ -2021,9 +2006,34 @@ function App() {
                 </span>
               </div>
             </section>
+            {rowMenu && <AnchoredPopover id="row-actions" anchor={rowMenu.anchor} close={() => setRowMenu(null)}
+              className="row-action-menu" menu label={"Actions for " + (rowMenu.kind === "folder" ? rowMenu.value.label : rowMenu.value.title)}>
+              <button role="menuitem" type="button" onClick={() => {
+                managementEpoch.current++;
+                setManagementSaving(false);
+                setManagementFailure(null);
+                managementInvoker.current = rowMenu.anchor;
+                setManagementDelete(false);
+                if (rowMenu.kind === "folder") { setEditingFolder(rowMenu.value); setPanel("Folder"); }
+                else { setManagedSession(rowMenu.value); setManagedProject(rowMenu.value.project); setFormValue(rowMenu.value.title); setPanel("Conversation"); }
+                setRowMenu(null);
+              }}>{rowMenu.kind === "folder" ? "Edit folder…" : "Rename or move…"}</button>
+              <button role="menuitem" type="button" className="danger-action" onClick={() => {
+                managementEpoch.current++;
+                setManagementSaving(false);
+                setManagementFailure(null);
+                managementInvoker.current = rowMenu.anchor;
+                setManagementDelete(true);
+                if (rowMenu.kind === "folder") { setEditingFolder(rowMenu.value); setPanel("Folder"); }
+                else { setManagedSession(rowMenu.value); setManagedProject(rowMenu.value.project); setFormValue(rowMenu.value.title); setPanel("Conversation"); }
+                setRowMenu(null);
+              }}>Review deletion…</button>
+            </AnchoredPopover>}
             <AnimatePresence initial={false}>
               {panel && (
-                <Panel key={panel} title={panel} close={() => setPanel(null)}>
+                <Panel key={panel} title={managementDelete && (panel === "Folder" || panel === "Conversation") ? "Delete " + panel.toLowerCase() : panel} close={() => { managementEpoch.current++; if (panel === "Import folder") folderImport.reset(); setPanel(null); }}
+                  returnFocusTo={panel === "Folder" || panel === "Conversation" ? managementInvoker.current : null}>
+                  {(panel === "Folder" || panel === "Conversation") && <ManagementError failure={managementFailure} epoch={managementEpoch.current} />}
                   {panel === "Settings" ? (
                     <>
                       <section
@@ -2165,35 +2175,37 @@ function App() {
                           Select a project before importing.
                         </p>
                       )}
+                      {folderImport.error && <p className="run-error" role="alert">{folderImport.error}</p>}
                       <button
                         className="primary-button"
-                        disabled={busy || !folder}
-                        onClick={chooseImportFolder}
+                        disabled={busy || !!folderImport.pending || !folder}
+                        onClick={folderImport.choose}
                       >
-                        {busy ? "Waiting for folder picker…" : "Choose folder"}
+                        {folderImport.pending === "choosing" ? "Waiting for folder picker…" : "Choose folder"}
                       </button>
-                      {importPreview && (
+                      {folderImport.preview && (
                         <section className="import-review">
                           <h3>Review import</h3>
                           <p>
-                            {importPreview.files.length} files ·{" "}
-                            {importPreview.bytes.toLocaleString()} bytes
+                            {folderImport.preview.files.length} files ·{" "}
+                            {folderImport.preview.bytes.toLocaleString()} bytes
                           </p>
                           <ul>
-                            {importPreview.files.map((path) => (
+                            {folderImport.preview.files.map((path) => (
                               <li key={path}>{path}</li>
                             ))}
                           </ul>
                           <button
                             className="primary-button"
-                            disabled={busy}
-                            onClick={commitImport}
+                            disabled={busy || !!folderImport.pending}
+                            onClick={folderImport.commit}
                           >
-                            Copy reviewed files
+                            {folderImport.pending === "copying" ? "Copying reviewed files…" : "Copy reviewed files"}
                           </button>
                           <button
                             className="secondary-button"
-                            onClick={() => setImportPreview(null)}
+                            disabled={!!folderImport.pending}
+                            onClick={folderImport.reset}
                           >
                             Cancel import
                           </button>
@@ -2364,20 +2376,35 @@ function App() {
                     </>
                   ) : panel === "Conversation" ? (
                     <>
-                      <form
+                      {!managementDelete && <><form
                         className="app-form"
                         onSubmit={async (event) => {
                           event.preventDefault();
-                          if (!session || !formValue.trim()) return;
+                          if (!managedSession || !formValue.trim() || managementPending.current === managementEpoch.current) return;
+                          const epoch = managementEpoch.current;
+                          const target = managedSession;
+                          managementPending.current = epoch;
+                          setManagementSaving(true);
+                          setManagementFailure(null);
                           try {
-                            await rpc("session.rename", {
-                              session_id: session,
-                              title: formValue.trim(),
+                            const saved = await saveManagedConversation(target, { title: formValue, project: managedProject }, {
+                              rename: (id, title) => rpc("session.rename", { session_id: id, title }),
+                              move: (id, project) => rpc("session.move", { session_id: id, project_id: project }),
                             });
+                            if (currentSession.current === target.id && saved.project !== target.project) setFolder(saved.project);
                             await refresh();
-                            setPanel(null);
+                            if (managementEpoch.current === epoch) {
+                              setManagedSession(saved);
+                              setPanel(null);
+                            }
                           } catch (error) {
-                            report(error);
+                            if (managementEpoch.current === epoch) setManagementFailure({ epoch, message: managementFailureMessage(error) });
+                            else report(Error("An earlier conversation save failed: " + managementFailureMessage(error)));
+                          } finally {
+                            if (managementEpoch.current === epoch) {
+                              managementPending.current = null;
+                              setManagementSaving(false);
+                            }
                           }
                         }}
                       >
@@ -2385,6 +2412,7 @@ function App() {
                           Conversation name
                           <input
                             value={formValue}
+                            disabled={managementSaving}
                             required
                             maxLength={80}
                             onChange={(event) =>
@@ -2392,27 +2420,13 @@ function App() {
                             }
                           />
                         </label>
-                        <button className="primary-button" type="submit">
-                          Save name
-                        </button>
-                      </form>
                       <label className="setting-line">
                         Move to folder
                         <select
-                          value={folder ?? ""}
-                          onChange={async (e) => {
-                            if (!session) return;
-                            try {
-                              await rpc("session.move", {
-                                session_id: session,
-                                project_id: e.target.value || null,
-                              });
-                              setFolder(e.target.value || null);
-                              await refresh();
-                            } catch (e) {
-                              report(e);
-                            }
-                          }}
+                          value={managedProject ?? ""}
+                          title={folders.find(item => item.id === managedProject)?.label ?? "No folder"}
+                          disabled={managementSaving}
+                          onChange={event => setManagedProject(event.target.value || null)}
                         >
                           <option value="">No folder</option>
                           {folders.map((f) => (
@@ -2422,24 +2436,34 @@ function App() {
                           ))}
                         </select>
                       </label>
+                        <button className="primary-button" type="submit" disabled={managementSaving}>
+                          {managementSaving ? "Saving…" : "Save changes"}
+                        </button>
+                        <button type="button" onClick={() => { managementEpoch.current++; setPanel(null); }}>Cancel</button>
+                      </form></>}
+                      {managementDelete && <><p><strong>{managedSession?.title}</strong></p>
                       <p>
                         Delete this conversation and its app-owned references.
                       </p>
-                      {session && (
+                      {managedSession && (
                         <DeleteButton
-                          onConfirm={() =>
-                            deleteRecord("conversation", session)
-                          }
+                          onConfirm={async () => {
+                            const epoch = managementEpoch.current;
+                            await deleteRecord("conversation", managedSession.id);
+                            if (managementEpoch.current === epoch) setPanel(null);
+                          }}
                         />
-                      )}
+                      )}</>}
                     </>
                   ) : (
                     editingFolder && (
                       <>
-                        <label className="setting-line">
+                        {!managementDelete && <><label className="setting-line">
                           Name
                           <input
                             value={editingFolder.label}
+                            disabled={managementSaving}
+                            maxLength={80}
                             onChange={(e) =>
                               setEditingFolder({
                                 ...editingFolder,
@@ -2452,6 +2476,7 @@ function App() {
                           Parent
                           <select
                             value={editingFolder.parent ?? ""}
+                            disabled={managementSaving}
                             onChange={(e) =>
                               setEditingFolder({
                                 ...editingFolder,
@@ -2476,6 +2501,7 @@ function App() {
                               key={color}
                               aria-label={color}
                               aria-pressed={editingFolder.color === color}
+                              disabled={managementSaving}
                               style={{ background: `var(--${color})` }}
                               onClick={() =>
                                 setEditingFolder({ ...editingFolder, color })
@@ -2485,6 +2511,11 @@ function App() {
                         </fieldset>
                         <button
                           onClick={async () => {
+                            const epoch = managementEpoch.current;
+                            if (managementPending.current === epoch) return;
+                            managementPending.current = epoch;
+                            setManagementSaving(true);
+                            setManagementFailure(null);
                             try {
                               await rpc("folder.update", {
                                 project_id: editingFolder.id,
@@ -2493,24 +2524,33 @@ function App() {
                                 color: editingFolder.color,
                               });
                               await refresh();
-                              setPanel(null);
+                              if (managementEpoch.current === epoch) setPanel(null);
                             } catch (e) {
-                              report(e);
+                              if (managementEpoch.current === epoch) setManagementFailure({ epoch, message: managementFailureMessage(e) });
+                              else report(Error("An earlier folder save failed: " + managementFailureMessage(e)));
+                            } finally {
+                              if (managementEpoch.current === epoch) {
+                                managementPending.current = null;
+                                setManagementSaving(false);
+                              }
                             }
                           }}
+                          disabled={managementSaving}
                         >
                           Save folder
-                        </button>
+                        </button></>}
+                        {managementDelete && <><p><strong>{editingFolder.label}</strong></p>
                         <p>
                           Deleting this folder includes its child folders and
                           conversations. Original host folders stay unchanged.
                         </p>
                         <DeleteButton
                           onConfirm={async () => {
+                            const epoch = managementEpoch.current;
                             await deleteRecord("project", editingFolder.id);
-                            setPanel(null);
+                            if (managementEpoch.current === epoch) setPanel(null);
                           }}
-                        />
+                        /></>}
                       </>
                     )
                   )}

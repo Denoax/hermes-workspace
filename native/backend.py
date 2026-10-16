@@ -7,6 +7,7 @@ import os
 import pwd
 from pathlib import Path
 import socket
+import stat
 import subprocess
 import time
 
@@ -158,6 +159,39 @@ def _stop_locked():
         SOCKET.unlink(missing_ok=True)
 
 
+def _write_unit(path, arm):
+    """Preserve unknown files and set the static generated unit's own mode.
+
+    The supervisor's private umask must not change the registered0644 unit
+    contract. Read/validate an existing file before any write or mode change.
+    """
+    raw = unit_text(arm).encode()
+    known = (unit_text('normal').encode(), unit_text('abliterated').encode())
+    flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK
+    try:
+        descriptor = os.open(path, flags | os.O_CREAT | os.O_EXCL, 0o644)
+        before = None
+    except FileExistsError:
+        before = path.lstat()
+        if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_uid != os.geteuid():
+            raise RuntimeError('preserve_unregistered_backend_unit')
+        descriptor = os.open(path, flags)
+    with os.fdopen(descriptor, 'r+b') as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_uid != os.geteuid():
+            raise RuntimeError('preserve_unregistered_backend_unit')
+        if before is not None:
+            identity = lambda item: (item.st_dev, item.st_ino, item.st_size, item.st_mtime_ns, item.st_ctime_ns)
+            if identity(info) != identity(before) or stream.read(max(map(len, known)) + 1) not in known:
+                raise RuntimeError('preserve_unregistered_backend_unit')
+            if identity(os.fstat(stream.fileno())) != identity(info):
+                raise RuntimeError('preserve_changed_backend_unit')
+        os.fchmod(stream.fileno(), 0o644)
+        stream.seek(0)
+        stream.write(raw)
+        stream.truncate()
+
+
 def start(arm, valid=lambda:True):
     import window
     if not window.active() or not valid():
@@ -165,9 +199,7 @@ def start(arm, valid=lambda:True):
     if not artifacts_current():raise RuntimeError('fresh_pinned_artifact_verification_required')
     stop()
     path = Path('/run/systemd/system')/UNIT
-    if path.exists() and path.read_text() not in (unit_text('normal'), unit_text('abliterated')):
-        raise RuntimeError('preserve_unregistered_backend_unit')
-    path.write_text(unit_text(arm))
+    _write_unit(path, arm)
     subprocess.run(['/usr/bin/systemctl', 'daemon-reload'], check=True, timeout=10, capture_output=True)
     subprocess.run(['/usr/bin/systemctl', 'start', UNIT], check=True, timeout=30, capture_output=True)
     started = time.monotonic()

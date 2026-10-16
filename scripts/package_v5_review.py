@@ -111,12 +111,13 @@ def publication(record, source):
     return {name: record[name] for name in fields if name in record}
 
 
-def validate_acceptance(acceptance, source, payload):
+def validate_acceptance(acceptance, source, payload, *, expected_rows=36, expected_ids=None):
     rows = acceptance['rows']
     counts = {status: sum(row['status'] == status for row in rows) for status in STATUSES}
     required = json.loads(payload['review/loop/requirements.json'])
     state = json.loads(payload['review/loop/state.json'])
-    if (len(rows) != 36 or len({row['id'] for row in rows}) != 36 or sum(counts.values()) != 36
+    if (len(rows) != expected_rows or len({row['id'] for row in rows}) != expected_rows or sum(counts.values()) != expected_rows
+            or expected_ids is not None and [row['id'] for row in rows] != list(expected_ids)
             or [row['id'] for row in rows] != [task['id'] for task in required['tasks']]
             or set(state['tasks']) != {row['id'] for row in rows}
             or state['requirements_sha256'] != digest(payload['review/loop/requirements.json'])):
@@ -134,7 +135,7 @@ def validate_acceptance(acceptance, source, payload):
     if receipt.get('verification_artifact'):
         path = 'review/' + safe_name(receipt['verification_artifact'])
         expected_publication.update(verification_archive_path=path, verification_sha256=digest(payload[path]))
-    expected_summary = {'counts': counts, 'overall': 'PASS' if counts['PASS'] == 36 else 'PARTIAL',
+    expected_summary = {'counts': counts, 'overall': 'PASS' if counts['PASS'] == expected_rows else 'PARTIAL',
                         'unfinished_ids': [row['id'] for row in rows if row['status'] != 'PASS'],
                         'publication_status': receipt['status']}
     manifest = {name: digest(data) for name, data in source['files'].items()}
@@ -188,7 +189,10 @@ def export_source(live, public, selection, destination):
     return record
 
 
-def verify(archive, destination):
+def verify(archive, destination, *, archive_name=NAME):
+    safe_name(archive_name)
+    if len(PurePosixPath(archive_name).parts) != 1:
+        raise ValueError('single_archive_root_required')
     # Validate names, types, sizes, payload hashes and sanitization before any
     # extraction. A fresh destination prevents preexisting symlink traversal.
     with zipfile.ZipFile(archive) as source:
@@ -198,16 +202,16 @@ def verify(archive, destination):
         if sum(item.file_size for item in items) > MAX_TOTAL:raise ValueError('review_total_limit')
         payload, modes = {}, {}
         for item in items:
-            if not item.filename.startswith(NAME + '/') or item.is_dir() or item.flag_bits & 1:
+            if not item.filename.startswith(archive_name + '/') or item.is_dir() or item.flag_bits & 1:
                 raise ValueError('fixed_regular_archive_root_required')
-            name = item.filename.removeprefix(NAME + '/')
-            safe_name(name)
+            member_name = item.filename.removeprefix(archive_name + '/')
+            safe_name(member_name)
             mode = item.external_attr >> 16
             if stat.S_IFMT(mode) not in (0, stat.S_IFREG) or item.file_size > MAX_MEMBER:
                 raise ValueError('bounded_regular_archive_member_required')
             data = source.read(item)
-            checked(name, data)
-            payload[name], modes[name] = data, mode
+            checked(member_name, data)
+            payload[member_name], modes[member_name] = data, mode
     if 'SHA256SUMS.txt' not in payload:raise ValueError('checksum_inventory_required')
     checksums = payload.pop('SHA256SUMS.txt').decode('utf-8').splitlines()
     expected = {}
@@ -221,7 +225,7 @@ def verify(archive, destination):
     if list(expected) != sorted(expected) or set(expected) != set(payload):raise ValueError('exact_sorted_checksum_inventory_required')
     if any(digest(data) != expected[name] for name, data in payload.items()):raise ValueError('payload_hash_failure')
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
-    root = destination / NAME
+    root = destination / archive_name
     for name, data in {**payload, 'SHA256SUMS.txt': ('\n'.join(checksums) + '\n').encode()}.items():
         target = root / name
         target.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -230,7 +234,10 @@ def verify(archive, destination):
     return root, len(payload)
 
 
-def package(public, review, review_files, output):
+def package(public, review, review_files, output, *, expected_rows=36, expected_ids=None, archive_name=NAME):
+    safe_name(archive_name)
+    if len(PurePosixPath(archive_name).parts) != 1:
+        raise ValueError('single_archive_root_required')
     source = committed_source(public)
     if not isinstance(review_files, list) or len(review_files) != len(set(review_files)):
         raise ValueError('explicit_unique_review_inventory_required')
@@ -244,22 +251,22 @@ def package(public, review, review_files, output):
     export = json.loads(payload['review/source-export.json'])
     if export['source_files'] != manifest:raise ValueError('committed_source_differs_from_reviewed_export')
     acceptance = json.loads(payload['review/acceptance.json'])
-    validate_acceptance(acceptance, source, payload)
+    validate_acceptance(acceptance, source, payload, expected_rows=expected_rows, expected_ids=expected_ids)
     payload['implementation.json'] = encoded({'commit': source['commit'], 'tree': source['tree'], 'source_files': manifest,
                                              'private_backups_included': False, 'canonical_acceptance': 'review/acceptance.json'})
     for name, data in payload.items():checked(name, data)
     if len(payload) >= MAX_MEMBERS or sum(map(len, payload.values())) > MAX_TOTAL:raise ValueError('review_total_limit')
     payload['SHA256SUMS.txt'] = ''.join(digest(data) + '  ' + name + '\n' for name, data in sorted(payload.items())).encode()
     with zipfile.ZipFile(output, 'x', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        for name, data in sorted(payload.items()):
-            item = zipfile.ZipInfo(NAME + '/' + name)
-            executable = name.startswith('source/') and source['modes'][name.removeprefix('source/')] == '100755'
+        for member_name, data in sorted(payload.items()):
+            item = zipfile.ZipInfo(archive_name + '/' + member_name)
+            executable = member_name.startswith('source/') and source['modes'][member_name.removeprefix('source/')] == '100755'
             item.external_attr = (stat.S_IFREG | (0o700 if executable else 0o600)) << 16
             item.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(item, data)
     output.chmod(0o600)
     with tempfile.TemporaryDirectory(prefix='hermes-v5-verify-') as directory:
-        _root, count = verify(output, Path(directory) / 'clean')
+        _root, count = verify(output, Path(directory) / 'clean', archive_name=archive_name)
     return {'bytes': output.stat().st_size, 'sha256': digest(output.read_bytes()),
             'payloads_verified': count, 'commit': source['commit'], 'tree': source['tree']}
 

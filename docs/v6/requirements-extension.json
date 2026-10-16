@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "scope": "Additive v6 extension from current Mani request. Preserve every original v5 task/status/evidence; this file is not a replacement live state.",
+  "objective_extension": "Refine Hermes navigation,contextual actions,reading behavior,modal/sheet focus and visual/motion quality with inspected human references.",
+  "tasks": [
+    {
+      "id": "V6-BASE",
+      "title": "Reconcile actual current source/pin and preserve user edits",
+      "depends_on": [],
+      "required_evidence": [
+        "review",
+        "native"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Reconcile actual current source/pin and preserve user edits"
+    },
+    {
+      "id": "V6-ZIP",
+      "title": "Audit actual v5 ZIP and update critique from uninterrupted recordings",
+      "depends_on": [
+        "V6-BASE"
+      ],
+      "required_evidence": [
+        "review",
+        "motion"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Verify actual8d3f...ZIP,714 reported payloads against measured manifest and403 published source; watch actual recordings and separate agent observation from user approval."
+    },
+    {
+      "id": "V6-SCOPE",
+      "title": "Extend existing ledger without dropping any v5 state/evidence",
+      "depends_on": [
+        "V6-BASE"
+      ],
+      "required_evidence": [
+        "review",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Extend existing ledger without dropping any v5 state/evidence"
+    },
+    {
+      "id": "V6-NAV",
+      "title": "Verify overview,explicit new conversation and current-context hierarchy",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "reference_ids": [
+        "R10",
+        "R11"
+      ],
+      "manual": false,
+      "acceptance": "Verify overview,explicit new conversation and current-context hierarchy"
+    },
+    {
+      "id": "V6-TARGET",
+      "title": "Verify management of B leaves viewed A and its draft/attachments intact",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "required_evidence": [
+        "browser",
+        "production",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Verify management of B leaves viewed A and its draft/attachments intact"
+    },
+    {
+      "id": "V6-MENUS",
+      "title": "Verify actual anchored geometry,logical focus and menu keys",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Corners/zoom/narrow/short windows,visual viewport8px inset,trigger drift<=1px,arrows/Home/End/typeahead/Tab/Escape/outside click and cross-surface focus."
+    },
+    {
+      "id": "V6-SURFACES",
+      "title": "Verify sheet/modal distinctions and visible composer controls",
+      "depends_on": [
+        "V6-MENUS"
+      ],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "True modal background/focus; Files/Details reserve actual composer/status; useful small-screen modal alternative when a sheet cannot fit; no covered Cancel."
+    },
+    {
+      "id": "V6-READ",
+      "title": "Verify stable reading position during actual streaming and activity",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "required_evidence": [
+        "browser",
+        "production",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Verify stable reading position during actual streaming and activity"
+    },
+    {
+      "id": "V6-STYLE",
+      "title": "Refine hierarchy,type,borders,spacing and consistent utility icons",
+      "depends_on": [
+        "V6-NAV",
+        "V6-MENUS",
+        "V6-SURFACES"
+      ],
+      "required_evidence": [
+        "visual",
+        "review"
+      ],
+      "reference_ids": [
+        "R10",
+        "R11"
+      ],
+      "manual": false,
+      "acceptance": "Refine hierarchy,type,borders,spacing and consistent utility icons"
+    },
+    {
+      "id": "V6-RESP",
+      "title": "Verify actual scaling,200percent zoom,portrait and touch targets",
+      "depends_on": [
+        "V6-STYLE"
+      ],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Verify actual scaling,200percent zoom,portrait and touch targets"
+    },
+    {
+      "id": "V6-MOTION",
+      "title": "Review and refine uninterrupted entry,exit,reversal and lifecycle states",
+      "depends_on": [
+        "V6-ZIP",
+        "V6-STYLE"
+      ],
+      "required_evidence": [
+        "motion",
+        "browser"
+      ],
+      "reference_ids": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "manual": false,
+      "acceptance": "Matched source/current states; immediate popover removal critically reviewed; exact core adaptations documented, no fixtures as live state or inferred human parity."
+    },
+    {
+      "id": "V6-PERF",
+      "title": "Measure idle and both real-model workloads without cadence overclaims",
+      "depends_on": [
+        "V6-MOTION"
+      ],
+      "required_evidence": [
+        "review",
+        "production"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Measure idle and both real-model workloads without cadence overclaims"
+    },
+    {
+      "id": "V6-IMPORT",
+      "title": "Resolve and prove unassisted native folder chooser parenting/focus",
+      "depends_on": [
+        "V6-SURFACES"
+      ],
+      "required_evidence": [
+        "native",
+        "browser"
+      ],
+      "reference_ids": [
+        "R06"
+      ],
+      "manual": false,
+      "acceptance": "Resolve and prove unassisted native folder chooser parenting/focus"
+    },
+    {
+      "id": "V6-VOICE",
+      "title": "Review actual voice UI/device and physical listening",
+      "depends_on": [
+        "V6-SURFACES"
+      ],
+      "required_evidence": [
+        "physical",
+        "browser"
+      ],
+      "reference_ids": [
+        "R07"
+      ],
+      "manual": true,
+      "acceptance": "User-participating microphone/listening/unplug check; no ambient recording or approval fabricated. Preserve denial/consent boundaries."
+    },
+    {
+      "id": "V6-PERMISSIONS",
+      "title": "Revalidate affected server/dispatch contracts and persisted policy",
+      "depends_on": [
+        "V6-TARGET",
+        "V6-SURFACES"
+      ],
+      "required_evidence": [
+        "production",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Revalidate affected server/dispatch contracts and persisted policy"
+    },
+    {
+      "id": "V6-CHAT",
+      "title": "Verify both real linked local models through existing18791 pin",
+      "depends_on": [
+        "V6-NAV",
+        "V6-READ",
+        "V6-PERMISSIONS"
+      ],
+      "required_evidence": [
+        "production",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Connected turns,history,reload,stream,cancel,same-ID retry,draft+attachment retention; genuine normal/candidate/normal final sequence."
+    },
+    {
+      "id": "V6-PRESERVE",
+      "title": "Verify later user data,sounds,buddy and normal-model restoration",
+      "depends_on": [
+        "V6-CHAT"
+      ],
+      "required_evidence": [
+        "review",
+        "native"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Five WAV byte hashes,mute/12percent,cursor buddy,normal65536/fourconfigpins,unclassified records/messages/drafts preserved."
+    },
+    {
+      "id": "V6-GAPS",
+      "title": "Carry all current guest/import/device/reboot gaps into final truth",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "required_evidence": [
+        "review"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "All36 oldIDs/status/evidence/blockers retained; guest all-five currentboot gate preserved; no false R08 live-task animation or bypass."
+    },
+    {
+      "id": "V6-SOURCE",
+      "title": "Bind final source/build/installed and publication status",
+      "depends_on": [
+        "V6-RESP",
+        "V6-PERF",
+        "V6-PRESERVE",
+        "V6-GAPS"
+      ],
+      "required_evidence": [
+        "review",
+        "native",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Bind final source/build/installed and publication status"
+    },
+    {
+      "id": "V6-RETURN",
+      "title": "Return complete native v6 review ZIP and recoverable rollback",
+      "depends_on": [
+        "V6-SOURCE",
+        "V6-ZIP"
+      ],
+      "required_evidence": [
+        "review",
+        "test"
+      ],
+      "reference_ids": [],
+      "manual": false,
+      "acceptance": "Final acceptance perrow;C01-C20 dispositions;all source/evidence/rights/failures/checksums;clean extraction rebuild;actual pin ready;blocked/manual still named."
+    },
+    {
+      "id": "V6-HUMAN",
+      "title": "Obtain actual Mani visual and continuous-motion review",
+      "depends_on": [
+        "V6-RETURN"
+      ],
+      "required_evidence": [
+        "human"
+      ],
+      "reference_ids": [],
+      "manual": true,
+      "acceptance": "Obtain actual Mani visual and continuous-motion review"
+    }
+  ]
+}

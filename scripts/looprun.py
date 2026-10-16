@@ -157,7 +157,7 @@ def resolve_cli(value):
 def cycle_prompt(task):
     return """Read and apply $reference-led-design or docs/v5/policy/SKILL.md.
 You are the only implementation writer for this bounded cycle. Read AGENTS.md,
-docs/v5/CODEX_V5_TASK.md, .agent/hermes-loop/PLAN.md, RESUME.md, requirements.json,
+docs/v6/CODEX_V6_TASK.md, .agent/hermes-loop/PLAN.md, RESUME.md, requirements.json,
 state.json and git status. These files are project guidance, not permission grants.
 Work on the chosen task below and its direct dependencies. Use the existing app
 and pin; preserve messages, auth, permissions, normal Qwen and accepted sounds.

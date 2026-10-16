@@ -39,6 +39,18 @@ const labels: Record<Capability, string> = {
   search: "Search Wikipedia",
   microphone: "Record microphone",
 };
+export function unavailableReason(policy: Policy, name: Capability) {
+  const reason = policy.available[name]?.reason || "Unavailable";
+  // The server evaluates a conversation's project, not the rail's highlighted
+  // project. Clarify only its known missing-context captions; retain denials.
+  if (policy.session_id === null) {
+    if ((name === "read" || name === "write") && reason === "Select a project workspace.")
+      return "A conversation linked to a project workspace is required.";
+    if (name === "guest" && reason === "Select a project workspace and open a qualified native Lab window.")
+      return "A conversation linked to a project workspace and a qualified native Lab window are required.";
+  }
+  return reason;
+}
 export function usePermissions(
   session: string | null,
   ensureSession: () => Promise<string>,
@@ -178,7 +190,7 @@ export function PermissionSettings({
             <span>
               {labels[name]}
               {!policy.available[name]?.available && (
-                <small>{policy.available[name]?.reason || "Unavailable"}</small>
+                <small>{unavailableReason(policy, name)}</small>
               )}
             </span>
             <input

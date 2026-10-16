@@ -225,10 +225,10 @@ class Application:
             finally:fs.close()
         if method=='workspace.import.request':
             c.files(fields['project_id']).close()
-            from workspace.desktop import desktop_environment
-            result=subprocess.run(['/usr/bin/kdialog','--getexistingdirectory',str(Path.home()),'Select files to copy into Hermes Lab'],env=desktop_environment(),capture_output=True,text=True,timeout=120)
-            if result.returncode:return {'cancelled':True}
-            return c.import_preview(fields['project_id'],result.stdout.strip())
+            from workspace.desktop import choose_import_directory
+            result=choose_import_directory()
+            if result['status']=='cancelled':return {'cancelled':True}
+            return c.import_preview(fields['project_id'],result['path'])
         if method=='workspace.import.commit':return c.import_commit(fields['project_id'],fields['ticket'])
         if method=='workspace.open':
             c.files(fields['project_id']).close()

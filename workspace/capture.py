@@ -203,7 +203,12 @@ def owned_x11_window(diagnostics=None):
     if len(surfaces) != 1:
         raise RuntimeError('native_recording_owned_surface_not_unique')
     surface = surfaces[0]
+    from workspace.native_coordinates import read_layout, translate_rectangle
+    layout = read_layout()
+    expected_position, expected_size = translate_rectangle(layout, surface['at'], surface['size'])
     diagnostics['expected_bounds'] = {'position': surface['at'], 'size': surface['size']}
+    diagnostics['expected_X11_bounds'] = {'position': expected_position, 'size': expected_size}
+    diagnostics['coordinate_mapping'] = 'Exact output-name match, equal coordinate units; no output reconfiguration.'
     x = ctypes.CDLL(library)
     pointer, window, atom, integer, ulong = ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_int, ctypes.c_ulong
     x.XOpenDisplay.argtypes = [ctypes.c_char_p]; x.XOpenDisplay.restype = pointer
@@ -281,7 +286,7 @@ def owned_x11_window(diagnostics=None):
                                 ctypes.byref(px), ctypes.byref(py), ctypes.byref(child)))
                             size = [attributes.width, attributes.height]
                             position = [px.value, py.value]
-                            bounds_match = got_attributes and translated and size == surface['size'] and all(abs(a-b) <= 1 for a,b in zip(position, surface['at']))
+                            bounds_match = got_attributes and translated and tuple(size) == expected_size and all(abs(a-b) <= 1 for a,b in zip(position, expected_position))
                             row = {'XID': xid, 'WM_CLASS': names.decode('utf-8', 'replace').split('\0'),
                                    'server_PID': pid, 'profile_owned': owned, 'viewable': got_attributes and attributes.map_state == 2,
                                    'position': position, 'size': size, 'native_bounds_match': bounds_match}
@@ -294,6 +299,8 @@ def owned_x11_window(diagnostics=None):
         diagnostics['matching_visible_owned_windows'] = len(set(matches))
         if len(set(matches)) != 1:
             raise RuntimeError('native_recording_owned_X11_window_not_unique')
+        if read_layout() != layout:
+            raise RuntimeError('native_output_layout_changed_during_attestation')
         return matches[0], display_name
     finally:
         x.XCloseDisplay(display)

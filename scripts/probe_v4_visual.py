@@ -60,11 +60,17 @@ class NativeX11Input:
         self.pressed = False
 
     def move(self, x, y):
+        from workspace.native_coordinates import read_layout, translate_point
+        layout = read_layout()
+        if getattr(self, 'output_layout', layout) != layout:
+            raise RuntimeError('native_output_layout_changed_no_input')
+        self.output_layout = layout
+        native_x, native_y = translate_point(layout, x, y)
         # XWayland's XTEST pointer and Hyprland's visible cursor are distinct.
         # Pair their native operations, then the caller verifies both readbacks.
         subprocess.run(['/usr/bin/hyprctl', 'dispatch', f'hl.dsp.cursor.move({{x={round(x)},y={round(y)}}})'],
                        capture_output=True, check=True, timeout=4)
-        if not self.test.XTestFakeMotionEvent(self.display, -1, round(x), round(y), 0):
+        if not self.test.XTestFakeMotionEvent(self.display, -1, round(native_x), round(native_y), 0):
             raise RuntimeError('native_XTEST_motion_rejected')
         self.x.XSync(self.display, 0)
 

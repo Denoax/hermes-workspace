@@ -1,5 +1,16 @@
 # Repository maintenance
 
+## v6 interaction refinement
+
+Read and apply `$reference-led-design` or `docs/v5/policy/SKILL.md`, then
+`docs/v6/CODEX_V6_TASK.md`. Current v6 instructions supersede historical design
+choices while preserving working v5 chat and native boundaries. Integrate the
+v6 requirements extension into the actual durable ledger, preserving every
+v5 status/evidence/blocker and recording this new user-authorized scope. Do not
+replace an untracked live state with a template. Do not start the optional
+runner until that scope change and current source/evidence are reconciled.
+
+
 ## v5 continuation
 
 Read and apply `$reference-led-design` for this work, or the complete fallback at

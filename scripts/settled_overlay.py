@@ -34,7 +34,7 @@ def settled_overlay(browser, *, expected_title=None, timeout_ms=3000):
       const deadline = setTimeout(()=>finish('timeout','overlay_not_settled_before_deadline'),timeoutMs);
       const sample = () => {
         try {
-          const nodes=[...document.querySelectorAll('dialog[open]:not([aria-hidden="true"]),.effort-popover,.action-menu')];
+          const nodes=[...document.querySelectorAll('dialog[open]:not([aria-hidden="true"]),.effort-popover,.action-menu,.row-action-menu')];
           const rows=nodes.map(describe);
           if(!rows.length && !expectedTitle) {finish('no_overlay','no_open_overlay_to_settle');return;}
           const titleMatches=!expectedTitle || rows.some(row=>row.title===expectedTitle);

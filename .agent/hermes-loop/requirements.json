@@ -1,493 +1,497 @@
 {
-  "schema_version": 1,
-  "objective": "Complete Hermes v5 from verified v4, preserve working local chat/permissions/buddy, refine every exact visual reference, and retain all unfinished acceptance across context resets.",
-  "production_url": "http://127.0.0.1:18791/hermes-workspace",
   "constraints": [
     "Read and apply $reference-led-design or docs/v5/policy/SKILL.md; no generated media.",
     "Preserve current user edits, messages/projects, normal Qwen65536/config pins, accepted clicks, authentication, firewall and lock.",
     "Exact R01-R11 sources stay locked; new research has assigned supporting roles only.",
     "Native/guest gates and original-host approvals cannot be weakened or self-issued.",
     "One writer; optional runner is bounded and does not authorize native GPU, sudo, publication or reboot.",
-    "Evidence metadata is not proof of truth; human/physical review remains external."
+    "Evidence metadata is not proof of truth; human/physical review remains external.",
+    "V6 is an additive scope authorized by the current user request; preserve all 36 v5 IDs, original evidence, blockers and historical completion records.",
+    "Review the actual local v5 complete ZIP and uninterrupted recordings; prepared candidate tests are not native visual or motion approval.",
+    "Revalidate only source-bound affected claims and dependent DONE rows; never rewrite old proof hashes to make historical observations current.",
+    "Keep row management ownership separate from the viewed conversation; preserve its draft, attachments, model, reading position and every later user record.",
+    "Keep native qualification, unassisted import, microphone, physical-device, reboot and human approval gaps explicit; no old receipt, host fallback or self-issued approval."
   ],
+  "objective": "Complete Hermes v6 interaction refinement against the preserved current checkout; retain the working v4 repair, v5 behavior, all user data and every unresolved v5 gap; verify the existing production pin and return a source-bound complete review.",
+  "production_url": "http://127.0.0.1:18791/hermes-workspace",
   "proposed_batch_limits": {
-    "max_cycles": 8,
-    "wall_minutes": 60,
     "cycle_minutes": 20,
     "max_consecutive_no_progress_cycles": 2,
-    "scope": "Implemented by optional scripts/looprun.py; interactive cycles use the same durable record."
+    "max_cycles": 8,
+    "scope": "Implemented by optional scripts/looprun.py; interactive cycles use the same durable record.",
+    "wall_minutes": 60
   },
+  "schema_version": 1,
   "tasks": [
     {
-      "id": "BASE-01",
-      "title": "Verify supplied v4 archive and published source",
+      "acceptance": "484 payload checksums, 315 exact Git blob matches; preserve scoped baseline.",
       "depends_on": [],
+      "id": "BASE-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "review"
       ],
-      "reference_ids": [],
-      "acceptance": "484 payload checksums, 315 exact Git blob matches; preserve scoped baseline.",
-      "manual": false
+      "title": "Verify supplied v4 archive and published source"
     },
     {
-      "id": "PREP-LOOP",
-      "title": "Implement and verify bounded controller and ledger",
+      "acceptance": "New continuation utility tests pass; synthetic provider events count only as utility tests, not native CLI adoption.",
       "depends_on": [
         "BASE-01"
       ],
+      "id": "PREP-LOOP",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "test"
       ],
-      "reference_ids": [],
-      "acceptance": "New continuation utility tests pass; synthetic provider events count only as utility tests, not native CLI adoption.",
-      "manual": false
+      "title": "Implement and verify bounded controller and ledger"
     },
     {
-      "id": "NATIVE-01",
-      "title": "Reconcile live checkout, existing pin and v4 repair identity",
+      "acceptance": "Current source/build/unit/profile/catalog identity; preserve namespace repair, root-peer checks, user edits and new conversations.",
       "depends_on": [
         "BASE-01"
       ],
+      "id": "NATIVE-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "native",
         "review"
       ],
-      "reference_ids": [],
-      "acceptance": "Current source/build/unit/profile/catalog identity; preserve namespace repair, root-peer checks, user edits and new conversations.",
-      "manual": false
+      "title": "Reconcile live checkout, existing pin and v4 repair identity"
     },
     {
-      "id": "LOOP-01",
-      "title": "Adopt durable state and prove interruption/resume on native Codex",
+      "acceptance": "Hydrate/checkpoint with full inventory after harmless repository-only interrupt; installed CLI help/version and actual sandbox checked if optional runner used. One writer.",
       "depends_on": [
         "NATIVE-01",
         "PREP-LOOP"
       ],
+      "id": "LOOP-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "test",
         "native"
       ],
-      "reference_ids": [],
-      "acceptance": "Hydrate/checkpoint with full inventory after harmless repository-only interrupt; installed CLI help/version and actual sandbox checked if optional runner used. One writer.",
-      "manual": false
+      "title": "Adopt durable state and prove interruption/resume on native Codex"
     },
     {
-      "id": "UI-01",
-      "title": "Refine neutral shell and populated nested project navigation",
+      "acceptance": "Apply DESIGN_V5 shell/rail changes; populated folders/colors/long titles/branches and light/dark comparison, exact R10 source uncertainty retained.",
       "depends_on": [
         "LOOP-01"
       ],
-      "required_evidence": [
-        "visual",
-        "browser"
-      ],
+      "id": "UI-01",
+      "manual": false,
       "reference_ids": [
         "R10",
         "R11"
       ],
-      "acceptance": "Apply DESIGN_V5 shell/rail changes; populated folders/colors/long titles/branches and light/dark comparison, exact R10 source uncertainty retained.",
-      "manual": false
-    },
-    {
-      "id": "UI-02",
-      "title": "Compact composer, clear local model identity and stable header panels",
-      "depends_on": [
-        "LOOP-01"
-      ],
       "required_evidence": [
         "visual",
         "browser"
       ],
-      "reference_ids": [],
-      "acceptance": "Empty composer <=96px desktop/112px at390px; truthful installed models, essential actions accessible, panel trigger drift<=1CSSpx and focus/coordinates correct.",
-      "manual": false
+      "title": "Refine neutral shell and populated nested project navigation"
     },
     {
-      "id": "UI-03",
-      "title": "Simplify Settings while preserving granular permissions",
+      "acceptance": "Empty composer <=96px desktop/112px at390px; truthful installed models, essential actions accessible, panel trigger drift<=1CSSpx and focus/coordinates correct.",
       "depends_on": [
         "LOOP-01"
       ],
+      "id": "UI-02",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "visual",
+        "browser"
+      ],
+      "title": "Compact composer, clear local model identity and stable header panels"
+    },
+    {
+      "acceptance": "Interface preferences grouped; permissions visible; model/capability details disclosed; custom mode persists across model switch/reload; attribution visible.",
+      "depends_on": [
+        "LOOP-01"
+      ],
+      "id": "UI-03",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "visual",
         "browser",
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Interface preferences grouped; permissions visible; model/capability details disclosed; custom mode persists across model switch/reload; attribution visible.",
-      "manual": false
+      "title": "Simplify Settings while preserving granular permissions"
     },
     {
-      "id": "UI-04",
-      "title": "Preserve portfolio buddy and accepted sounds through lifecycle checks",
+      "acceptance": "Distant follow/reverse/drag cancel/sleep/wake/keyboard/hidden cleanup; no duplicate sounds, exact accepted WAV bytes and mute/12% setting retained.",
       "depends_on": [
         "LOOP-01"
       ],
+      "id": "UI-04",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "motion",
         "browser"
       ],
-      "reference_ids": [],
-      "acceptance": "Distant follow/reverse/drag cancel/sleep/wake/keyboard/hidden cleanup; no duplicate sounds, exact accepted WAV bytes and mute/12% setting retained.",
-      "manual": false
+      "title": "Preserve portfolio buddy and accepted sounds through lifecycle checks"
     },
     {
-      "id": "REF-R01",
-      "title": "Finish exact R01 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-02"
       ],
-      "required_evidence": [
-        "visual",
-        "motion"
-      ],
+      "id": "REF-R01",
+      "manual": false,
       "reference_ids": [
         "R01"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
-    },
-    {
-      "id": "REF-R02",
-      "title": "Finish exact R02 production comparison and interactions",
-      "depends_on": [
-        "UI-02"
-      ],
       "required_evidence": [
         "visual",
         "motion"
       ],
+      "title": "Finish exact R01 production comparison and interactions"
+    },
+    {
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
+      "depends_on": [
+        "UI-02"
+      ],
+      "id": "REF-R02",
+      "manual": false,
       "reference_ids": [
         "R02"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
-    },
-    {
-      "id": "REF-R03",
-      "title": "Finish exact R03 production comparison and interactions",
-      "depends_on": [
-        "UI-02"
-      ],
       "required_evidence": [
         "visual",
         "motion"
       ],
+      "title": "Finish exact R02 production comparison and interactions"
+    },
+    {
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
+      "depends_on": [
+        "UI-02"
+      ],
+      "id": "REF-R03",
+      "manual": false,
       "reference_ids": [
         "R03"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
-    },
-    {
-      "id": "REF-R04",
-      "title": "Finish exact R04 production comparison and interactions",
-      "depends_on": [
-        "UI-02"
-      ],
       "required_evidence": [
         "visual",
         "motion"
       ],
+      "title": "Finish exact R03 production comparison and interactions"
+    },
+    {
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
+      "depends_on": [
+        "UI-02"
+      ],
+      "id": "REF-R04",
+      "manual": false,
       "reference_ids": [
         "R04"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
-    },
-    {
-      "id": "REF-R05",
-      "title": "Finish exact R05 production comparison and interactions",
-      "depends_on": [
-        "UI-02"
-      ],
       "required_evidence": [
         "visual",
         "motion"
       ],
+      "title": "Finish exact R04 production comparison and interactions"
+    },
+    {
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
+      "depends_on": [
+        "UI-02"
+      ],
+      "id": "REF-R05",
+      "manual": false,
       "reference_ids": [
         "R05"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
-    },
-    {
-      "id": "REF-R06",
-      "title": "Finish exact R06 production comparison and interactions",
-      "depends_on": [
-        "UI-02"
-      ],
       "required_evidence": [
         "visual",
         "motion"
       ],
+      "title": "Finish exact R05 production comparison and interactions"
+    },
+    {
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
+      "depends_on": [
+        "UI-02"
+      ],
+      "id": "REF-R06",
+      "manual": false,
       "reference_ids": [
         "R06"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "required_evidence": [
+        "visual",
+        "motion"
+      ],
+      "title": "Finish exact R06 production comparison and interactions"
     },
     {
-      "id": "REF-R07",
-      "title": "Finish exact R07 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-02"
+      ],
+      "id": "REF-R07",
+      "manual": false,
+      "reference_ids": [
+        "R07"
       ],
       "required_evidence": [
         "visual",
         "motion"
       ],
-      "reference_ids": [
-        "R07"
-      ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "title": "Finish exact R07 production comparison and interactions"
     },
     {
-      "id": "REF-R08",
-      "title": "Finish exact R08 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-02",
         "VM-03"
       ],
+      "id": "REF-R08",
+      "manual": false,
+      "reference_ids": [
+        "R08"
+      ],
       "required_evidence": [
         "visual",
         "motion",
         "native"
       ],
-      "reference_ids": [
-        "R08"
-      ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "title": "Finish exact R08 production comparison and interactions"
     },
     {
-      "id": "REF-R09",
-      "title": "Finish exact R09 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-02"
+      ],
+      "id": "REF-R09",
+      "manual": false,
+      "reference_ids": [
+        "R09"
       ],
       "required_evidence": [
         "visual",
         "motion"
       ],
-      "reference_ids": [
-        "R09"
-      ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "title": "Finish exact R09 production comparison and interactions"
     },
     {
-      "id": "REF-R10",
-      "title": "Finish exact R10 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-01"
       ],
-      "required_evidence": [
-        "visual"
-      ],
+      "id": "REF-R10",
+      "manual": false,
       "reference_ids": [
         "R10"
       ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "required_evidence": [
+        "visual"
+      ],
+      "title": "Finish exact R10 production comparison and interactions"
     },
     {
-      "id": "REF-R11",
-      "title": "Finish exact R11 production comparison and interactions",
+      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
       "depends_on": [
         "UI-01"
+      ],
+      "id": "REF-R11",
+      "manual": false,
+      "reference_ids": [
+        "R11"
       ],
       "required_evidence": [
         "visual"
       ],
-      "reference_ids": [
-        "R11"
-      ],
-      "acceptance": "Follow exact row in docs/v5/DESIGN_V5.md, matched state/size/theme and concrete differences; truthful runtime adaptation and original rights; no inferred human approval.",
-      "manual": false
+      "title": "Finish exact R11 production comparison and interactions"
     },
     {
-      "id": "PERM-01",
-      "title": "Map final named server/dispatcher regressions and live permission behavior",
+      "acceptance": "Final expiry/version/replay/concurrency/symlink/stale base/host approval/budget/audit tests explicitly attached; direct bypass denied. Guest revoke separate.",
       "depends_on": [
         "LOOP-01"
       ],
+      "id": "PERM-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "test",
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Final expiry/version/replay/concurrency/symlink/stale base/host approval/budget/audit tests explicitly attached; direct bypass denied. Guest revoke separate.",
-      "manual": false
+      "title": "Map final named server/dispatcher regressions and live permission behavior"
     },
     {
-      "id": "CHAT-01",
-      "title": "Verify v5 normal Qwen real production conversation",
+      "acceptance": "Existing18791 pin, real connected replies, reload/history/context, source/runtime IDs; no isolated server.",
       "depends_on": [
         "UI-01",
         "UI-02",
         "UI-03"
       ],
+      "id": "CHAT-01",
+      "manual": false,
+      "production_model": "normal",
+      "reference_ids": [],
       "required_evidence": [
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Existing18791 pin, real connected replies, reload/history/context, source/runtime IDs; no isolated server.",
-      "manual": false,
-      "production_model": "normal"
+      "title": "Verify v5 normal Qwen real production conversation"
     },
     {
-      "id": "CHAT-02",
-      "title": "Verify v5 pinned abliterated real production conversation",
+      "acceptance": "Existing18791 pin, actual hash-pinned candidate and8192 context, connected replies/history; restore normal.",
       "depends_on": [
         "CHAT-01"
       ],
+      "id": "CHAT-02",
+      "manual": false,
+      "production_model": "abliterated",
+      "reference_ids": [],
       "required_evidence": [
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Existing18791 pin, actual hash-pinned candidate and8192 context, connected replies/history; restore normal.",
-      "manual": false,
-      "production_model": "abliterated"
+      "title": "Verify v5 pinned abliterated real production conversation"
     },
     {
-      "id": "CHAT-03",
-      "title": "Verify final streaming/cancel/retry/attachment retention",
+      "acceptance": "Real growing output/compute stop/same-ID retry; draft plus real attachment survives failure/reconnect; one user message/run, no duplicate effects.",
       "depends_on": [
         "CHAT-02",
         "PERM-01"
       ],
+      "id": "CHAT-03",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "production",
         "test"
       ],
-      "reference_ids": [],
-      "acceptance": "Real growing output/compute stop/same-ID retry; draft plus real attachment survives failure/reconnect; one user message/run, no duplicate effects.",
-      "manual": false
+      "title": "Verify final streaming/cancel/retry/attachment retention"
     },
     {
-      "id": "METRIC-01",
-      "title": "Report separable model timings and missing measurements truthfully",
+      "acceptance": "Admission/load/first-public-output/total where observable; no observer reconnect or warmed-normal claimed as cold model timing.",
       "depends_on": [
         "CHAT-02"
       ],
+      "id": "METRIC-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "review",
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Admission/load/first-public-output/total where observable; no observer reconnect or warmed-normal claimed as cold model timing.",
-      "manual": false
+      "title": "Report separable model timings and missing measurements truthfully"
     },
     {
-      "id": "VM-01",
-      "title": "Diagnose aggregate versus standalone guest readiness",
+      "acceptance": "Same boot/source/resources, targeted sanitized phases if needed, demonstrated cause and bounded fix; retain failed receipts and budgets.",
       "depends_on": [
         "NATIVE-01"
       ],
+      "id": "VM-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "native",
         "review"
       ],
-      "reference_ids": [],
-      "acceptance": "Same boot/source/resources, targeted sanitized phases if needed, demonstrated cause and bounded fix; retain failed receipts and budgets.",
-      "manual": false
+      "title": "Diagnose aggregate versus standalone guest readiness"
     },
     {
-      "id": "VM-02",
-      "title": "Pass all five current-boot watchdog scenarios",
+      "acceptance": "Absolute deadline, heartbeat loss, VM crash, owner crash and supervisor hang; current policy hashes/boot ID, three VM exit and cleanup criteria unchanged.",
       "depends_on": [
         "VM-01"
       ],
+      "id": "VM-02",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "native"
       ],
-      "reference_ids": [],
-      "acceptance": "Absolute deadline, heartbeat loss, VM crash, owner crash and supervisor hang; current policy hashes/boot ID, three VM exit and cleanup criteria unchanged.",
-      "manual": false
+      "title": "Pass all five current-boot watchdog scenarios"
     },
     {
-      "id": "VM-03",
-      "title": "Verify qualified guest task, confinement, cancel/revoke and restoration",
+      "acceptance": "Existing bounded native workflow; supported task with real output, filesystem/network controls, expiry/cancel/revoke/cleanup, normal recovery; no host fallback.",
       "depends_on": [
         "VM-02",
         "PERM-01"
       ],
+      "id": "VM-03",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "native",
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Existing bounded native workflow; supported task with real output, filesystem/network controls, expiry/cancel/revoke/cleanup, normal recovery; no host fallback.",
-      "manual": false
+      "title": "Verify qualified guest task, confinement, cancel/revoke and restoration"
     },
     {
-      "id": "VOICE-01",
-      "title": "Complete rendered real voice playback and consent/release UI",
+      "acceptance": "Actual media timing/waveform/play/pause/seek and recording states; grant/denial/late permission/device loss/track release; source recording fixture labelled.",
       "depends_on": [
         "UI-02"
+      ],
+      "id": "VOICE-01",
+      "manual": false,
+      "reference_ids": [
+        "R07"
       ],
       "required_evidence": [
         "visual",
         "motion",
         "browser"
       ],
-      "reference_ids": [
-        "R07"
-      ],
-      "acceptance": "Actual media timing/waveform/play/pause/seek and recording states; grant/denial/late permission/device loss/track release; source recording fixture labelled.",
-      "manual": false
+      "title": "Complete rendered real voice playback and consent/release UI"
     },
     {
-      "id": "ACC-01",
-      "title": "Verify keyboard, zoom, narrow layout, contrast and motion preferences",
+      "acceptance": "Both themes/meaningful viewports,200%zoom, focus/Escape/return, forced colors/reduced motion/transparency; no essential action lost.",
       "depends_on": [
         "UI-01",
         "UI-02",
         "UI-03"
       ],
+      "id": "ACC-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "browser",
         "visual"
       ],
-      "reference_ids": [],
-      "acceptance": "Both themes/meaningful viewports,200%zoom, focus/Escape/return, forced colors/reduced motion/transparency; no essential action lost.",
-      "manual": false
+      "title": "Verify keyboard, zoom, narrow layout, contrast and motion preferences"
     },
     {
-      "id": "PERF-01",
-      "title": "Measure animation/input work at idle and both model workloads",
+      "acceptance": "Actual workload/hardware/sample duration and adverse measurements; no encoded FPS treated as display cadence; no constant full-screen shader cost.",
       "depends_on": [
         "CHAT-02",
         "UI-04"
       ],
+      "id": "PERF-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "review",
         "production",
         "motion"
       ],
-      "reference_ids": [],
-      "acceptance": "Actual workload/hardware/sample duration and adverse measurements; no encoded FPS treated as display cadence; no constant full-screen shader cost.",
-      "manual": false
+      "title": "Measure animation/input work at idle and both model workloads"
     },
     {
-      "id": "RECOVERY-01",
-      "title": "Verify configured idle and socket-manager recovery",
+      "acceptance": "Existing pin, actual idle transition and permitted socket/service restart, data intact; reboot remains separate manual row.",
       "depends_on": [
         "CHAT-03"
       ],
+      "id": "RECOVERY-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "native",
         "production"
       ],
-      "reference_ids": [],
-      "acceptance": "Existing pin, actual idle transition and permitted socket/service restart, data intact; reboot remains separate manual row.",
-      "manual": false
+      "title": "Verify configured idle and socket-manager recovery"
     },
     {
-      "id": "SOURCE-01",
-      "title": "Reconcile final source, build, installed and publication identity",
+      "acceptance": "Fresh normal/candidate/normal after cleanup, normal65536 and four pins unchanged; all final source/assets bound. Publication performed only if currently authorized, otherwise explicitly pending.",
       "depends_on": [
         "CHAT-03",
         "ACC-01",
@@ -506,68 +510,391 @@
         "REF-R10",
         "REF-R11"
       ],
+      "id": "SOURCE-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "review",
         "test",
         "native"
       ],
-      "reference_ids": [],
-      "acceptance": "Fresh normal/candidate/normal after cleanup, normal65536 and four pins unchanged; all final source/assets bound. Publication performed only if currently authorized, otherwise explicitly pending.",
-      "manual": false
+      "title": "Reconcile final source, build, installed and publication identity"
     },
     {
-      "id": "ZIP-01",
-      "title": "Deliver one complete native v5 review with remaining gaps",
+      "acceptance": "Return contract, all source/evidence/manifest/rollback, clean extraction rebuild/tests; full ledger included, blocked/manual work stays named and overall PARTIAL where applicable.",
       "depends_on": [
         "SOURCE-01"
       ],
+      "id": "ZIP-01",
+      "manual": false,
+      "reference_ids": [],
       "required_evidence": [
         "review",
         "test"
       ],
-      "reference_ids": [],
-      "acceptance": "Return contract, all source/evidence/manifest/rollback, clean extraction rebuild/tests; full ledger included, blocked/manual work stays named and overall PARTIAL where applicable.",
-      "manual": false
+      "title": "Deliver one complete native v5 review with remaining gaps"
     },
     {
-      "id": "PHYSICAL-01",
-      "title": "Review physical voice listening and actual unplug behavior",
+      "acceptance": "User-observed intelligibility/listening/device unplug; no automated ambient recording or fabricated approval.",
       "depends_on": [
         "VOICE-01"
       ],
+      "id": "PHYSICAL-01",
+      "manual": true,
+      "reference_ids": [],
       "required_evidence": [
         "physical"
       ],
-      "reference_ids": [],
-      "acceptance": "User-observed intelligibility/listening/device unplug; no automated ambient recording or fabricated approval.",
-      "manual": true
+      "title": "Review physical voice listening and actual unplug behavior"
     },
     {
-      "id": "REBOOT-01",
-      "title": "Coordinate and verify native reboot recovery",
+      "acceptance": "Only when specifically coordinated with user; preserve access/recovery; real postboot pin/model check, not old-boot evidence.",
       "depends_on": [
         "RECOVERY-01"
       ],
+      "id": "REBOOT-01",
+      "manual": true,
+      "reference_ids": [],
       "required_evidence": [
         "native",
         "human"
       ],
-      "reference_ids": [],
-      "acceptance": "Only when specifically coordinated with user; preserve access/recovery; real postboot pin/model check, not old-boot evidence.",
-      "manual": true
+      "title": "Coordinate and verify native reboot recovery"
     },
     {
-      "id": "HUMAN-01",
-      "title": "Obtain Mani review of final visual and continuous motion",
+      "acceptance": "Actual user review/message reference. Offer real complete review, never self-approve or infer from silence.",
       "depends_on": [
         "ZIP-01"
       ],
+      "id": "HUMAN-01",
+      "manual": true,
+      "reference_ids": [],
       "required_evidence": [
         "human"
       ],
+      "title": "Obtain Mani review of final visual and continuous motion"
+    },
+    {
+      "acceptance": "Reconcile actual current source/pin and preserve user edits",
+      "depends_on": [],
+      "id": "V6-BASE",
+      "manual": false,
       "reference_ids": [],
-      "acceptance": "Actual user review/message reference. Offer real complete review, never self-approve or infer from silence.",
-      "manual": true
+      "required_evidence": [
+        "review",
+        "native"
+      ],
+      "title": "Reconcile actual current source/pin and preserve user edits"
+    },
+    {
+      "acceptance": "Verify actual8d3f...ZIP,714 reported payloads against measured manifest and403 published source; watch actual recordings and separate agent observation from user approval.",
+      "depends_on": [
+        "V6-BASE"
+      ],
+      "id": "V6-ZIP",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "motion"
+      ],
+      "title": "Audit actual v5 ZIP and update critique from uninterrupted recordings"
+    },
+    {
+      "acceptance": "Extend existing ledger without dropping any v5 state/evidence",
+      "depends_on": [
+        "V6-BASE"
+      ],
+      "id": "V6-SCOPE",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "test"
+      ],
+      "title": "Extend existing ledger without dropping any v5 state/evidence"
+    },
+    {
+      "acceptance": "Verify overview,explicit new conversation and current-context hierarchy",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "id": "V6-NAV",
+      "manual": false,
+      "reference_ids": [
+        "R10",
+        "R11"
+      ],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "title": "Verify overview,explicit new conversation and current-context hierarchy"
+    },
+    {
+      "acceptance": "Verify management of B leaves viewed A and its draft/attachments intact",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "id": "V6-TARGET",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "browser",
+        "production",
+        "test"
+      ],
+      "title": "Verify management of B leaves viewed A and its draft/attachments intact"
+    },
+    {
+      "acceptance": "Corners/zoom/narrow/short windows,visual viewport8px inset,trigger drift<=1px,arrows/Home/End/typeahead/Tab/Escape/outside click and cross-surface focus.",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "id": "V6-MENUS",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "title": "Verify actual anchored geometry,logical focus and menu keys"
+    },
+    {
+      "acceptance": "True modal background/focus; Files/Details reserve actual composer/status; useful small-screen modal alternative when a sheet cannot fit; no covered Cancel.",
+      "depends_on": [
+        "V6-MENUS"
+      ],
+      "id": "V6-SURFACES",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "title": "Verify sheet/modal distinctions and visible composer controls"
+    },
+    {
+      "acceptance": "Verify stable reading position during actual streaming and activity",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "id": "V6-READ",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "browser",
+        "production",
+        "test"
+      ],
+      "title": "Verify stable reading position during actual streaming and activity"
+    },
+    {
+      "acceptance": "Refine hierarchy,type,borders,spacing and consistent utility icons",
+      "depends_on": [
+        "V6-NAV",
+        "V6-MENUS",
+        "V6-SURFACES"
+      ],
+      "id": "V6-STYLE",
+      "manual": false,
+      "reference_ids": [
+        "R10",
+        "R11"
+      ],
+      "required_evidence": [
+        "visual",
+        "review"
+      ],
+      "title": "Refine hierarchy,type,borders,spacing and consistent utility icons"
+    },
+    {
+      "acceptance": "Verify actual scaling,200percent zoom,portrait and touch targets",
+      "depends_on": [
+        "V6-STYLE"
+      ],
+      "id": "V6-RESP",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "browser",
+        "visual"
+      ],
+      "title": "Verify actual scaling,200percent zoom,portrait and touch targets"
+    },
+    {
+      "acceptance": "Matched source/current states; immediate popover removal critically reviewed; exact core adaptations documented, no fixtures as live state or inferred human parity.",
+      "depends_on": [
+        "V6-ZIP",
+        "V6-STYLE"
+      ],
+      "id": "V6-MOTION",
+      "manual": false,
+      "reference_ids": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "required_evidence": [
+        "motion",
+        "browser"
+      ],
+      "title": "Review and refine uninterrupted entry,exit,reversal and lifecycle states"
+    },
+    {
+      "acceptance": "Measure idle and both real-model workloads without cadence overclaims",
+      "depends_on": [
+        "V6-MOTION"
+      ],
+      "id": "V6-PERF",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "production"
+      ],
+      "title": "Measure idle and both real-model workloads without cadence overclaims"
+    },
+    {
+      "acceptance": "Resolve and prove unassisted native folder chooser parenting/focus",
+      "depends_on": [
+        "V6-SURFACES"
+      ],
+      "id": "V6-IMPORT",
+      "manual": false,
+      "reference_ids": [
+        "R06"
+      ],
+      "required_evidence": [
+        "native",
+        "browser"
+      ],
+      "title": "Resolve and prove unassisted native folder chooser parenting/focus"
+    },
+    {
+      "acceptance": "User-participating microphone/listening/unplug check; no ambient recording or approval fabricated. Preserve denial/consent boundaries.",
+      "depends_on": [
+        "V6-SURFACES"
+      ],
+      "id": "V6-VOICE",
+      "manual": true,
+      "reference_ids": [
+        "R07"
+      ],
+      "required_evidence": [
+        "physical",
+        "browser"
+      ],
+      "title": "Review actual voice UI/device and physical listening"
+    },
+    {
+      "acceptance": "Revalidate affected server/dispatch contracts and persisted policy",
+      "depends_on": [
+        "V6-TARGET",
+        "V6-SURFACES"
+      ],
+      "id": "V6-PERMISSIONS",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "production",
+        "test"
+      ],
+      "title": "Revalidate affected server/dispatch contracts and persisted policy"
+    },
+    {
+      "acceptance": "Connected turns,history,reload,stream,cancel,same-ID retry,draft+attachment retention; genuine normal/candidate/normal final sequence.",
+      "depends_on": [
+        "V6-NAV",
+        "V6-READ",
+        "V6-PERMISSIONS"
+      ],
+      "id": "V6-CHAT",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "production",
+        "test"
+      ],
+      "title": "Verify both real linked local models through existing18791 pin"
+    },
+    {
+      "acceptance": "Five WAV byte hashes,mute/12percent,cursor buddy,normal65536/fourconfigpins,unclassified records/messages/drafts preserved.",
+      "depends_on": [
+        "V6-CHAT"
+      ],
+      "id": "V6-PRESERVE",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "native"
+      ],
+      "title": "Verify later user data,sounds,buddy and normal-model restoration"
+    },
+    {
+      "acceptance": "All36 oldIDs/status/evidence/blockers retained; guest all-five currentboot gate preserved; no false R08 live-task animation or bypass.",
+      "depends_on": [
+        "V6-SCOPE"
+      ],
+      "id": "V6-GAPS",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review"
+      ],
+      "title": "Carry all current guest/import/device/reboot gaps into final truth"
+    },
+    {
+      "acceptance": "Bind final source/build/installed and publication status",
+      "depends_on": [
+        "V6-RESP",
+        "V6-PERF",
+        "V6-PRESERVE",
+        "V6-GAPS"
+      ],
+      "id": "V6-SOURCE",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "native",
+        "test"
+      ],
+      "title": "Bind final source/build/installed and publication status"
+    },
+    {
+      "acceptance": "Final acceptance perrow;C01-C20 dispositions;all source/evidence/rights/failures/checksums;clean extraction rebuild;actual pin ready;blocked/manual still named.",
+      "depends_on": [
+        "V6-SOURCE",
+        "V6-ZIP"
+      ],
+      "id": "V6-RETURN",
+      "manual": false,
+      "reference_ids": [],
+      "required_evidence": [
+        "review",
+        "test"
+      ],
+      "title": "Return complete native v6 review ZIP and recoverable rollback"
+    },
+    {
+      "acceptance": "Obtain actual Mani visual and continuous-motion review",
+      "depends_on": [
+        "V6-RETURN"
+      ],
+      "id": "V6-HUMAN",
+      "manual": true,
+      "reference_ids": [],
+      "required_evidence": [
+        "human"
+      ],
+      "title": "Obtain actual Mani visual and continuous-motion review"
     }
   ]
 }

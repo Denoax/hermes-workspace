@@ -358,7 +358,16 @@ class OwnedActionReview:
         check(not any(row['id'] == sid for row in self.rpc('session.list')), 'owned_empty_delete_not_committed')
         self.report['checks']['genuine_new_empty_conversation_deleted'] = sid; self.save()
 
-    def import_motion(self, recording, fixture, picker_driver, qualify_after_reload):
+    def open_import_surface(self):
+        self.require_native()
+        if self.b.evaluate("!!document.querySelector('.dashboard-actions')"):
+            self.button('Import folder', "document.querySelector('.dashboard-actions')")
+        else:
+            self.b.click('#plus-menu')
+            self.button('Import folder', "document.querySelector('#composer-actions')")
+        self.b.wait("document.querySelector('dialog[open] h2')?.textContent==='Import folder'")
+
+    def import_motion(self, recording, fixture, picker_driver, qualify_after_reload, *, stop_after_cancel=False):
         texts = verify_import_fixture(fixture)
         check(fixture['nonce'] == self.case['nonce'], 'fixture_from_another_case')
         check(callable(getattr(recording, 'segment', None)), 'bounded_import_recording_segments_required')
@@ -372,7 +381,12 @@ class OwnedActionReview:
             check(session and session['id'] in self.case['created_session_ids'] and session['project'] == project['id'] and session['title'] == self.case['nonce'] + ' · Import preview', 'original_owned_import_session_changed')
             check(self.rpc('workspace.files', {'project_id': project['id']})['files'] == [], 'import_case_acquired_files_preserve_it')
             snap = self.rpc('chat.snapshot', {'session_id': session['id']})
-            check(not snap['runs'] and not snap['messages'] and not self.rpc('draft.read', {'session_id':session['id']})['text'], 'import_case_acquired_content_preserve_it')
+            check(not snap['runs'] and not snap['messages'] and self.rpc('draft.read', {'session_id':session['id']}) == {'text':'','mode':'chat'} and not self.rpc('session.jobs', {'session_id':session['id']}), 'import_case_acquired_content_preserve_it')
+            selected = self.b.evaluate('localStorage.getItem(' + json.dumps('hermes:draft-attachments:v1:' + session['id']) + ')')
+            if selected:
+                try: selection = json.loads(selected)
+                except (ValueError, TypeError): raise RuntimeError('import_case_acquired_attachments_preserve_it')
+                check(isinstance(selection,dict) and selection.get('version') == 1 and selection.get('ids') == [], 'import_case_acquired_attachments_preserve_it')
         else:
             before_projects = {row['id'] for row in self.rpc('workspace.list')}
             project = self.rpc('workspace.create', {'label': self.case['nonce'] + ' · Import case'})
@@ -387,14 +401,13 @@ class OwnedActionReview:
         self.rpc('view.write', {'state': view}); self.reload_ready()
         self.filter_owned()
         qualify_after_reload(); self.require_native()
-        self.button('Import folder', "document.querySelector('.dashboard-actions')")
-        self.b.wait("document.querySelector('dialog[open] h2')?.textContent==='Import folder'")
+        self.open_import_surface()
         # Observe only this new project's real request response. The exact
         # original fetch Promise/response is returned; no response is replaced.
-        self.b.evaluate("""(()=>{const original=globalThis.fetch,records=[],state={overflow:0};const project=""" + json.dumps(project['id']) + """;
+        self.b.evaluate("""(()=>{const original=globalThis.fetch,records=[],responses=[],state={overflow:0};const project=""" + json.dumps(project['id']) + """;
         const wrapped=function(...args){let watched=false;try{const q=JSON.parse(args[1]?.body||'null');const u=new URL(typeof args[0]==='string'?args[0]:args[0].url,location.href);watched=u.origin===location.origin&&u.pathname==='/hermes-workspace/api/rpc'&&q?.method==='workspace.import.request'&&q.fields?.project_id===project}catch{}
-        const response=Reflect.apply(original,this,args);if(watched)response.then(r=>r.clone().json()).then(body=>{if(records.length<3)records.push(body.result??null);else state.overflow++}).catch(()=>{});return response;};
-        globalThis.fetch=wrapped;globalThis.__ownedImportObserver={records,state,cleanup:()=>{if(globalThis.fetch===wrapped)globalThis.fetch=original;}};})()""")
+        const response=Reflect.apply(original,this,args);if(watched)response.then(async r=>({status:r.status,body:await r.clone().json()})).then(({status,body})=>{if(records.length<3){records.push(body.result??null);responses.push({status,error:typeof body.error==='string'?body.error.slice(0,1000):null,result:body.result??null})}else state.overflow++}).catch(()=>{});return response;};
+        globalThis.fetch=wrapped;globalThis.__ownedImportObserver={records,responses,state,cleanup:()=>{if(globalThis.fetch===wrapped)globalThis.fetch=original;}};})()""")
         preview = '[aria-label="Preview folder contents"]'
         from scripts.probe_v4_visual import move
         recording.segment('folder_interaction')
@@ -424,6 +437,11 @@ class OwnedActionReview:
             observed = self.b.evaluate('globalThis.__ownedImportObserver.records[' + str(count - 1) + ']')
             if phase == 'cancel_picker':
                 check(observed == {'cancelled': True} and not self.b.evaluate("!!document.querySelector('.import-review')"), 'cancelled_picker_created_preview')
+                self.report['checks']['actual_picker_cancelled_without_preview'] = True; self.save()
+                if stop_after_cancel:
+                    self.report['checks']['diagnostic_cancel_only_no_copy'] = True
+                    self.b.evaluate('globalThis.__ownedImportObserver.cleanup()'); self.save()
+                    return
             else:
                 self.b.wait("!!document.querySelector('.import-review')")
                 check(isinstance(observed, dict) and bool(ID.fullmatch(observed.get('ticket', ''))), 'actual_UI_import_ticket_not_observed')

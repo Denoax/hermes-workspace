@@ -7,25 +7,33 @@
 **Hermes × your local model.**<br>
 Local conversations, persistent projects and explicit boundaries.
 
-[Local use](#local-use) · [Capabilities](#capabilities) · [V5 verification](docs/V5_VERIFICATION.md) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
+[Local use](#local-use) · [Capabilities](#capabilities) · [V6 verification](docs/V6_VERIFICATION.md) · [Operation and recovery](docs/LOCAL_CHAT.md) · [Sources and credits](docs/LOCAL_CHAT_SOURCES.md)
 
 <img src="showcase/local-chat/v5-dark.png" alt="Actual v5 Hermes workspace with populated project navigation" width="100%">
 
 </div>
 
-## V5
+## V6 interaction refinement
 
-The neutral shell, nested navigation and compact composer run in the existing
-Hermes pin. Unsent attachment selections persist per conversation, with checked
-metadata and guards against late uploads or submit acknowledgements clearing a
-newer draft. The working v4 backend repair, protected admission, accepted sounds
-and portfolio buddy remain in place.
+Row actions stay attached to their explicit project or conversation. Rename and
+move forms stage changes until Save; opening another row's actions preserves the
+conversation being read. New conversation has a distinct composing view that
+survives reload. Files and Details use workspace sheets, with focused dialogs in
+small windows. Settings and destructive reviews contain keyboard focus and
+support interrupted close/reopen.
 
-Both local models passed connected production conversations; cancellation and
-failure/reconnect/retry were exercised against the real application. See
-[measured checks and remaining limits](docs/V5_VERIFICATION.md) and the
-[durable continuation workflow](docs/v5/LOOP_ENGINEERING.md). Guest qualification
-and human/physical review have separate gates.
+The existing Hermes pin, working v4 admission repair, conversations, accepted
+clicks and portfolio buddy are preserved. Actual UI checks cover both themes,
+portrait and short windows, native pointer/keyboard input and browser preference
+emulation. [V6 verification](docs/V6_VERIFICATION.md) records their scope and open
+items. Actual v6 checks pass normal → abliterated → normal three-turn memory,
+history/reload, both compute cancellations, reading position and Jump to latest,
+and same-run retry/draft/attachment retention across two real app restarts.
+Unassisted native folder import also passes cancel, preview-cancel and commit.
+Earlier failures and a model output-format discrepancy are retained. Human
+motion approval, physical device/voice/AT/reboot and guest qualification remain
+separate open gates. The [v5 conversations](docs/V5_VERIFICATION.md) and gallery
+remain explicitly historical.
 
 ## The workspace
 

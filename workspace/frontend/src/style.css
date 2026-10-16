@@ -1,15 +1,20 @@
 @import "tailwindcss";
 @import "./buddy.css";
+@import "./interaction-surfaces.css";
 @custom-variant dark (&:where(.dark, .dark *));
 @source './components/*.tsx';
 @font-face {
   font-family: Inter;
   src: url("/fonts/Inter-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
   font-display: swap;
 }
 @font-face {
   font-family: Rubik;
   src: url("/fonts/Rubik.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300 900;
   font-display: swap;
 }
 :root {
@@ -129,9 +134,9 @@ button:hover:not(:disabled) {
 .shell {
   height: 100dvh;
   display: grid;
-  grid-template-columns: clamp(220px, 18%, 276px) minmax(0, 1fr);
-  padding: 16px;
-  gap: 12px;
+  grid-template-columns: clamp(240px, 20%, 288px) minmax(0, 1fr);
+  padding: 12px;
+  gap: 8px;
   background: var(--bg);
   box-shadow: inset 0 0 0 1px #ffffff26;
   overflow: hidden;
@@ -139,7 +144,7 @@ button:hover:not(:disabled) {
 .sidebar {
   background: var(--rail);
   border: 1px solid var(--line);
-  border-radius: 22px;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
   padding: 18px 12px 10px;
@@ -255,7 +260,7 @@ button:hover:not(:disabled) {
   background: transparent;
 }
 .sidebar :is(.folder-options, .session-options) {
-  opacity: 0;
+  opacity: 0.65;
 }
 .sidebar
   :is(.folder-row, .session-row):is(:hover, :focus-within, .selected)
@@ -384,7 +389,7 @@ button:hover:not(:disabled) {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--line);
-  border-radius: 22px;
+  border-radius: 18px;
   background: var(--surface);
   backdrop-filter: blur(28px);
   overflow: hidden;
@@ -777,7 +782,7 @@ button:hover:not(:disabled) {
   border-radius: 17px;
   padding: 7px;
   box-shadow: var(--shadow);
-  animation: panel-in 0.16s ease-out;
+  /* Entry/exit is owned by AnchoredPopover; avoid competing transforms. */
 }
 .action-menu {
   width: 246px;
@@ -1500,7 +1505,8 @@ button:hover:not(:disabled) {
   .effort-popover {
     backdrop-filter: none;
   }
-  .metal-rim i {
+  .metal-rim i,
+  .metal-button:hover .metal-rim i {
     animation: none;
     filter: none;
     opacity: 0;
@@ -1523,7 +1529,7 @@ button:hover:not(:disabled) {
   scroll-behavior: auto !important;
 }
 .project-dashboard {
-  padding-top: 38px;
+  padding-top: 22px;
   max-width: 650px;
   margin: auto;
 }
@@ -1534,7 +1540,8 @@ button:hover:not(:disabled) {
 }
 .project-dashboard h1 {
   font-family: Rubik;
-  font-size: 30px;
+  font-size: 22px;
+  line-height: 1.4;
   font-weight: 400;
   margin: 12px 0;
   overflow-wrap: anywhere;
@@ -1548,7 +1555,7 @@ button:hover:not(:disabled) {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 36px;
+  margin-bottom: 22px;
 }
 .dashboard-actions button {
   padding: 0 15px;
@@ -1582,7 +1589,7 @@ button:hover:not(:disabled) {
     padding-top: 35px;
   }
   .project-dashboard h1 {
-    font-size: 25px;
+    font-size: 21px;
   }
 }
 [data-visibility="hidden"] *,
@@ -1654,6 +1661,7 @@ button:hover:not(:disabled) {
 .app-form textarea,
 .app-form select {
   width: 100%;
+  max-width: 100%;
   border: 1px solid var(--line);
   background: var(--paper);
   border-radius: 10px;

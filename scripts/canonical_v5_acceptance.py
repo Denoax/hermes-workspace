@@ -13,14 +13,15 @@ EVIDENCE_FIELDS = ('kind', 'outcome', 'fixture', 'scope', 'app_url', 'via', 'run
                    'viewport', 'theme', 'reference_ids', 'duration_seconds', 'continuous')
 
 
-def generate(root, public, review, inspector=None):
+def generate(root, public, review, inspector=None, *, expected_rows=36, expected_ids=None):
     source = archive.committed_source(public)
     source_hashes = {name: archive.digest(data) for name, data in source['files'].items()}
     inputs = {name: archive.read_scoped(root, LOOP + name) for name in archive.LEDGER_FILES}
     requirements, state = (json.loads(inputs[name]) for name in archive.LEDGER_FILES[:2])
     task_ids = [task['id'] for task in requirements['tasks']]
-    if len(task_ids) != 36 or len(set(task_ids)) != 36 or set(state['tasks']) != set(task_ids):
-        raise ValueError('complete_exact_36_row_inventory_required')
+    if (len(task_ids) != expected_rows or len(set(task_ids)) != expected_rows or set(state['tasks']) != set(task_ids)
+            or expected_ids is not None and task_ids != list(expected_ids)):
+        raise ValueError(f'complete_exact_{expected_rows}_row_inventory_required')
     if inspector is None:
         spec = importlib.util.spec_from_file_location('review_loopctl', root / 'scripts/loopctl.py')
         controller = importlib.util.module_from_spec(spec)
@@ -97,11 +98,11 @@ def generate(root, public, review, inspector=None):
         final_publication['verification_archive_path'] = 'review/' + verification
         final_publication['verification_sha256'] = archive.digest(data)
     counts = {status: sum(row['status'] == status for row in rows) for status in archive.STATUSES}
-    result = {'schema_version': 1, 'inventory': 'exact current 36-row requirements ledger',
+    result = {'schema_version': 1, 'inventory': f'exact current {expected_rows}-row requirements ledger',
               'source': {'commit': source['commit'], 'tree': source['tree'], 'files': source_hashes},
               'runtime_scope': 'Per-evidence native/production identity and capture scope; source hashes alone do not attest installed behavior.',
               'ledger_inputs': snapshots, 'rows': rows, 'evidence': evidence, 'publication': final_publication,
-              'summary': {'counts': counts, 'overall': 'PASS' if counts['PASS'] == 36 else 'PARTIAL',
+              'summary': {'counts': counts, 'overall': 'PASS' if counts['PASS'] == expected_rows else 'PARTIAL',
                           'unfinished_ids': [row['id'] for row in rows if row['status'] != 'PASS'],
                           'publication_status': final_publication['status']},
               'observation_truth_attested_by_generator': False, 'human_identity_authenticated_by_generator': False}

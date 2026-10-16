@@ -198,7 +198,8 @@ def browser(headless=False, audio_sink=None):
     incoming=channel/'in';outgoing=channel/'out'
     os.mkfifo(incoming,0o600);os.mkfifo(outgoing,0o600)
     boot=channel/'boot.sh'
-    browser_args=['/app/bin/brave','--remote-debugging-pipe','--user-data-dir='+str(PROFILE),
+    # The native picker attests its parent through XRes, so select X11 explicitly.
+    browser_args=['/app/bin/brave','--ozone-platform=x11','--remote-debugging-pipe','--user-data-dir='+str(PROFILE),
                   '--class=HermesWorkspace','--no-first-run','--no-default-browser-check','--disable-background-mode','--app='+ORIGIN+'/hermes-workspace']
     if headless:browser_args.append('--headless=new')
     boot.write_text('#!/bin/sh\nexec 3<'+shlex.quote(str(incoming))+'\nexec 4>'+shlex.quote(str(outgoing))+

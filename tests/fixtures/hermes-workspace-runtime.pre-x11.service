@@ -1,0 +1,21 @@
+[Unit]
+Description=Local Hermes workspace data runtime
+After=user@1000.service
+Requires=user@1000.service
+[Service]
+User=mani
+Group=mani
+WorkingDirectory=/home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1
+ExecStart=/usr/bin/python3 -I /home/mani/mani-hermes-vm-lab-43x3qx7c/MANI_HERMES_VM_LAB_Codex_Handoff_v1/workspace/server.py
+Environment=HOME=/home/mani
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+UMask=0077
+PrivateTmp=yes
+PrivateUsers=no
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20

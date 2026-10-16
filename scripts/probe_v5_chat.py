@@ -18,6 +18,7 @@ from scripts.production_pin import ProductionPin
 from scripts.probe_v4_chat import rpc
 from scripts.probe_v4_visual import close_panels, input_text
 from scripts.performance_summary import summarize
+from scripts.performance_capture import stop_performance
 from workspace.chat import wait_for_normal_recovery
 from workspace.server import normal_profile_unchanged
 from workspace.capture import NativeWindowRecording
@@ -32,6 +33,7 @@ def main():
     parser.add_argument('--turns', type=int, choices=(1, 3), default=3)
     parser.add_argument('--cancel', action='store_true')
     parser.add_argument('--record-cancel', action='store_true', help='Silent app-only unedited native capture, bounded by the existing 30-second recorder.')
+    parser.add_argument('--reading-check', action='store_true', help='Observe actual growing-output reading position, terminal activity and Jump to latest during the cancellation case.')
     parser.add_argument('--execute-production-probe', action='store_true')
     args = parser.parse_args()
     if not args.execute_production_probe or os.geteuid() == 0:
@@ -40,6 +42,8 @@ def main():
         parser.error('cancellation is one owned turn')
     if args.record_cancel and not args.cancel:
         parser.error('native recording is scoped to the cancellation case')
+    if args.reading_check and not args.cancel:
+        parser.error('reading observation requires the owned cancellation case')
     args.output.mkdir(parents=True, exist_ok=True, mode=0o700)
     target = args.output / 'chat.json'
     if target.exists():
@@ -69,7 +73,8 @@ def main():
         report['pin'] = browser.identity
         report['probe_sha256'] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
         paths = ('workspace/frontend/src/main.tsx', 'workspace/frontend/src/style.css', 'workspace/frontend/src/controls.tsx',
-                 'workspace/ui/dist/app.js', 'workspace/ui/dist/app.css', 'workspace/launcher.py', 'workspace/server.py', 'workspace/chat.py')
+                 'workspace/ui/dist/app.js', 'workspace/ui/dist/app.css', 'workspace/launcher.py', 'workspace/server.py', 'workspace/chat.py', 'scripts/performance_capture.py', 'scripts/performance_sampler.js',
+                 'workspace/capture.py', 'workspace/native_coordinates.py', 'scripts/probe_v4_visual.py')
         report['source_sha256'] = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in paths}
         report['served_sha256'] = browser.evaluate('(async()=>{const out={};for(const name of ["app.js","app.css"]){const r=await fetch("/assets/"+name,{cache:"no-store"});if(!r.ok)throw Error("served_build_missing");out[name]=[...new Uint8Array(await crypto.subtle.digest("SHA-256",await r.arrayBuffer()))].map(v=>v.toString(16).padStart(2,"0")).join("")}return out})()')
         if any(report['served_sha256'][name] != report['source_sha256']['workspace/ui/dist/' + name] for name in ('app.js', 'app.css')):
@@ -112,7 +117,8 @@ def main():
         browser.click('#prompt')
         time.sleep(5)
         word = report['verification_word']
-        prompts = ([f'{word}: Count from 1 to 10000, one integer per line. Do not abbreviate.'] if args.cancel else
+        prompts = ([f'{word}: Write 60 short numbered lines about common trees. Use one sentence and one paragraph per line, starting with 1. Continue through 60.'] if args.reading_check else
+                   [f'{word}: Count from 1 to 10000, one integer per line. Do not abbreviate.'] if args.cancel else
                    [f'Remember the harmless verification word {word}. Reply with only that word.',
                     'What exact verification word did I ask you to remember? Reply with only the word.',
                     'Reply with that same remembered verification word followed by :3. No other text.'][:args.turns])
@@ -120,7 +126,7 @@ def main():
         save()
         for index, prompt in enumerate(prompts):
             if index:
-                raw = browser.evaluate('globalThis.__hermesPerformanceProbe.stop()')
+                raw = stop_performance(browser)
                 (args.output / f'performance-{index}.json').write_text(json.dumps(raw) + '\n')
                 (args.output / f'performance-{index}-summary.json').write_text(json.dumps(summarize(raw), indent=2) + '\n')
                 sampler_active = False
@@ -140,6 +146,8 @@ def main():
             cancel_time = None
             last_progress = started
             interacted = False
+            reading_anchor = None
+            reading_last_chars = None
             while time.monotonic() - started < 240:
                 candidate_sid = sid or rpc(browser, 'view.read', {}).get('session_id')
                 if candidate_sid:
@@ -171,7 +179,25 @@ def main():
                             browser.click('#settings-toggle')
                             browser.key('Escape')
                             interacted = True
-                        if args.cancel and len(text) >= 80 and len(result['stream_samples']) >= 2 and row['state'] == 'generating' and cancel_time is None:
+                        if args.reading_check and row['state'] == 'generating' and cancel_time is None:
+                            metric = browser.evaluate('(()=>{const e=document.querySelector(".conversation");return {top:e.scrollTop,height:e.clientHeight,scroll_height:e.scrollHeight,jump:!!document.querySelector(".jump-latest")}})()')
+                            if reading_anchor is None and metric['scroll_height']-metric['height'] >= 180:
+                                rect = browser.rect('.conversation')
+                                browser.call('Input.dispatchMouseEvent', {'type':'mouseWheel','x':rect['x']+rect['width']/2,
+                                    'y':rect['y']+rect['height']/2,'deltaX':0,'deltaY':-10000})
+                                browser.wait('document.querySelector(".conversation").scrollTop<=1')
+                                reading_anchor = browser.evaluate('document.querySelector(".conversation").scrollTop')
+                                reading_last_chars = len(text)
+                                result['reading'] = {'status':'IN_PROGRESS','anchor_top':reading_anchor,'samples':[],
+                                    'activity_count_before':len(snap.get('activity',[])),
+                                    'input_scope':'Browser-trusted wheel and Jump click; not physical input.'}
+                            elif reading_anchor is not None and len(text) > reading_last_chars:
+                                if abs(metric['top']-reading_anchor)>1 or not metric['jump']:
+                                    raise RuntimeError('actual_stream_changed_held_reading_position')
+                                result['reading']['samples'].append({'characters':len(text),**metric})
+                                reading_last_chars = len(text)
+                        reading_ready = not args.reading_check or (reading_anchor is not None and len(result['reading']['samples'])>=3)
+                        if args.cancel and reading_ready and len(text) >= 80 and len(result['stream_samples']) >= 2 and row['state'] == 'generating' and cancel_time is None:
                             close_panels(browser)
                             browser.wait('!!document.querySelector("#cancel-response")')
                             browser.capture(args.output / 'streaming-before-cancel.png')
@@ -185,6 +211,17 @@ def main():
                                 if cancel_time is None or row['state'] != 'cancelled' or len(result['stream_samples']) < 2:
                                     raise RuntimeError('actual_growing_stream_and_compute_cancel_not_proven')
                                 result['cancel_to_terminal_seconds'] = time.monotonic() - cancel_time
+                                if args.reading_check:
+                                    top = browser.evaluate('document.querySelector(".conversation").scrollTop')
+                                    if abs(top-reading_anchor)>1:
+                                        raise RuntimeError('terminal_activity_changed_held_reading_position')
+                                    result['reading']['terminal_top'] = top
+                                    result['reading']['activity_count_after'] = len(snap.get('activity',[]))
+                                    browser.wait('!!document.querySelector(".jump-latest")')
+                                    browser.click('.jump-latest')
+                                    browser.wait('(()=>{const e=document.querySelector(".conversation");return e.scrollHeight-e.clientHeight-e.scrollTop<=2})()')
+                                    result['reading'].update(status='PASS_SCOPED_TECHNICAL',jump_to_latest=True)
+
                             elif row['state'] != 'completed' or word not in text:
                                 raise RuntimeError('real_reply_semantics_failed')
                             if row['identity']['arm'] != args.arm or row['identity']['context'] != (65536 if args.arm == 'normal' else 8192):
@@ -203,7 +240,7 @@ def main():
             recording.hold(.8)
             finished, recording = recording, None
             report['recording'] = finished.finish()
-        raw = browser.evaluate('globalThis.__hermesPerformanceProbe.stop()')
+        raw = stop_performance(browser)
         (args.output / 'performance-final.json').write_text(json.dumps(raw) + '\n')
         (args.output / 'performance-final-summary.json').write_text(json.dumps(summarize(raw), indent=2) + '\n')
         sampler_active = False
@@ -233,7 +270,7 @@ def main():
         if browser:
             if sampler_active:
                 try:
-                    raw = browser.evaluate('globalThis.__hermesPerformanceProbe.stop()')
+                    raw = stop_performance(browser)
                     (args.output / 'performance-final.json').write_text(json.dumps(raw) + '\n')
                     (args.output / 'performance-final-summary.json').write_text(json.dumps(summarize(raw), indent=2) + '\n')
                 except Exception as error:

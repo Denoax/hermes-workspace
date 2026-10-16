@@ -1,102 +1,128 @@
-import { useEffect, useRef, type ReactNode, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { motion, useIsPresent } from "motion/react";
 import { useReducedMotion } from "./lib/reduced-motion";
-export function Panel({
-  title,
-  close,
-  children,
-}: {
-  title: string;
-  close: () => void;
-  children: ReactNode;
+import { containModalTab, releaseSurface, workspaceSurface } from "./lib/workspace-surface";
+export function Panel({ title, close, children, returnFocusTo }: {
+  title: string; close: () => void; children: ReactNode; returnFocusTo?: HTMLElement | null;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const present = useIsPresent();
   const presentRef = useRef(present);
   presentRef.current = present;
+  const closeRef = useRef(close);
+  closeRef.current = close;
   const reduced = useReducedMotion();
-  useEffect(() => {
-    const before = document.activeElement as HTMLElement;
-    const trigger =
-      document.getElementById(title.toLowerCase() + "-toggle") ?? before;
+  const requestedSheet = title === "Files" || title === "Details";
+  const [surface, setSurface] = useState<"sheet" | "modal">(requestedSheet ? "sheet" : "modal");
+  const release = useRef<(restore: boolean) => void>(() => {});
+  const dismiss = (restore = true) => {
+    release.current(restore);
+    closeRef.current();
+  };
+  useLayoutEffect(() => {
+    if (!present) return;
+    const before = document.activeElement as HTMLElement | null;
+    const triggerId = ({ Files: "files-toggle", Details: "diagnostics", Settings: "settings-toggle" } as Record<string, string>)[title];
+    const trigger = returnFocusTo ?? (triggerId ? document.getElementById(triggerId) : null) ?? before;
     const dialog = ref.current!;
-    dialog.show();
-    const resize = () => {
-      dialog.style.maxHeight = innerWidth < 500 ? "calc(100dvh - 80px)" : "";
+    let mode: "sheet" | "modal" | null = null;
+    let released = false;
+    const focusContent = () => {
+      const target = dialog.querySelector<HTMLElement>(
+        '[autofocus],input:not(:disabled),textarea:not(:disabled),select:not(:disabled),button:not(:disabled):not([data-action="close-dialog"])',
+      ) ?? dialog.querySelector<HTMLElement>('[data-action="close-dialog"]');
+      target?.focus({ preventScroll: true });
     };
-    const outside = (e: PointerEvent) => {
-      if (!presentRef.current) return;
-      const target = e.target as HTMLElement;
-      if (!dialog.contains(target) && !target.closest(".toolbar-actions"))
-        close();
+    release.current = restore => {
+      if (released) return;
+      released = true;
+      releaseSurface(dialog, trigger, restore);
     };
-    const escape = (e: KeyboardEvent) => {
-      if (!presentRef.current) return;
-      if (e.key === "Escape") {
-        e.preventDefault();
-        close();
+    const composer = document.querySelector<HTMLElement>(".composer-area");
+    const toolbar = document.querySelector<HTMLElement>(".toolbar");
+    const layout = () => {
+      if (released || !presentRef.current) return;
+      const viewport = window.visualViewport;
+      const area = { left: viewport?.offsetLeft ?? 0, top: viewport?.offsetTop ?? 0,
+        width: viewport?.width ?? innerWidth, height: viewport?.height ?? innerHeight };
+      const bounds = requestedSheet ? workspaceSurface(area,
+        toolbar?.getBoundingClientRect().bottom ?? area.top,
+        composer?.getBoundingClientRect().top ?? area.top + area.height) : null;
+      const nextMode = bounds?.mode ?? "modal";
+      const focused = dialog.contains(document.activeElement) ? document.activeElement as HTMLElement : null;
+      if (nextMode !== mode) {
+        if (dialog.open) dialog.close();
+        mode = nextMode;
+        dialog.dataset.surface = mode;
+        setSurface(mode);
+        if (mode === "sheet") dialog.show(); else dialog.showModal();
+        dialog.inert = false;
+        if (focused?.isConnected) focused.focus({ preventScroll: true }); else focusContent();
+      }
+      if (bounds) {
+        dialog.dataset.sheetFallback = bounds.mode === "modal" ? "true" : "false";
+        Object.assign(dialog.style, { inset: `${bounds.top}px auto auto ${bounds.left}px`,
+          width: `${bounds.width}px`, maxWidth: `${bounds.width}px`,
+          height: `${bounds.height}px`, maxHeight: `${bounds.height}px`, margin: "0" });
       }
     };
-    resize();
-    addEventListener("resize", resize);
-    addEventListener("pointerdown", outside);
-    addEventListener("keydown", escape);
-    return () => {
-      dialog.close();
-      removeEventListener("resize", resize);
-      removeEventListener("pointerdown", outside);
-      removeEventListener("keydown", escape);
-      if (!document.querySelector('dialog[open]:not([aria-hidden="true"])'))
-        trigger?.focus();
+    const resize = new ResizeObserver(layout);
+    if (requestedSheet && composer) resize.observe(composer);
+    if (requestedSheet && toolbar) resize.observe(toolbar);
+    layout();
+    if (requestedSheet) {
+      addEventListener("resize", layout);
+      window.visualViewport?.addEventListener("resize", layout);
+      window.visualViewport?.addEventListener("scroll", layout);
+    }
+    const outside = (event: PointerEvent) => {
+      if (!presentRef.current || mode !== "sheet") return;
+      const target = event.target as HTMLElement;
+      if (!dialog.contains(target) && !target.closest(".toolbar-actions")) dismiss(false);
     };
-  }, [title]);
+    const escape = (event: KeyboardEvent) => {
+      if (presentRef.current && mode === "sheet" && event.key === "Escape") {
+        event.preventDefault(); dismiss();
+      }
+    };
+    addEventListener("pointerdown", outside);
+    // Native modal Escape is owned by onCancel; sheets need the non-modal route.
+    if (requestedSheet) addEventListener("keydown", escape);
+    return () => {
+      release.current(true);
+      resize.disconnect();
+      if (requestedSheet) {
+        removeEventListener("resize", layout);
+        window.visualViewport?.removeEventListener("resize", layout);
+        window.visualViewport?.removeEventListener("scroll", layout);
+      }
+      removeEventListener("pointerdown", outside);
+      if (requestedSheet) removeEventListener("keydown", escape);
+    };
+    // AnimatePresence may reuse this node when an exit is interrupted. Re-enter
+    // its native top layer as well as its animation on each present transition.
+  }, [present, title, requestedSheet, returnFocusTo]);
+  const sheet = surface === "sheet";
   return createPortal(
-    <motion.dialog
-      ref={ref}
-      initial={{ opacity: 0, y: reduced ? 0 : -10, scale: reduced ? 1 : 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: reduced ? 0 : -8, scale: reduced ? 1 : 0.97 }}
-      transition={{ duration: reduced ? 0 : 0.23, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{
-        transformOrigin: "top right",
-        pointerEvents: present ? "auto" : "none",
-      }}
-      aria-hidden={!present}
+    <motion.dialog ref={ref} className="panel" data-surface={sheet ? "sheet" : "modal"}
+      data-settings={title === "Settings" || undefined}
+      initial={{ opacity: sheet ? 1 : 0, x: reduced || !sheet ? 0 : 12, y: reduced || sheet ? 0 : 6, scale: reduced || sheet ? 1 : 0.99 }}
+      animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+      exit={{ opacity: sheet ? 1 : 0, x: reduced || !sheet ? 0 : 8, y: reduced || sheet ? 0 : 4, scale: 1 }}
+      transition={{ duration: reduced ? 0 : 0.16, ease: [0.16, 1, 0.3, 1] }}
+      style={{ pointerEvents: present ? "auto" : "none", transformOrigin: sheet ? "right center" : "center" }}
       aria-label={title}
-      className="panel"
-      onCancel={(e) => {
-        e.preventDefault();
-        close();
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          const r = e.currentTarget.getBoundingClientRect();
-          if (
-            e.clientX < r.left ||
-            e.clientX > r.right ||
-            e.clientY < r.top ||
-            e.clientY > r.bottom
-          )
-            close();
-        }
-      }}
-    >
-      <header>
-        <h2>{title}</h2>
-        <button
-          className="icon-button"
-          data-action="close-dialog"
-          aria-label={"Close " + title}
-          onClick={close}
-        >
-          ×
-        </button>
-      </header>
+      onKeyDown={event => containModalTab(event.currentTarget, event)}
+      onCancel={event => { event.preventDefault(); dismiss(); }}
+      onClick={event => {
+        if (sheet || event.target !== event.currentTarget) return;
+        const r = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dismiss();
+      }}>
+      <header><h2>{title}</h2><button className="icon-button" data-action="close-dialog" aria-label={"Close " + title} onClick={() => dismiss()}>×</button></header>
       {children}
-    </motion.dialog>,
-    document.body,
-  );
+    </motion.dialog>, document.body);
 }
 export function Brain({ on }: { on: boolean }) {
   return (
@@ -240,6 +266,8 @@ export function MetalButton({
       type="button"
       aria-label="Add attachment or action"
       aria-expanded={open}
+      aria-haspopup="menu"
+      aria-controls={open ? "composer-actions" : undefined}
       onClick={toggle}
     >
       <span className="metal-rim" aria-hidden="true">
